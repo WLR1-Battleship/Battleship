@@ -1,8 +1,9 @@
 import { createStore, combineReducers  } from "redux";
 import gameReducer from "./gameReducer";
+import authReducer from "./authReducer";
 
 const rootReducer = combineReducers({
-    gameReducer
+    gameReducer, authReducer
 })
 
 export default createStore(rootReducer);

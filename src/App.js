@@ -1,14 +1,20 @@
 // import logo from './logo.svg';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import io  from 'socket.io-client';
 import './App.css';
 import Dash from './components/Dash';
 import Game from './components/Game'
+import {setUser} from './redux/authReducer'
+import axios from 'axios'
+import Auth from './components/Auth'
 
 function App(props) {
   const [ socket,setSocket ] = useState(null)
   const [onGame, setOnGame] = useState(false);
   const [onDash, setOnDash] = useState(true);
+  const {user} = useSelector((store) => store.authReducer)
+  const dispatch = useDispatch();
 
   useEffect(()=>{
     if(!socket){
@@ -21,10 +27,20 @@ function App(props) {
         }
     }
 },[socket])
+  useEffect(()=> {
+    axios.get('/api/auth/user')
+    .then((res)=>{
+      dispatch(setUser(res.data))
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  },[])
   return (
     <div className="App">
-      {onDash && <Dash socket={socket} setOnDash={setOnDash} setOnGame={setOnGame} />}
-      {onGame && <Game socket={socket}/>}
+      {!user && <Auth/>}
+      {user && onDash && <Dash socket={socket} setOnDash={setOnDash} setOnGame={setOnGame} />}
+      {user && onGame && <Game socket={socket}/>}
     </div>
   );
 }

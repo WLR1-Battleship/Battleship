@@ -77,7 +77,7 @@ const Game =(props)=>{
                     })}
                 </section>
 
-                <h2>CODE: ASDFFF</h2>
+                <h2>CODE: {roomCode}</h2>
             </section>
 
             <section className='radar-grid'>

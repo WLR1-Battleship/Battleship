@@ -2,10 +2,13 @@ import badwordsRegExp from 'badwords/regexp'
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { setRoomCode } from '../redux/gameReducer';
+
+
 const Dash=(props)=>{
     const dispatch = useDispatch();
     const {setOnDash, setOnGame, socket} = props
     const[roomInput,setRoomInput] = useState('')
+    const {user} = useSelector((store)=>store.authReducer)
 
 
     const generateCode=(_code, num)=>{
@@ -24,7 +27,7 @@ const Dash=(props)=>{
         let code = generateCode('', 6)
         dispatch(setRoomCode(code))
         if(socket){
-            socket.emit('client-start-game', {code, user_id: 1}) // CHANGE THIS TO ACTUAL user id FROM REDUX
+            socket.emit('client-start-game', {code, user_id: user.user_id}) // CHANGE THIS TO ACTUAL user id FROM REDUX
             setOnGame(true);
             setOnDash(false);
         }
@@ -32,7 +35,7 @@ const Dash=(props)=>{
     }
 
     const handleJoinGame=()=>{
-        socket && socket.emit('client-attempt-join', {code: roomInput})
+        socket && socket.emit('client-attempt-join', {code: roomInput, user_id: user.user_id})
     }
 
     useEffect(()=>{
