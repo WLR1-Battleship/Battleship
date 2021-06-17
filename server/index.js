@@ -5,7 +5,7 @@ const session = require('express-session')
 
 const path = require('path')
 
-const {CONNECTION_STRING, SESSION_SECRET, SERVER_PORT}
+const {CONNECTION_STRING, SESSION_SECRET, SERVER_PORT} = process.env;
 
 const app = express()
 
@@ -25,6 +25,23 @@ massive({
 .then(db =>{
     app.set('db', db)
     console.log('DB connected')
-    app.listen(SERVER_PORT, ()=> console.log(`Server: ${SERVER_PORT}`))
+    const io = require('socket.io')(app.listen(SERVER_PORT, ()=> console.log(`Server: ${SERVER_PORT}`)),{cors: {origin: true}})
+    // ----------- SOCKET HANDLERS -----------
+    const registerGameHandlers = require("./handlers/gameHandler");
+    const registerRoomHandlers = require("./handlers/roomHandler")
+    
+    const onConnection = (socket) => {
+        console.log(`Socket: ${socket.id} connected`)
+        registerGameHandlers(io, socket);
+        registerRoomHandlers(io,socket);
+        
+
+        socket.on('disconnect', ()=>{
+            console.log(`Socket ${socket.id} disconnected` )
+            
+        })
+    }
+    
+    io.on("connection", onConnection);
 })
 .catch(err => console.log(err))
