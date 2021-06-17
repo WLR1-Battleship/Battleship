@@ -5,7 +5,7 @@ const session = require('express-session')
 
 const path = require('path')
 
-const {CONNECTION_STRING, SESSION_SECRET, SERVER_PORT}
+const {CONNECTION_STRING, SESSION_SECRET, SERVER_PORT} = process.env;
 
 const app = express()
 
