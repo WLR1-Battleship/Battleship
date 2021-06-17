@@ -54,7 +54,7 @@ const Game =(props)=>{
     },[socket])
 
    const handleAttack=(row, column)=>{
-        socket.emit('send-attack', {row, column})
+        socket.emit('send-attack', {row, column, roomCode})
    }
 
     console.log(roomCode)
@@ -77,7 +77,7 @@ const Game =(props)=>{
                     })}
                 </section>
 
-                <h2>CODE: ASDFFF</h2>
+                <h2>CODE: {roomCode}</h2>
             </section>
 
             <section className='radar-grid'>
