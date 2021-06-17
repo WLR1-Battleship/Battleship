@@ -1,6 +1,7 @@
 module.exports = (io,socket)=>{
     const serverSendAttack=(body)=>{
-        io.emit('server-send-attack', body)
+        const {row, column, roomCode} = body
+        socket.to(roomCode).emit('server-send-attack' , {row,column})
     }
 
     socket.on('send-attack', serverSendAttack)

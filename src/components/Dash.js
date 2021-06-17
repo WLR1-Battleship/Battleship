@@ -39,8 +39,8 @@ const Dash=(props)=>{
     }
     
     useEffect(()=>{
-        const joinRoom = () => {
-            dispatch(setRoomCode(roomInput))
+        const joinRoom = (body) => {
+            dispatch(setRoomCode(body.code))
             setOnGame(true)
             setOnDash(false)
         }

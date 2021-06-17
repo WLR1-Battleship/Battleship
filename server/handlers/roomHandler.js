@@ -13,7 +13,7 @@ module.exports = (io, socket, db, app) => {
     if (game) {
       socket.join(code);
       await db.games.addplayer2(user_id, code)
-      return socket.emit("server-confirm-join");
+      return socket.emit("server-confirm-join", {code});
     }
     socket.emit("join-failed");
   };

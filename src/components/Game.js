@@ -54,7 +54,7 @@ const Game =(props)=>{
     },[socket])
 
    const handleAttack=(row, column)=>{
-        socket.emit('send-attack', {row, column})
+        socket.emit('send-attack', {row, column, roomCode})
    }
 
     console.log(roomCode)
