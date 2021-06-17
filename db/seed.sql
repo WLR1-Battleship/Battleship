@@ -13,7 +13,8 @@ CREATE TABLE games (
     player_1 INT REFERENCES users(user_id),
     player_2 INT REFERENCES users(user_id),
     player_1_ships json,
-    player_2_ships json
+    player_2_ships json,
+    room_code VARCHAR(6)
 );
 CREATE TABLE moves (
     move_id SERIAL PRIMARY KEY,

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useSelector } from "react-redux";
 import io, { Socket } from "socket.io-client";
 import './Game.css'
 
@@ -8,6 +9,7 @@ const Game =(props)=>{
     const [radarGrid, setRadarGrid] = useState([])
     const [shipGrid,setShipGrid] = useState([])
     const {socket} = props
+    const {roomCode} = useSelector(store=>store.gameReducer)
     
     useEffect(()=>{
         let square = [];
@@ -55,7 +57,7 @@ const Game =(props)=>{
         socket.emit('send-attack', {row, column})
    }
 
-    console.log(radarGrid)
+    console.log(roomCode)
     return(
         <div className='game-screen'>
             <section className='yard-grid-wrapper'>
