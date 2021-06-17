@@ -37,11 +37,20 @@ const Dash=(props)=>{
     const handleJoinGame=()=>{
         socket && socket.emit('client-attempt-join', {code: roomInput, user_id: user.user_id})
     }
-
+    
     useEffect(()=>{
-        if(socket){
-
+        const joinRoom = () => {
+            dispatch(setRoomCode(roomInput))
+            setOnGame(true)
+            setOnDash(false)
         }
+        if(socket){
+            socket.on('server-confirm-join', joinRoom)
+        }
+        return ()=>{
+            socket.off('server-confirm-join', joinRoom)
+        } 
+        
     },[socket])
 
     return(
