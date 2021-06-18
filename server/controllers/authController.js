@@ -6,14 +6,13 @@ module.exports = {
     const [user] = await db.user.get(username);
     if (!user) {
       let [newuser] = await db.user.add(username);
-      user = newuser;
+      req.session.user = newuser
+      return res.status(200).send(req.session.user)
     }
 
-    const isAuthenticated = user;
-    if (isAuthenticated) {
-      req.session.user = user;
-      return res.status(200).send(req.session.user);
-    }
+    req.session.user = user;
+    return res.status(200).send(req.session.user);
+    
   },
   getUser: async (req,res) =>{
       if(req.session.user){
