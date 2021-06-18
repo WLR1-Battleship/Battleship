@@ -1,0 +1,1 @@
+INSERT into moves (game_id, user_id, move) VALUES ($1, $2, ARRAY $3);

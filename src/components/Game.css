@@ -4,6 +4,12 @@
     display: flex;
     justify-content: space-around;
 }
+.yard-grid-wrapper{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-evenly;
+}
 
 .radar-grid-square{
     height: 60px;
@@ -40,6 +46,80 @@
     background-color: lightblue;
     border: black 1px solid;
     box-sizing: border-box;
+}
+
+.ship-grid-row{
+    display: flex;
+    /* height: 40px; */
+}
+
+/*SHIPYARD*/
+.ship-yard{
+    margin-top: 5px;
+    height: 300px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: chartreuse;
+}
+#ship-yard-ship-container.horizontal{
+    height: 260px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+#ship-yard-ship-container.vertical{
+    height: 260px;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+#battleship.horizontal, #carrier.horizontal, #sub.horizontal, #cruiser.horizontal, #destroyer.horizontal{
+        display: flex;
+        width: fit-content;
+        height: fit-content;
+}
+#battleship.vertical, #carrier.vertical, #sub.vertical, #cruiser.vertical, #destroyer.vertical{
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        height: fit-content;
+}
+.ship-yard-ship-piece{
+    width: 30px;
+    height: 30px;
+    background-color: blue;
+}
+
+/*Ship Grid*/
+.ship-grid{
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 300px;
+    border: black 1px solid;
+}
+
+.ship-grid-square{
+    height: 30px;
+    width: 30px;
+    background-color: lightblue;
+    border: black 1px solid;
+    box-sizing: border-box;
+}
+.ship-grid-square.ship{
+    background-color: blue;
+    border: none;
+}
+.ship-grid-square.hit, .radar-grid-square.hit{
+    background-color: red;
+}
+.ship-grid-square.miss, .radar-grid-square.miss{
+    background-color: white;
 }
 
 .ship-grid-row{

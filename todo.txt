@@ -1,0 +1,14 @@
+*BUGS*
+
+
+
+
+*TODO*
+
+-add moves to db
+
+-change css on grid sqaures to match ship name 
+
+-add username of opponent 
+
+-add status of opponent
