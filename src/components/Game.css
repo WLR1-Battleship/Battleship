@@ -56,23 +56,23 @@
 /*SHIPYARD*/
 .ship-yard{
     margin-top: 5px;
-    height: 400px;
-    width: 400px;
+    height: 300px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background-color: chartreuse;
 }
 #ship-yard-ship-container.horizontal{
-    height: 360px;
-    width: 400px;
+    height: 260px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 }
 #ship-yard-ship-container.vertical{
-    height: 360px;
-    width: 400px;
+    height: 260px;
+    width: 300px;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -113,6 +113,13 @@
 }
 .ship-grid-square.ship{
     background-color: blue;
+    border: none;
+}
+.ship-grid-square.hit, .radar-grid-square.hit{
+    background-color: red;
+}
+.ship-grid-square.miss, .radar-grid-square.miss{
+    background-color: white;
 }
 
 .ship-grid-row{

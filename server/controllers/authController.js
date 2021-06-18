@@ -3,7 +3,7 @@ module.exports = {
     const db = req.app.get("db");
     const { username } = req.body;
 
-    const [user] = await db.user.get(username);
+    let [user] = await db.user.get(username);
     if (!user) {
       let [newuser] = await db.user.add(username);
       user = newuser;
