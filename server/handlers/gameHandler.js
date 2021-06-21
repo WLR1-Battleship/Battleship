@@ -20,8 +20,17 @@ module.exports = (io, socket, db, app) => {
     socket.to(roomCode).emit("hit", body);
   };
 
+  const serverSendSink=(body)=>{
+    const {roomCode, user_id} = body;
+    // Message: 'user_id has lost all ships!'
+
+    // IDEA: make call to database to update ships. Return Ships. If all ships are sunk, then emit you-win to the proper user_id
+    socket.to(roomCode).emit('you-win')
+  }
+
   socket.on("ships-set", shipsSet);
   socket.on("send-attack", serverSendAttack);
   socket.on("miss", handleMiss);
   socket.on("hit", handleHit);
+  socket.on('player-sunk', serverSendSink)
 };

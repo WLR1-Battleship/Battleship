@@ -26,6 +26,7 @@ const Game = (props) => {
   const radarGridRef = useRef(radarGrid)
   const shipsPositionsRef = useRef(shipsPositions);
   const [myTurn, setMyTurn] = useState(false);
+  const [gameOver,setGameOver] = useState(false) // {win: true||false}
 
 
 //Start Game
@@ -188,6 +189,8 @@ const startGame = () => {
               }
               if(allSunk === 16){
                 console.log('YOU LOSE')
+                setGameOver({win: false})
+                socket.emit('player-sunk', {user_id: user.user_id, roomCode: body.roomCode})
               }
               // POTENTIALLY EMIT TO OTHER PLAYERS THAT A SHIP WAS SUNK ????????
             }
@@ -224,6 +227,10 @@ const startGame = () => {
         setRadarGrid(updateRadarGrid)
 
     }
+
+    const handleWin =()=>{
+      setGameOver({win: true})
+    }
   
     if (socket) {
       socket.on("server-send-attack", attackRespond);
@@ -234,6 +241,8 @@ const startGame = () => {
 
       socket.on('hit', handleHit)
 
+      socket.on('you-win', handleWin)
+
     }
 
     return () => {
@@ -243,13 +252,14 @@ const startGame = () => {
         socket.off('player-ready', playerReady)
         socket.off('miss', handleMiss)
         socket.off('hit', handleHit)
+        socket.off('you-win', handleWin)
       }
     };
   }, [socket]);
 
   const handleAttack = (row, column) => {
     console.log(radarGrid[row][column])
-    if(everyoneReady&& myTurn && !radarGrid[row][column].attacked){
+    if(!gameOver && everyoneReady&& myTurn && !radarGrid[row][column].attacked){
       socket.emit("send-attack", { row, column, roomCode });
       setMyTurn(false)
     }
@@ -518,7 +528,7 @@ const startGame = () => {
               </div>
             );
           })}
-          {everyoneReady && <h2>{ myTurn? 'Your Turn!' : 'Opponent\'s turn!'}</h2>}
+          {everyoneReady && <h2>{ !gameOver? (myTurn? 'Your Turn!' : 'Opponent\'s turn!') : (gameOver.win ? 'You Win!' : 'You Lose!')}</h2>}
         </section>
       )}
     </div>
