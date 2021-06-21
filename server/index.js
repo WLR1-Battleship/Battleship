@@ -35,11 +35,13 @@ massive({
     // ----------- SOCKET HANDLERS -----------
     const registerGameHandlers = require("./handlers/gameHandler");
     const registerRoomHandlers = require("./handlers/roomHandler");
+    const registerChatHandlers = require('./handlers/chatHandler')
 
     const onConnection = (socket) => {
       console.log(`Socket: ${socket.id} connected`);
       registerGameHandlers(io, socket, db);
       registerRoomHandlers(io, socket, db, app);
+      registerChatHandlers(io, socket, db, app)
 
       socket.on("disconnect", () => {
         console.log(`Socket ${socket.id} disconnected`);
