@@ -27,6 +27,11 @@ module.exports = (io, socket, db, app) => {
 
     // IDEA: make call to database to update ships. Return Ships. If all ships are sunk, then emit you-win to the proper user_id
     const [game] = await db.games.game_complete(roomCode)
+    console.log(game)
+    for (let i = 1; i < 3; i++) {
+      console.log(game[`player_${i}`])
+      await db.user.add_play(user_id!== game[`player_${i}`]? 1:0, game[`player_${i}`])
+    }
     socket.to(roomCode).emit('you-win')
   }
 
