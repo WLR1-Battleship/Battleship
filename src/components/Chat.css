@@ -1,0 +1,7 @@
+.chat-board{
+    overflow-y: auto;
+    height: 10rem;
+    border: black 1px solid;
+    display: flex;
+    flex-direction: column-reverse;
+}
