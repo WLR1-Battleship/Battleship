@@ -1,7 +1,8 @@
 module.exports = (io, socket, db, app) => {
-  const serverSendAttack = (body) => {
+  const serverSendAttack = async(body) => {
     //update db with move (add_move);
-    const { row, column, roomCode } = body;
+    const {row, column, roomCode, user_id} = body
+    await db.moves.add_move([roomCode, user_id, row, column])
     socket.to(roomCode).emit("server-send-attack", { row, column, roomCode });
   };
   const shipsSet = async (body) => {
@@ -20,11 +21,12 @@ module.exports = (io, socket, db, app) => {
     socket.to(roomCode).emit("hit", body);
   };
 
-  const serverSendSink=(body)=>{
+  const serverSendSink=async (body)=>{
     const {roomCode, user_id} = body;
     // Message: 'user_id has lost all ships!'
 
     // IDEA: make call to database to update ships. Return Ships. If all ships are sunk, then emit you-win to the proper user_id
+    const [game] = await db.games.game_complete(roomCode)
     socket.to(roomCode).emit('you-win')
   }
 

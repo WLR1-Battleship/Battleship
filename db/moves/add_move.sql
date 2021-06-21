@@ -1,0 +1,1 @@
+INSERT into moves (game_id, user_id, move) VALUES ((SELECT game_id FROM games WHERE room_code =$1), $2, ARRAY [$3,$4]);

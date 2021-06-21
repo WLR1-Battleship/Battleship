@@ -260,7 +260,7 @@ const startGame = () => {
   const handleAttack = (row, column) => {
     console.log(radarGrid[row][column])
     if(!gameOver && everyoneReady&& myTurn && !radarGrid[row][column].attacked){
-      socket.emit("send-attack", { row, column, roomCode });
+      socket.emit("send-attack", { row, column, roomCode, user_id: user.user_id });
       setMyTurn(false)
     }
   };
