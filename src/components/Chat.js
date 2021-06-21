@@ -33,7 +33,6 @@ const Chat = props => {
 
     return(
         <div>
-            Bruh
             {messages.map((body) => (
                 <div>
                     {body.username}: {body.message}
