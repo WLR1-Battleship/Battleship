@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import "./Game.css";
+import Chat from "./Chat";
 
 const Game = (props) => {
   //Placing ships onto grid
@@ -308,7 +309,7 @@ const startGame = () => {
             );
           })}
         </section>
-{imReady? <div>Message Board</div> :
+{imReady? <div> <Chat socket={props.socket} /> </div> :
         <section className="ship-yard">
           <div className="ship-yard-button-container">
             <button
