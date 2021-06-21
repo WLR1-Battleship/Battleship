@@ -15,7 +15,8 @@ const Game = (props) => {
   const [shipsDirection, setShipsDirection] = useState("horizontal");
   const [draggedShipPiece, setDraggedShipPiece] = useState(null);
   ////////////////////////////////////////////////////////////////
-  const [gameStarted, setGameStarted] = useState(false);
+  const [imReady, setImReady] = useState(false);
+  const [everyoneReady, setEveryoneReady] = useState(false);
   const [radarGrid, setRadarGrid] = useState([]);
   const [shipGrid, setShipGrid] = useState([]);
   const { socket } = props;
@@ -23,10 +24,13 @@ const Game = (props) => {
   const {user} = useSelector((store)=>store.authReducer);
   const shipGridRef = useRef(shipGrid)
   const radarGridRef = useRef(radarGrid)
+  const shipsPositionsRef = useRef(shipsPositions);
+  const [myTurn, setMyTurn] = useState(false);
+
 
 //Start Game
 const startGame = () => {
-    setGameStarted(true);
+    setImReady(true);
     socket.emit('ships-set', {user_id: user.user_id, ships: shipsPositions, roomCode: roomCode, username: user.username})
 
 }
@@ -143,6 +147,8 @@ const startGame = () => {
     }
     setShipGrid(shipSquares);
   }, []);
+
+
   useEffect(()=>{
     shipGridRef.current = shipGrid
   },[shipGrid])
@@ -151,6 +157,11 @@ const startGame = () => {
     radarGridRef.current = radarGrid
   },[radarGrid])
 
+  useEffect(()=>{
+    shipsPositionsRef.current = shipsPositions
+  },[shipsPositions])
+
+
   useEffect(() => {
       
     const attackRespond = (body) => {
@@ -158,31 +169,57 @@ const startGame = () => {
         ///Maybe change shipGrid to useRef
         
         if (shipGridRef.current[body.row][body.column].ship !== null){
+          let shipName = shipGridRef.current[body.row][body.column].ship.slice(0, shipGridRef.current[body.row][body.column].ship.indexOf("-"));
+          // console.log('SHip Positions: ', shipsPositionsRef.current, 'shipPName: ', shipName)
             socket.emit('hit', body)
-            updateShipGrid[body.row][body.column].attack = true;
+            setShipsPositions({...shipsPositionsRef.current, [shipName]: {...shipsPositionsRef.current[shipName], hits: shipsPositionsRef.current[shipName].hits+1 }})
+            // console.log('new positions: ', shipsPositionsRef.current)
+            updateShipGrid[body.row][body.column].attacked = true;
             updateShipGrid[body.row][body.column].hit = true;
+            if(shipsPositionsRef.current[shipName].hits + 1 >= shipsPositionsRef.current[shipName].positions.length){
+              console.log(`${shipName} SUNK!`)
+              for (let i = 0; i < shipsPositionsRef.current[shipName].positions.length; i++) {
+                updateShipGrid[shipsPositionsRef.current[shipName].positions[i][0]][shipsPositionsRef.current[shipName].positions[i][1]].sunk = true;
+              }
+              // 17 hits means all ships are sunk, but because ShipPositionsRef.current is a render behind, we are checking for 16 hits.
+              let allSunk = 0
+              for (const key in shipsPositionsRef.current) {
+                allSunk += shipsPositionsRef.current[key].hits
+              }
+              if(allSunk === 16){
+                console.log('YOU LOSE')
+              }
+              // POTENTIALLY EMIT TO OTHER PLAYERS THAT A SHIP WAS SUNK ????????
+            }
         }
         else{
             socket.emit('miss', body)
-            updateShipGrid[body.row][body.column].attack = true;
+            updateShipGrid[body.row][body.column].attacked = true;
             updateShipGrid[body.row][body.column].hit = false;
         }
+        setMyTurn(true)
       setShipGrid(updateShipGrid)
       console.log(body);
     };
     const playerReady = (body) => {
-        console.log(body)
+        const {username, gameReady, player_1} = body;
+        if(gameReady){
+          console.log('EVERYONE READY')
+           setEveryoneReady(true)
+          player_1 === user.user_id && setMyTurn(true);
+        };
+        console.log(username)
     }
 
     const handleMiss = (body) => {
         let updateRadarGrid = [...radarGridRef.current]
-        updateRadarGrid[body.row][body.column].attack = true;
+        updateRadarGrid[body.row][body.column].attacked = true;
         updateRadarGrid[body.row][body.column].hit = false;
         setRadarGrid(updateRadarGrid)
     }
     const handleHit = (body) => {
         let updateRadarGrid = [...radarGridRef.current]
-        updateRadarGrid[body.row][body.column].attack = true;
+        updateRadarGrid[body.row][body.column].attacked = true;
         updateRadarGrid[body.row][body.column].hit = true;
         setRadarGrid(updateRadarGrid)
 
@@ -211,9 +248,14 @@ const startGame = () => {
   }, [socket]);
 
   const handleAttack = (row, column) => {
-    socket.emit("send-attack", { row, column, roomCode });
+    console.log(radarGrid[row][column])
+    if(everyoneReady&& myTurn && !radarGrid[row][column].attacked){
+      socket.emit("send-attack", { row, column, roomCode });
+      setMyTurn(false)
+    }
   };
-  
+  // console.log(shipsPositionsRef.current)
+  // MAYBE WE SHOULD
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
@@ -229,11 +271,14 @@ const startGame = () => {
                   if (square.ship !== null) {
                     cssClass = "ship";
                   }
-                  if (square.attack === true && square.hit === true){
+                  if (square.attacked === true && square.hit === true){
                       cssClass = "hit"
                   }
-                  if (square.attack === true && square.hit === false){
+                  if (square.attacked === true && square.hit === false){
                       cssClass = "miss"
+                  }
+                  if (square.sunk === true){
+                    cssClass = 'sunk'
                   }
                  
                   return (
@@ -253,7 +298,7 @@ const startGame = () => {
             );
           })}
         </section>
-{gameStarted? <div>Message Board</div> :
+{imReady? <div>Message Board</div> :
         <section className="ship-yard">
           <div className="ship-yard-button-container">
             <button
@@ -430,7 +475,7 @@ const startGame = () => {
 }
         <h2>CODE: {roomCode}</h2>
       </section>
-      {gameStarted ? null : (
+      {imReady ? null : (
         <div>
           {shipsSet === 5 ? (
             <button
@@ -444,7 +489,7 @@ const startGame = () => {
         </div>
       )}
 
-      {gameStarted && (
+      {imReady && (
         <section className="radar-grid">
           {radarGrid.map((row) => {
             return (
@@ -457,10 +502,10 @@ const startGame = () => {
                   if (square.ship !== null) {
                     cssClass = "ship";
                   }
-                  if (square.attack === true && square.hit === true){
+                  if (square.attacked === true && square.hit === true){
                       cssClass = "hit"
                   }
-                  if (square.attack === true && square.hit === false){
+                  if (square.attacked === true && square.hit === false){
                       cssClass = "miss"
                   }
                   return (
@@ -473,6 +518,7 @@ const startGame = () => {
               </div>
             );
           })}
+          {everyoneReady && <h2>{ myTurn? 'Your Turn!' : 'Opponent\'s turn!'}</h2>}
         </section>
       )}
     </div>
