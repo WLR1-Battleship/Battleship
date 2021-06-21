@@ -1,9 +1,11 @@
 module.exports = (io, socket, db, app) => {
   const serverSendAttack = async(body) => {
     //update db with move (add_move);
-    const {row, column, roomCode, user_id} = body
+    const {row, column, roomCode} = body
+    const {user_id, username} = body.user
+    io.to(roomCode).emit('relay-message', {username: 'GAME', message:`${username} attacks row: ${row}, column: ${column}.`})
     await db.moves.add_move([roomCode, user_id, row, column])
-    socket.to(roomCode).emit("server-send-attack", { row, column, roomCode });
+    socket.to(roomCode).emit("server-send-attack", { row, column, roomCode, username });
   };
   const shipsSet = async (body) => {
     const { user_id, ships, roomCode, username } = body;
@@ -12,12 +14,13 @@ module.exports = (io, socket, db, app) => {
     io.in(roomCode).emit("player-ready", { username: username, gameReady: game.player_1_ships && game.player_2_ships? true : false , player_1: game.player_1});
   };
   const handleMiss = (body) => {
-    const { row, column, roomCode } = body;
-
+    const { row, column, roomCode, username, username2 } = body;
+    io.to(roomCode).emit('relay-message', {username: 'GAME', message:`${username} misses ${username2}!`})
     socket.to(roomCode).emit("miss", body);
   };
   const handleHit = (body) => {
-    const { row, column, roomCode } = body;
+    const { row, column, roomCode, username, username2 } = body;
+    io.to(roomCode).emit('relay-message', {username: 'GAME', message:`${username} hits ${username2}!`})
     socket.to(roomCode).emit("hit", body);
   };
 
@@ -32,7 +35,7 @@ module.exports = (io, socket, db, app) => {
       console.log(game[`player_${i}`])
       await db.user.add_play(user_id!== game[`player_${i}`]? 1:0, game[`player_${i}`])
     }
-    socket.to(roomCode).emit('you-win')
+    socket.to(roomCode).emit('you-win', {roomCode})
   }
 
   socket.on("ships-set", shipsSet);

@@ -168,18 +168,18 @@ const startGame = () => {
       
     const attackRespond = (body) => {
         let updateShipGrid = [...shipGridRef.current]
-        ///Maybe change shipGrid to useRef
         
         if (shipGridRef.current[body.row][body.column].ship !== null){
           let shipName = shipGridRef.current[body.row][body.column].ship.slice(0, shipGridRef.current[body.row][body.column].ship.indexOf("-"));
           // console.log('SHip Positions: ', shipsPositionsRef.current, 'shipPName: ', shipName)
-            socket.emit('hit', body)
+            socket.emit('hit', {...body, username2: user.username})
             setShipsPositions({...shipsPositionsRef.current, [shipName]: {...shipsPositionsRef.current[shipName], hits: shipsPositionsRef.current[shipName].hits+1 }})
             // console.log('new positions: ', shipsPositionsRef.current)
             updateShipGrid[body.row][body.column].attacked = true;
             updateShipGrid[body.row][body.column].hit = true;
             if(shipsPositionsRef.current[shipName].hits + 1 >= shipsPositionsRef.current[shipName].positions.length){
               console.log(`${shipName} SUNK!`)
+              socket.emit('send-message', {username: user.username, roomCode: body.roomCode, message: `You sunk my ${shipName}!`})
               for (let i = 0; i < shipsPositionsRef.current[shipName].positions.length; i++) {
                 updateShipGrid[shipsPositionsRef.current[shipName].positions[i][0]][shipsPositionsRef.current[shipName].positions[i][1]].sunk = true;
               }
@@ -197,7 +197,7 @@ const startGame = () => {
             }
         }
         else{
-            socket.emit('miss', body)
+            socket.emit('miss', {...body, username2: user.username})
             updateShipGrid[body.row][body.column].attacked = true;
             updateShipGrid[body.row][body.column].hit = false;
         }
@@ -229,7 +229,9 @@ const startGame = () => {
 
     }
 
-    const handleWin =()=>{
+    const handleWin =(body)=>{
+      const {roomCode} = body
+      socket.emit('send-message', {username: 'GAME', roomCode, message: `${user.username} WINS!!!!` })
       setGameOver({win: true})
     }
   
@@ -261,7 +263,7 @@ const startGame = () => {
   const handleAttack = (row, column) => {
     console.log(radarGrid[row][column])
     if(!gameOver && everyoneReady&& myTurn && !radarGrid[row][column].attacked){
-      socket.emit("send-attack", { row, column, roomCode, user_id: user.user_id });
+      socket.emit("send-attack", { row, column, roomCode, user });
       setMyTurn(false)
     }
   };
