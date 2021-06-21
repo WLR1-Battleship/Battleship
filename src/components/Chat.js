@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import { useSelector } from 'react-redux'
 import io, { Socket } from 'socket.io-client'
 // import store from '../redux/authReducer'
+import './Chat.css'
 
 const Chat = props => {
     const {user} = useSelector((store) => store.authReducer)
@@ -12,7 +13,7 @@ const Chat = props => {
     useEffect(() => {
         const emitMessage = (body) => {
             console.log(body)
-            setMessages((currentMessages) => [...currentMessages, body ])
+            setMessages((currentMessages) => [body, ...currentMessages])
         }
         if(props.socket){
             props.socket.on('relay-message', emitMessage)
@@ -32,15 +33,17 @@ const Chat = props => {
     }
 
     return(
-        <div>
-            {messages.map((body) => (
-                <div>
-                    {body.username}: {body.message}
-                </div>
-            ))}
+        <section>
+            <div className='chat-board'>
+                {messages.map((body) => (
+                    <div>
+                        {body.username}: {body.message}
+                    </div>
+                ))}
+            </div>
             <input value={message} onChange={(e) => setMessage(e.target.value)} />
             <button onClick={sendMessage}>Send</button>
-        </div>
+        </section>
     )
 }
 
