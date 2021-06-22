@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {setUser} from '../redux/authReducer'
+import './Auth.css'
 
 const Auth = (props) =>{
     const [username, setUsername] = useState("");
@@ -26,10 +27,12 @@ const Auth = (props) =>{
       };
 
     return (
-        <div>
-            <h1>AUTH</h1>
-            <input value={username} onChange={(e) =>{ setUsername(e.target.value)}}/>
-            <button onClick={handleLogin}>Enter</button>
+        <div className='auth'>
+          <div className='auth-container'>
+            <h1 className='auth-title'>WARFARE BOAT</h1>
+            <input className='auth-input' placeholder='Enter a username' value={username} onChange={(e) =>{ setUsername(e.target.value)}}/>
+            <button className='auth-button' onClick={handleLogin}>Enter</button>
+          </div>
         </div>
     )
 }

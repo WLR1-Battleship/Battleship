@@ -41,8 +41,8 @@ const Chat = props => {
                     </div>
                 ))}
             </div>
-            <input value={message} onChange={(e) => setMessage(e.target.value)} />
-            <button onClick={sendMessage}>Send</button>
+            <input className='chat-input' value={message} onChange={(e) => setMessage(e.target.value)} />
+            <button className='chat-button' onClick={sendMessage}>Send</button>
         </section>
     )
 }
