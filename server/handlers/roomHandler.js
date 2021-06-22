@@ -7,13 +7,16 @@ module.exports = (io, socket, db, app) => {
   };
 
   const serverAttemptJoin = async (body) => {
-    const { code, user_id} = body;
+    const { code, user_id } = body;
     const [game] = await db.games.get_game(code);
     // POTENTIALLY NEED TO INCLUDE A CHECK FOR IF PLAYERS ALREADY EXIST
+
     if (game) {
+      if (game.player_2 === null) {
+        await db.games.addplayer2(user_id, code);
+      }
       socket.join(code);
-      await db.games.addplayer2(user_id, code)
-      return socket.emit("server-confirm-join", {code});
+      return socket.emit("server-confirm-join", { code });
     }
     socket.emit("join-failed");
   };

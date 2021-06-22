@@ -12,3 +12,6 @@
 -add username of opponent 
 
 -add status of opponent
+
+
+

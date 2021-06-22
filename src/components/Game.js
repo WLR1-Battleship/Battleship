@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import "./Game.css";
 import Chat from "./Chat";
+import axios from "axios";
 
 const Game = (props) => {
   //Placing ships onto grid
@@ -22,20 +23,117 @@ const Game = (props) => {
   const [shipGrid, setShipGrid] = useState([]);
   const { socket } = props;
   const { roomCode } = useSelector((store) => store.gameReducer);
-  const {user} = useSelector((store)=>store.authReducer);
-  const shipGridRef = useRef(shipGrid)
-  const radarGridRef = useRef(radarGrid)
+  const { user } = useSelector((store) => store.authReducer);
+  const shipGridRef = useRef(shipGrid);
+  const radarGridRef = useRef(radarGrid);
   const shipsPositionsRef = useRef(shipsPositions);
   const [myTurn, setMyTurn] = useState(false);
-  const [gameOver,setGameOver] = useState(false) // {win: true||false}
+  const [gameOver, setGameOver] = useState(false); // {win: true||false}
+  //get all previous game data on re-join
+  useEffect(() => {
+    axios
+      .get(`/api/get/game/${roomCode}`)
+      .then((res) => {
+        console.log(res.data);
+        updateGameRejoin(res.data)
+      })
+      .catch((err) => {
+        console.log(err);
+        
+      });
+  }, []);
 
+  const updateGameRejoin = async (info) => {
+      //determine if user is player1 or player2
+      console.log(info)
+      let opponent;
+      let opponentShips;
+      let thisPlayer;
+      let thisPlayerShips;
+      if (user.user_id === info.game.player_1){
+        thisPlayer = info.game.player_1;
+        thisPlayerShips = info.game.player_1_ships;
+        opponent = info.game.player_2;
+        opponentShips = info.game.player_2_ships;
+      }
+      else if (user.user_id === info.game.player_2){
+        thisPlayer = info.game.player_2;
+        thisPlayerShips = info.game.player_2_ships;
+        opponent = info.game.player_1;
+        opponentShips = info.game.player_1_ships;
+      }
+      console.log("thisplayer",thisPlayer, thisPlayerShips)
+      console.log("opponent",opponent, opponentShips)
+      if (thisPlayerShips !== null){
+      setShipsPositions(thisPlayerShips)
+      setImReady(true)
+      }
+      if (opponentShips !== null){
+        setEveryoneReady(true)
+      } 
+      setGrids(opponentShips, thisPlayerShips, info.moves, opponent, thisPlayer) 
+      if (info.moves.length > 0){
+        console.log(shipsPositionsRef.current)
+      let turn = info.moves.sort((a,b)=>{
+        if (a.move_id > b.move_id){
+          return -1
+        }
+        else{
+          return 1
+        }
+      })[0];
 
-//Start Game
-const startGame = () => {
+      if (turn.user_id === user.user_id){
+        setMyTurn(false)
+      }
+      else{
+        //why isnt the shipGridRef current?
+        console.log(shipGridRef.current)
+        console.log(shipsPositionsRef.current)
+        let hit = false
+        for (let ship in shipsPositionsRef.current){
+          for (let i = 0; i < shipsPositionsRef.current[ship].positions.length; i++){
+            if (turn.move[0] === shipsPositionsRef.current[ship].positions[i][0] && turn.move[1] === shipsPositionsRef.current[ship].positions[i][1]){
+              socket.emit('hit', {roomCode: roomCode, row: turn.move[0], column: turn.move[1], username2: user.username})
+              hit = true;
+              if(shipsPositionsRef.current[ship].hits >= shipsPositionsRef.current[ship].positions.length){
+                console.log(`${ship} SUNK!`)
+                socket.emit('send-message', {username: user.username, roomCode: roomCode, message: `You sunk my ${ship}!`})
+                let allSunk = 0
+                for (const key in shipsPositionsRef.current) {
+                  allSunk += shipsPositionsRef.current[key].hits
+                }
+                console.log(allSunk)
+                if(allSunk === 17){
+                  console.log('YOU LOSE')
+                  setGameOver({win: false})
+                  socket.emit('player-sunk', {user_id: user.user_id, roomCode: roomCode})
+                }
+              }
+            }
+          }
+        }
+        if (hit === false){
+          socket.emit('miss', {roomCode: roomCode, row: turn.move[0], column: turn.move[1], username2: user.username})
+
+        }
+        setMyTurn(true)
+      }
+    }
+    else if (info.game.player_1 === user.user_id){
+      setMyTurn(true)
+    }
+  }
+  //Start Game
+  const startGame = () => {
     setImReady(true);
-    socket.emit('ships-set', {user_id: user.user_id, ships: shipsPositions, roomCode: roomCode, username: user.username})
-
-}
+    socket.emit("ships-set", {
+      user_id: user.user_id,
+      ships: shipsPositions,
+      roomCode: roomCode,
+      username: user.username,
+    });
+  };
   //Placing ships onto grid
   const onDragStart = () => {};
   const onShipDrop = (square) => {
@@ -114,7 +212,7 @@ const startGame = () => {
     //update the ship position locally and in the db
   };
   //////////////////////////////////////////////////////////////////
-  useEffect(() => {
+  const setGrids = (opponentShips, playerShips, moves, opponent, thisPlayer) => {
     let square = [];
     for (let i = 0; i < 10; i++) {
       let row = [];
@@ -128,6 +226,26 @@ const startGame = () => {
         });
       }
       square.push(row);
+    }
+    if (opponentShips){
+      for (let i = 0; i < moves.length; i++){
+        if (moves[i].user_id === user.user_id){
+          let miss = true;
+          for (let ship in opponentShips){
+            for (let j = 0; j < opponentShips[ship].positions.length; j++){
+              if (moves[i].move[0] === opponentShips[ship].positions[j][0] && moves[i].move[1] === opponentShips[ship].positions[j][1]){
+                square[moves[i].move[0]][moves[i].move[1]].attacked = true;
+                square[moves[i].move[0]][moves[i].move[1]].hit = true;
+                miss = false;
+              }
+            }
+          }
+          if (miss === true){
+            square[moves[i].move[0]][moves[i].move[1]].attacked = true;
+            square[moves[i].move[0]][moves[i].move[1]].hit = false;
+          }
+        }
+      }
     }
     setRadarGrid(square);
 
@@ -147,128 +265,171 @@ const startGame = () => {
       }
       shipSquares.push(row);
     }
+    let updatedShipHits = {...shipsPositionsRef.current}
+    if (playerShips){
+      for (let ship in playerShips){
+        let index = 0;
+        for (let i = 0; i < playerShips[ship].positions.length; i++){
+          //change to actual ship piece
+          shipSquares[playerShips[ship].positions[i][0]][playerShips[ship].positions[i][1]].ship = `${ship}-${index}`
+          index++
+        }
+    }
+    for (let i = 0; i < moves.length; i++){
+      if (moves[i].user_id !== user.user_id){
+        let miss = true;
+        
+        for (let ship in playerShips){
+          for (let j = 0; j < playerShips[ship].positions.length; j++){
+            if (moves[i].move[0] === playerShips[ship].positions[j][0] && moves[i].move[1] === playerShips[ship].positions[j][1]){
+              shipSquares[moves[i].move[0]][moves[i].move[1]].attacked = true;
+              shipSquares[moves[i].move[0]][moves[i].move[1]].hit = true;
+              updatedShipHits[ship].hits += 1;
+              if (updatedShipHits[ship].hits === updatedShipHits[ship].positions.length){
+                updatedShipHits[ship].sunk = true;
+                for (let z = 0; z < updatedShipHits[ship].positions.length; z++){
+                  shipSquares[updatedShipHits[ship].positions[z][0]][updatedShipHits[ship].positions[z][1]].sunk = true
+                }
+              }
+
+              miss = false;
+            }
+          }
+        }
+        if (miss === true){
+          shipSquares[moves[i].move[0]][moves[i].move[1]].attacked = true;
+          shipSquares[moves[i].move[0]][moves[i].move[1]].hit = false;
+        }
+      }
+    }
+
+    }
+    setShipsPositions(updatedShipHits)
     setShipGrid(shipSquares);
-  }, []);
-
-
-  useEffect(()=>{
-    shipGridRef.current = shipGrid
-  },[shipGrid])
+  }
   
-  useEffect(()=>{
-    radarGridRef.current = radarGrid
-  },[radarGrid])
-
-  useEffect(()=>{
-    shipsPositionsRef.current = shipsPositions
-  },[shipsPositions])
-
 
   useEffect(() => {
-      
-    const attackRespond = (body) => {
-        let updateShipGrid = [...shipGridRef.current]
-        
-        if (shipGridRef.current[body.row][body.column].ship !== null){
-          let shipName = shipGridRef.current[body.row][body.column].ship.slice(0, shipGridRef.current[body.row][body.column].ship.indexOf("-"));
-          // console.log('SHip Positions: ', shipsPositionsRef.current, 'shipPName: ', shipName)
-            socket.emit('hit', {...body, username2: user.username})
-            setShipsPositions({...shipsPositionsRef.current, [shipName]: {...shipsPositionsRef.current[shipName], hits: shipsPositionsRef.current[shipName].hits+1 }})
-            // console.log('new positions: ', shipsPositionsRef.current)
-            updateShipGrid[body.row][body.column].attacked = true;
-            updateShipGrid[body.row][body.column].hit = true;
-            if(shipsPositionsRef.current[shipName].hits + 1 >= shipsPositionsRef.current[shipName].positions.length){
-              console.log(`${shipName} SUNK!`)
-              socket.emit('send-message', {username: user.username, roomCode: body.roomCode, message: `You sunk my ${shipName}!`})
-              for (let i = 0; i < shipsPositionsRef.current[shipName].positions.length; i++) {
-                updateShipGrid[shipsPositionsRef.current[shipName].positions[i][0]][shipsPositionsRef.current[shipName].positions[i][1]].sunk = true;
-              }
-              // 17 hits means all ships are sunk, but because ShipPositionsRef.current is a render behind, we are checking for 16 hits.
-              let allSunk = 0
-              for (const key in shipsPositionsRef.current) {
-                allSunk += shipsPositionsRef.current[key].hits
-              }
-              if(allSunk === 16){
-                console.log('YOU LOSE')
-                setGameOver({win: false})
-                socket.emit('player-sunk', {user_id: user.user_id, roomCode: body.roomCode})
-              }
-              // POTENTIALLY EMIT TO OTHER PLAYERS THAT A SHIP WAS SUNK ????????
-            }
+    shipGridRef.current = shipGrid;
+  }, [shipGrid]);
+
+  useEffect(() => {
+    radarGridRef.current = radarGrid;
+  }, [radarGrid]);
+
+  useEffect(() => {
+    shipsPositionsRef.current = shipsPositions;
+  }, [shipsPositions]);
+
+  const attackRespond = (body) => {
+    let updateShipGrid = [...shipGridRef.current]
+    if (shipGridRef.current[body.row][body.column].ship !== null){
+      let shipName = shipGridRef.current[body.row][body.column].ship.slice(0, shipGridRef.current[body.row][body.column].ship.indexOf("-"));
+      // console.log('SHip Positions: ', shipsPositionsRef.current, 'shipPName: ', shipName)
+        socket.emit('hit', {...body, username2: user.username})
+        setShipsPositions({...shipsPositionsRef.current, [shipName]: {...shipsPositionsRef.current[shipName], hits: shipsPositionsRef.current[shipName].hits+1 }})
+        // console.log('new positions: ', shipsPositionsRef.current)
+        updateShipGrid[body.row][body.column].attacked = true;
+        updateShipGrid[body.row][body.column].hit = true;
+        if(shipsPositionsRef.current[shipName].hits + 1 >= shipsPositionsRef.current[shipName].positions.length){
+          console.log(`${shipName} SUNK!`)
+          socket.emit('send-message', {username: user.username, roomCode: body.roomCode, message: `You sunk my ${shipName}!`})
+          for (let i = 0; i < shipsPositionsRef.current[shipName].positions.length; i++) {
+            updateShipGrid[shipsPositionsRef.current[shipName].positions[i][0]][shipsPositionsRef.current[shipName].positions[i][1]].sunk = true;
+          }
+          // 17 hits means all ships are sunk, but because ShipPositionsRef.current is a render behind, we are checking for 16 hits.
+          let allSunk = 0
+          for (const key in shipsPositionsRef.current) {
+            allSunk += shipsPositionsRef.current[key].hits
+          }
+          if(allSunk === 16){
+            console.log('YOU LOSE')
+            setGameOver({win: false})
+            socket.emit('player-sunk', {user_id: user.user_id, roomCode: body.roomCode})
+          }
         }
-        else{
-            socket.emit('miss', {...body, username2: user.username})
-            updateShipGrid[body.row][body.column].attacked = true;
-            updateShipGrid[body.row][body.column].hit = false;
-        }
-        setMyTurn(true)
-      setShipGrid(updateShipGrid)
-      console.log(body);
-    };
-    const playerReady = (body) => {
-        const {username, gameReady, player_1} = body;
-        if(gameReady){
-          console.log('EVERYONE READY')
-           setEveryoneReady(true)
-          player_1 === user.user_id && setMyTurn(true);
-        };
-        console.log(username)
     }
+    else{
+        socket.emit('miss', {...body, username2: user.username})
+        updateShipGrid[body.row][body.column].attacked = true;
+        updateShipGrid[body.row][body.column].hit = false;
+    }
+  setMyTurn(true)
+  setShipGrid(updateShipGrid)
+  console.log(body);
+};
+
+  useEffect(() => {
+    const playerReady = (body) => {
+      const { username, gameReady, player_1 } = body;
+      if (gameReady) {
+        console.log("EVERYONE READY");
+        setEveryoneReady(true);
+        player_1 === user.user_id && setMyTurn(true);
+      }
+      console.log(username);
+    };
 
     const handleMiss = (body) => {
-        let updateRadarGrid = [...radarGridRef.current]
-        updateRadarGrid[body.row][body.column].attacked = true;
-        updateRadarGrid[body.row][body.column].hit = false;
-        setRadarGrid(updateRadarGrid)
-    }
+      let updateRadarGrid = [...radarGridRef.current];
+      updateRadarGrid[body.row][body.column].attacked = true;
+      updateRadarGrid[body.row][body.column].hit = false;
+      setRadarGrid(updateRadarGrid);
+    };
     const handleHit = (body) => {
-        let updateRadarGrid = [...radarGridRef.current]
-        updateRadarGrid[body.row][body.column].attacked = true;
-        updateRadarGrid[body.row][body.column].hit = true;
-        setRadarGrid(updateRadarGrid)
+      let updateRadarGrid = [...radarGridRef.current];
+      updateRadarGrid[body.row][body.column].attacked = true;
+      updateRadarGrid[body.row][body.column].hit = true;
+      setRadarGrid(updateRadarGrid);
+    };
 
-    }
+    const handleWin = (body) => {
+      const { roomCode } = body;
+      socket.emit("send-message", {
+        username: "GAME",
+        roomCode,
+        message: `${user.username} WINS!!!!`,
+      });
+      setGameOver({ win: true });
+    };
 
-    const handleWin =(body)=>{
-      const {roomCode} = body
-      socket.emit('send-message', {username: 'GAME', roomCode, message: `${user.username} WINS!!!!` })
-      setGameOver({win: true})
-    }
-  
     if (socket) {
       socket.on("server-send-attack", attackRespond);
 
-      socket.on('player-ready', playerReady)
+      socket.on("player-ready", playerReady);
 
-      socket.on('miss', handleMiss);
+      socket.on("miss", handleMiss);
 
-      socket.on('hit', handleHit)
+      socket.on("hit", handleHit);
 
-      socket.on('you-win', handleWin)
-
+      socket.on("you-win", handleWin);
     }
 
     return () => {
-        console.log('off')
+      console.log("off");
       if (socket) {
         socket.off("server-send-attack", attackRespond);
-        socket.off('player-ready', playerReady)
-        socket.off('miss', handleMiss)
-        socket.off('hit', handleHit)
-        socket.off('you-win', handleWin)
+        socket.off("player-ready", playerReady);
+        socket.off("miss", handleMiss);
+        socket.off("hit", handleHit);
+        socket.off("you-win", handleWin);
       }
     };
   }, [socket]);
 
   const handleAttack = (row, column) => {
-    console.log(radarGrid[row][column])
-    if(!gameOver && everyoneReady&& myTurn && !radarGrid[row][column].attacked){
+    console.log(radarGrid[row][column]);
+    if (
+      !gameOver &&
+      everyoneReady &&
+      myTurn &&
+      !radarGrid[row][column].attacked
+    ) {
       socket.emit("send-attack", { row, column, roomCode, user });
-      setMyTurn(false)
+      setMyTurn(false);
     }
   };
-  // console.log(shipsPositionsRef.current)
-  // MAYBE WE SHOULD
+console.log(shipGridRef.current)
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
@@ -284,16 +445,16 @@ const startGame = () => {
                   if (square.ship !== null) {
                     cssClass = "ship";
                   }
-                  if (square.attacked === true && square.hit === true){
-                      cssClass = "hit"
+                  if (square.attacked === true && square.hit === true) {
+                    cssClass = "hit";
                   }
-                  if (square.attacked === true && square.hit === false){
-                      cssClass = "miss"
+                  if (square.attacked === true && square.hit === false) {
+                    cssClass = "miss";
                   }
-                  if (square.sunk === true){
-                    cssClass = 'sunk'
+                  if (square.sunk === true) {
+                    cssClass = "sunk";
                   }
-                 
+
                   return (
                     <div
                       onClick={() => console.log(square)}
@@ -311,191 +472,192 @@ const startGame = () => {
             );
           })}
         </section>
-{imReady? <div> <Chat socket={props.socket} /> </div> :
-        <section className="ship-yard">
-          <div className="ship-yard-button-container">
-            <button
-              onClick={() => {
-                let ships = Array.from(
-                  document.querySelectorAll("#ship-yard-ship-container > div")
-                );
-                for (let i = 0; i < ships.length; i++) {
-                  ships[i].style.display = "flex";
-                  setShipsDirection("horizontal");
-                }
-                let resetShipGrid = [...shipGrid];
-                for (let i = 0; i < resetShipGrid.length; i++) {
-                  for (let j = 0; j < resetShipGrid[i].length; j++) {
-                    resetShipGrid[i][j].ship = null;
+        {imReady ? (
+          <div>
+            {" "}
+            <Chat socket={props.socket} />{" "}
+          </div>
+        ) : (
+          <section className="ship-yard">
+            <div className="ship-yard-button-container">
+              <button
+                onClick={() => {
+                  let ships = Array.from(
+                    document.querySelectorAll("#ship-yard-ship-container > div")
+                  );
+                  for (let i = 0; i < ships.length; i++) {
+                    ships[i].style.display = "flex";
+                    setShipsDirection("horizontal");
                   }
-                }
-                setShipGrid(resetShipGrid);
-                setShipsSet(0);
-                setShipsPositions({
-                  battleship: {
-                    positions: [[], [], [], []],
-                    hits: 0,
-                    sunk: false,
-                  },
-                  carrier: {
-                    positions: [[], [], [], [], []],
-                    hits: 0,
-                    sunk: false,
-                  },
-                  sub: { positions: [[], [], []], hits: 0, sunk: false },
-                  cruiser: { positions: [[], [], []], hits: 0, sunk: false },
-                  destroyer: { positions: [[], []], hits: 0, sunk: false },
-                });
-              }}
-            >
-              reset
-            </button>
-            <button
-              onClick={() => {
-                if (shipsDirection === "horizontal") {
-                  setShipsDirection("vertical");
-                } else {
-                  setShipsDirection("horizontal");
-                }
-              }}
-            >
-              flip
-            </button>
-          </div>
-          <div id="ship-yard-ship-container" className={shipsDirection}>
-            <div
-              id="battleship"
-              draggable={true}
-              onDragStart={onDragStart}
-              className={shipsDirection}
-            >
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="battleship-0"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="battleship-1"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="battleship-2"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="battleship-3"
-              ></div>
+                  let resetShipGrid = [...shipGrid];
+                  for (let i = 0; i < resetShipGrid.length; i++) {
+                    for (let j = 0; j < resetShipGrid[i].length; j++) {
+                      resetShipGrid[i][j].ship = null;
+                    }
+                  }
+                  setShipGrid(resetShipGrid);
+                  setShipsSet(0);
+                  setShipsPositions({
+                    battleship: {
+                      positions: [[], [], [], []],
+                      hits: 0,
+                      sunk: false,
+                    },
+                    carrier: {
+                      positions: [[], [], [], [], []],
+                      hits: 0,
+                      sunk: false,
+                    },
+                    sub: { positions: [[], [], []], hits: 0, sunk: false },
+                    cruiser: { positions: [[], [], []], hits: 0, sunk: false },
+                    destroyer: { positions: [[], []], hits: 0, sunk: false },
+                  });
+                }}
+              >
+                reset
+              </button>
+              <button
+                onClick={() => {
+                  if (shipsDirection === "horizontal") {
+                    setShipsDirection("vertical");
+                  } else {
+                    setShipsDirection("horizontal");
+                  }
+                }}
+              >
+                flip
+              </button>
             </div>
-            <div
-              id="carrier"
-              draggable={true}
-              onDragStart={onDragStart}
-              className={shipsDirection}
-            >
+            <div id="ship-yard-ship-container" className={shipsDirection}>
               <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="carrier-0"
-              ></div>
+                id="battleship"
+                draggable={true}
+                onDragStart={onDragStart}
+                className={shipsDirection}
+              >
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="battleship-0"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="battleship-1"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="battleship-2"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="battleship-3"
+                ></div>
+              </div>
               <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="carrier-1"
-              ></div>
+                id="carrier"
+                draggable={true}
+                onDragStart={onDragStart}
+                className={shipsDirection}
+              >
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="carrier-0"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="carrier-1"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="carrier-2"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="carrier-3"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="carrier-4"
+                ></div>
+              </div>
               <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="carrier-2"
-              ></div>
+                id="sub"
+                draggable={true}
+                onDragStart={onDragStart}
+                className={shipsDirection}
+              >
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="sub-0"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="sub-1"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="sub-2"
+                ></div>
+              </div>
               <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="carrier-3"
-              ></div>
+                id="cruiser"
+                draggable={true}
+                onDragStart={onDragStart}
+                className={shipsDirection}
+              >
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="cruiser-0"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="cruiser-1"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="cruiser-2"
+                ></div>
+              </div>
               <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="carrier-4"
-              ></div>
+                id="destroyer"
+                draggable={true}
+                onDragStart={onDragStart}
+                className={shipsDirection}
+              >
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="destroyer-0"
+                ></div>
+                <div
+                  onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
+                  className="ship-yard-ship-piece"
+                  id="destroyer-1"
+                ></div>
+              </div>
             </div>
-            <div
-              id="sub"
-              draggable={true}
-              onDragStart={onDragStart}
-              className={shipsDirection}
-            >
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="sub-0"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="sub-1"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="sub-2"
-              ></div>
-            </div>
-            <div
-              id="cruiser"
-              draggable={true}
-              onDragStart={onDragStart}
-              className={shipsDirection}
-            >
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="cruiser-0"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="cruiser-1"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="cruiser-2"
-              ></div>
-            </div>
-            <div
-              id="destroyer"
-              draggable={true}
-              onDragStart={onDragStart}
-              className={shipsDirection}
-            >
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="destroyer-0"
-              ></div>
-              <div
-                onMouseDown={(e) => setDraggedShipPiece(e.target.id)}
-                className="ship-yard-ship-piece"
-                id="destroyer-1"
-              ></div>
-            </div>
-          </div>
-        </section>
-}
+          </section>
+        )}
         <h2>CODE: {roomCode}</h2>
       </section>
       {imReady ? null : (
         <div>
           {shipsSet === 5 ? (
-            <button
-              onClick={startGame}
-            >
-              Start Game
-            </button>
+            <button onClick={startGame}>Start Game</button>
           ) : (
             <div>Place Ships to start </div>
           )}
@@ -508,18 +670,18 @@ const startGame = () => {
             return (
               <div className="radar-grid-row">
                 {row.map((square) => {
-                    /*
+                  /*
                     CHANGE CSS to match square.ship
                     */
                   let cssClass = "none";
                   if (square.ship !== null) {
                     cssClass = "ship";
                   }
-                  if (square.attacked === true && square.hit === true){
-                      cssClass = "hit"
+                  if (square.attacked === true && square.hit === true) {
+                    cssClass = "hit";
                   }
-                  if (square.attacked === true && square.hit === false){
-                      cssClass = "miss"
+                  if (square.attacked === true && square.hit === false) {
+                    cssClass = "miss";
                   }
                   return (
                     <div
@@ -531,7 +693,17 @@ const startGame = () => {
               </div>
             );
           })}
-          {everyoneReady && <h2>{ !gameOver? (myTurn? 'Your Turn!' : 'Opponent\'s turn!') : (gameOver.win ? 'You Win!' : 'You Lose!')}</h2>}
+          {everyoneReady && (
+            <h2>
+              {!gameOver
+                ? myTurn
+                  ? "Your Turn!"
+                  : "Opponent's turn!"
+                : gameOver.win
+                ? "You Win!"
+                : "You Lose!"}
+            </h2>
+          )}
         </section>
       )}
     </div>
