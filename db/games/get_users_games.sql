@@ -1,0 +1,1 @@
+SELECT * FROM games WHERE player_1 = $1 OR player_2 = $1;

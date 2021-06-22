@@ -3,7 +3,7 @@ const express = require("express");
 const massive = require("massive");
 const session = require("express-session");
 const authController = require("./controllers/authController");
-
+const gameController = require('./controllers/gameController');
 const path = require("path");
 
 const { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT } = process.env;
@@ -55,3 +55,5 @@ massive({
 //AUth Endpoint
 app.post("/api/auth/login", authController.login);
 app.get("/api/auth/user", authController.getUser);
+app.get("/api/get/game/:roomCode", gameController.getGameData)
+app.get("/api/user/games/:userId", gameController.getAllUsersGames);

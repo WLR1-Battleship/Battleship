@@ -1,6 +1,10 @@
-/ RESET / DROP TABLE games;
 DROP TABLE moves;
+DROP TABLE games;
 DROP TABLE users;
+
+
+
+
 CREATE TABLE users(
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50),
