@@ -1,0 +1,80 @@
+.auth{
+    background-image: url("../assets/images/adam-pacanski-CwkNdlx2V1E-unsplash.jpg");
+    /* filter: grayscale(100%); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    /* background-color: teal; */
+}
+
+.auth-container{
+    border-radius: 8px;
+    box-shadow: 0 0 25px black;
+    width: 35vw;
+    height: 25vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 20px;
+    position: relative;
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.auth-title{
+    font-size: 80px;
+    font-family: jazz let, fantasy;
+    color: slategray;
+    -webkit-text-stroke: 3px rgba(253, 154, 5, 0.514);
+    cursor: none;
+}
+
+.auth-input{
+    border-radius: 5px;
+    background-color: whitesmoke;
+}
+
+.auth-button{
+    border-radius: 5px;
+    /* background-color: lightgray; */
+    background-color: transparent;
+    color: rgba(253, 154, 5, 0.822);
+    transition-duration: 0.4s;
+    font-size: 16px;
+}
+
+.auth-button:hover{
+    background-color: rgb(70, 77, 85);
+    /* -webkit-text-stroke: 3px rgba(253, 154, 5, 0.514); */
+    /* color: rgba(253, 154, 5, 0.822); */
+    border: rgba(253, 154, 5, 0.514) solid 1px;
+    cursor: pointer;
+}
+
+@media(max-width: 1350px){
+    .auth-title{
+        font-size: 60px;
+    }
+    .auth-container{
+        height: 35vh
+    }
+}
+
+@media(max-width: 500px){
+    .auth-container{
+        box-shadow: none;
+        background-color: transparent;
+    }
+    .auth-title{
+        color: black;
+    }
+}
