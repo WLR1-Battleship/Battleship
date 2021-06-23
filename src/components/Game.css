@@ -194,13 +194,67 @@
   background-color: blue;
   border: none;
 }
-.ship-grid-square.hit,
+.ship-grid-square.miss {
+  background-color: rgba(255, 255, 255, 0.479);
+  border-radius: 75%;
+  border: solid white 5px;
+  animation: fadeinMiss 2s;
+}
+.ship-grid-square.hit {
+  background-color: rgba(255, 0, 0, 0.479);
+  border-radius: 75%;
+  border: solid red 5px;
+  animation: fadeinHit 2s;
+}
+@keyframes fadeinMiss {
+  0% {
+    background-color: lightblue;
+    border-radius: 0%;
+    border: black 1px solid;
+    box-sizing: border-box;
+  }
+  99% {
+    background-color: lightblue;
+    border-radius: 0%;
+    border: black 1px solid;
+    box-sizing: border-box;
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.479);
+    border-radius: 75%;
+    border: solid white 5px;
+  }
+}
+
 .radar-grid-square.hit {
   background-color: rgba(255, 0, 0, 0.479);
   border-radius: 75%;
   border: solid red 5px;
 }
-.ship-grid-square.miss,
+
+.ship-grid-square.hit {
+  background-color: rgba(255, 0, 0, 0.479);
+  border-radius: 75%;
+  border: solid red 5px;
+  animation: fadeinHit 2s;
+}
+@keyframes fadeinHit {
+  0% {
+    background-color: blue;
+    border-radius: 0%;
+    border: none;
+  }
+  99% {
+    background-color: blue;
+    border-radius: 0%;
+    border: none;
+  }
+  100% {
+    background-color: rgba(255, 0, 0, 0.479);
+    border-radius: 75%;
+    border: solid red 5px;
+  }
+}
 .radar-grid-square.miss {
   background-color: rgba(255, 255, 255, 0.479);
   border-radius: 75%;
@@ -213,10 +267,72 @@
 }
 
 .ship-grid-square.sunk {
-  background-color: purple;
+  background-color: rgb(5, 5, 5);
+  animation: fadeinSink 2s;
+}
+@keyframes fadeinSink {
+  0% {
+    background-color: blue;
+  }
+  99% {
+    background-color: blue;
+  }
+  100% {
+    background-color: rgb(5, 5, 5);
+  }
 }
 
 .turn {
   position: relative;
   z-index: 201;
+}
+
+/*Replay Component*/
+
+.replay-grid-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.missile-right-to-left {
+  height: 5px;
+  width: 20px;
+  background-color: crimson;
+  display: inline-block;
+  position: relative;
+  animation: attack-right-to-left 2s;
+  z-index: 10;
+}
+@keyframes attack-right-to-left {
+  0% {
+    display: inline-block;
+    left: 300px;
+    opacity: 0;
+  }
+
+  100% {
+    left: 0px;
+    opacity: 1;
+  }
+}
+.missile-left-to-right {
+  height: 5px;
+  width: 20px;
+  background-color: crimson;
+  display: inline-block;
+  position: relative;
+  animation: attack-left-to-right 2s;
+  z-index: 10;
+}
+@keyframes attack-left-to-right {
+  0% {
+    display: inline-block;
+    right: 300px;
+    opacity: 0;
+  }
+
+  100% {
+    right: 0px;
+    opacity: 1;
+  }
 }
