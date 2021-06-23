@@ -1,9 +1,20 @@
+.chat {
+    padding: 5px;
+    font-family: "Big Shoulders Stencil Display", cursive;
+    font-size: larger;
+    color: greenyellow;
+  }
 .chat-board{
     overflow-y: auto;
     height: 10rem;
+    max-width: 90%;
     border: black 1px solid;
     display: flex;
     flex-direction: column-reverse;
+    text-align: start;
+    padding: 5px;
+    margin: 5px;
+    background-color: black;
 }
 
 .chat-button{

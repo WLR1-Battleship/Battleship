@@ -33,7 +33,8 @@ const Chat = props => {
     }
 
     return(
-        <section>
+        <section className="chat">
+        <h1>Chat:</h1>
             <div className='chat-board'>
                 {messages.map((body) => (
                     <div>
@@ -41,7 +42,7 @@ const Chat = props => {
                     </div>
                 ))}
             </div>
-            <input className='chat-input' value={message} onChange={(e) => setMessage(e.target.value)} />
+            <input placeholder="Enter Message Here" className='chat-input' value={message} onChange={(e) => setMessage(e.target.value)} />
             <button className='chat-button' onClick={sendMessage}>Send</button>
         </section>
     )
