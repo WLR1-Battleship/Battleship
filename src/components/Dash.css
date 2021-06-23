@@ -17,6 +17,90 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    box-shadow: 0 0 25px black;
+    background-color: rgba(0, 0, 0, .4);
    
+}
+
+.dash{
+    background-image: url("../assets/images/piotr-guzik-zgJTGnxxBvo-unsplash.jpg");
+    /* filter: grayscale(100%); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    color: white;
+    flex-direction: column;
+    /* background-color: teal; */
+}
+
+.current-games-button{
+    cursor: pointer;
+}
+
+.current-games-button:hover{
+    color: rgb(255, 217, 0);
+}
+
+.replay-games-button{
+    cursor: pointer;
+}
+
+.replay-games-button:hover{
+    color: rgb(255, 217, 0);
+}
+
+.dash-create-game-button{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .6);
+    border-radius: 5px;
+    color: whitesmoke;
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+}
+
+.dash-create-game-button:hover{
+    background-color: green;
+}
+
+.dash-join-game-button{
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, .6);
+    border-radius: 5px;
+    color: whitesmoke;
+}
+
+.dash-join-game-button:hover{
+    background-color: green;
+}
+
+.dash-replay-games-title{
+    cursor: default;
+}
+
+.dash-current-games-title{
+    cursor: default;
+}
+
+.dash-input{
+    border-bottom: black solid 2px;
+    background-color: transparent;
+    border-left: transparent;
+    border-right: transparent;
+    border-top: transparent;
+    color: whitesmoke;
+}
+
+.dash-input::placeholder{
+    color: whitesmoke;
+    opacity: 1;
 }

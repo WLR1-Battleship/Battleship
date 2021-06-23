@@ -36,3 +36,11 @@
 .chat-input{
     background-color: whitesmoke;
 }
+
+.chat-text{
+    font-size: 1rem;
+}
+
+.chat-title{
+    cursor: default;
+}
