@@ -34,10 +34,10 @@ const Chat = props => {
 
     return(
         <section className="chat">
-        <h1>Chat:</h1>
+        <h1 className='chat-title'>Chat:</h1>
             <div className='chat-board'>
                 {messages.map((body) => (
-                    <div>
+                    <div className='chat-text'>
                         {body.username}: {body.message}
                     </div>
                 ))}
