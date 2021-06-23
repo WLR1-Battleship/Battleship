@@ -113,7 +113,7 @@ const Dash = (props) => {
         <h1>replay games</h1>
         {pastGames.map((game) => {
                 return <div  onClick={()=>{handleReplay(game)}}>
-                  <h3> {`vs. ${game.opponent.username}`}</h3>
+                  <h3> {`vs. ${game.opponent? game.opponent.username:'Nobody'}`}</h3>
                   <h3>{game.room_code}</h3>
                 </div>;
               })}
@@ -122,7 +122,7 @@ const Dash = (props) => {
         <h1>current games</h1>
               {currentGames.map((game) => {
                 return <div  onClick={()=>{handleJoinGame(game)}}>
-                  <h3> {`vs. ${game.opponent.username}`}</h3>
+                  <h3> {`vs. ${game.opponent? game.opponent.username:'Nobody'}`}</h3>
                   <h3>{game.room_code}</h3>
                 </div>;
               })}
