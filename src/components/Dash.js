@@ -119,8 +119,10 @@ const Dash = (props) => {
         <h1 className='dash-replay-games-title'>REPLAY GAMES:</h1>
         <br />
         {pastGames.map((game) => {
+
                 return <div className='replay-games-button'  onClick={()=>{handleReplay(game)}}>
-                  <h3> {`vs. ${game.opponent.username}`}</h3>
+                <h3> {`vs. ${game.opponent? game.opponent.username:'Nobody'}`}</h3>
+
                   <h3>{game.room_code}</h3>
                 </div>;
               })}
@@ -129,8 +131,10 @@ const Dash = (props) => {
         <h1 className='dash-current-games-title'>CURRENT GAMES:</h1>
         <br />
               {currentGames.map((game) => {
+
                 return <div className='current-games-button'  onClick={()=>{handleJoinGame(game)}}>
-                  <h3> {`vs. ${game.opponent.username}`}</h3>
+                    <h3> {`vs. ${game.opponent? game.opponent.username:'Nobody'}`}</h3>
+
                   <h3>{game.room_code}</h3>
                 </div>;
               })}
