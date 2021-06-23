@@ -436,7 +436,7 @@ console.log(shipGridRef.current)
     <div className="game-screen">
       <section className="yard-grid-wrapper">
       <section> 
-      <h1>Your Ships:</h1>
+      <h1 className='your-ships-title'>Your Ships:</h1>
         <section className="ship-grid">
           {shipGrid.map((row) => {
             return (
@@ -657,7 +657,11 @@ console.log(shipGridRef.current)
             </div>
           </section>
         )}
-        <h2>CODE: {roomCode}</h2>
+        <div className='code-container'>
+          <h1 className='code-title'>CODE:</h1>
+          <br />
+          <h2> {roomCode} </h2>
+        </div>
       </section>
       {imReady ? null : (
         <div>
@@ -703,7 +707,7 @@ console.log(shipGridRef.current)
           <div className="scan"></div>
           </section>
           {everyoneReady && (
-            <h1>
+            <h1 className='your-turn'>
               {!gameOver
                 ? myTurn
                   ? "Your Turn!"

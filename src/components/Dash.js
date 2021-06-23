@@ -97,31 +97,39 @@ const Dash = (props) => {
   }, [socket]);
 
   return (
-    <div>
-      Dash
-      <button onClick={handleCreateGame}>Create Game</button>
-      <input
-        value={roomInput}
-        onChange={(e) => setRoomInput(e.target.value)}
-        placeholder="room code"
-      />
-      <button onClick={handleJoinGame}>Join</button>
+    <div className='dash'>
+      {/* Dash */}
+      <br />
+      <div>
+        <input
+          className='dash-input'
+          value={roomInput}
+          onChange={(e) => setRoomInput(e.target.value)}
+          placeholder="Enter Room Code"
+          />
+        <button className='dash-join-game-button' onClick={handleJoinGame}>Join</button>
+      </div>
+      <br />
+      <button className='dash-create-game-button' onClick={handleCreateGame}>Create Game</button>
+      <br />
       <div className="replay-current-games-container">
 
       
       <div>
-        <h1>replay games</h1>
+        <h1 className='dash-replay-games-title'>REPLAY GAMES:</h1>
+        <br />
         {pastGames.map((game) => {
-                return <div  onClick={()=>{handleReplay(game)}}>
+                return <div className='replay-games-button'  onClick={()=>{handleReplay(game)}}>
                   <h3> {`vs. ${game.opponent.username}`}</h3>
                   <h3>{game.room_code}</h3>
                 </div>;
               })}
       </div>
       <div>
-        <h1>current games</h1>
+        <h1 className='dash-current-games-title'>CURRENT GAMES:</h1>
+        <br />
               {currentGames.map((game) => {
-                return <div  onClick={()=>{handleJoinGame(game)}}>
+                return <div className='current-games-button'  onClick={()=>{handleJoinGame(game)}}>
                   <h3> {`vs. ${game.opponent.username}`}</h3>
                   <h3>{game.room_code}</h3>
                 </div>;

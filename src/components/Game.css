@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  height: 97.2vh;
   justify-content: space-around;
   padding: 10px;
   font-family: "Big Shoulders Stencil Display", cursive;
@@ -27,6 +27,7 @@
 #radar-header {
   font-size: 3rem;
   color: greenyellow;
+  cursor: default;
 }
 .radar-grid-square {
   position: relative;
@@ -71,6 +72,7 @@
 }
 
 .radar-grid {
+  cursor: crosshair red;
   overflow: hidden;
   position: relative;
   display: flex;
@@ -219,4 +221,22 @@
 .turn {
   position: relative;
   z-index: 201;
+}
+
+.your-ships-title{
+  cursor: default;
+}
+
+.code-title{
+  cursor: default;
+}
+
+.code-container{
+  display: flex;
+}
+
+.your-turn{
+  color: greenyellow;
+  font-size: 2rem;
+  cursor: default;
 }
