@@ -8,12 +8,14 @@ import Game from './components/Game'
 import {setUser} from './redux/authReducer'
 import axios from 'axios'
 import Auth from './components/Auth'
+import Replay from './components/Replay'
 
 function App(props) {
   const [ socket,setSocket ] = useState(null)
   const [onGame, setOnGame] = useState(false);
   const [onDash, setOnDash] = useState(true);
   const {user} = useSelector((store) => store.authReducer)
+  const [onReplay, setOnReplay] = useState(false)
   const dispatch = useDispatch();
 
   useEffect(()=>{
@@ -39,8 +41,9 @@ function App(props) {
   return (
     <div className="App">
       {!user && <Auth/>}
-      {user && onDash && <Dash socket={socket} setOnDash={setOnDash} setOnGame={setOnGame} />}
+      {user && onDash && <Dash socket={socket} setOnDash={setOnDash} setOnReplay={setOnReplay} setOnGame={setOnGame} />}
       {user && onGame && <Game socket={socket}/>}
+      {user && onReplay && <Replay /> }
     </div>
   );
 }

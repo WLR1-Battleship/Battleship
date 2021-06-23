@@ -24,6 +24,8 @@ const Game = (props) => {
   const { socket } = props;
   const { roomCode } = useSelector((store) => store.gameReducer);
   const { user } = useSelector((store) => store.authReducer);
+  const {opponentInfo} = useSelector((store)=>store.gameReducer);
+  console.log(opponentInfo)
   const shipGridRef = useRef(shipGrid);
   const radarGridRef = useRef(radarGrid);
   const shipsPositionsRef = useRef(shipsPositions);
@@ -45,7 +47,7 @@ const Game = (props) => {
 
   const updateGameRejoin = async (info) => {
       //determine if user is player1 or player2
-      console.log(info)
+      console.log(opponentInfo)
       let opponent;
       let opponentShips;
       let thisPlayer;
@@ -94,7 +96,7 @@ const Game = (props) => {
         for (let ship in shipsPositionsRef.current){
           for (let i = 0; i < shipsPositionsRef.current[ship].positions.length; i++){
             if (turn.move[0] === shipsPositionsRef.current[ship].positions[i][0] && turn.move[1] === shipsPositionsRef.current[ship].positions[i][1]){
-              socket.emit('hit', {roomCode: roomCode, row: turn.move[0], column: turn.move[1], username2: user.username})
+              socket.emit('hit', {roomCode: roomCode, row: turn.move[0], column: turn.move[1], username2: user.username, username: opponentInfo.username})
               hit = true;
               if(shipsPositionsRef.current[ship].hits >= shipsPositionsRef.current[ship].positions.length){
                 console.log(`${ship} SUNK!`)
@@ -114,7 +116,7 @@ const Game = (props) => {
           }
         }
         if (hit === false){
-          socket.emit('miss', {roomCode: roomCode, row: turn.move[0], column: turn.move[1], username2: user.username})
+          socket.emit('miss', {roomCode: roomCode, row: turn.move[0], column: turn.move[1], username2: user.username, username: opponentInfo.username})
 
         }
         setMyTurn(true)

@@ -56,4 +56,5 @@ massive({
 app.post("/api/auth/login", authController.login);
 app.get("/api/auth/user", authController.getUser);
 app.get("/api/get/game/:roomCode", gameController.getGameData)
+app.get("/api/get/completed/game/:roomCode", gameController.getCompletedGameData)
 app.get("/api/user/games/:userId", gameController.getAllUsersGames);

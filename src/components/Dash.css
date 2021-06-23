@@ -1,0 +1,22 @@
+.replay-current-games-container{
+    width: 100vw;
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.replay-current-games-container > div{
+    
+    display: flex;
+    flex-direction: column;
+   
+}
+.replay-current-games-container > div > div{
+    
+    height: 75px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid black;
+   
+}
