@@ -3,13 +3,16 @@ import badwordsRegExp from "badwords/regexp";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setRoomCode } from "../redux/gameReducer";
+import {setOpponent} from '../redux/gameReducer';
+import './Dash.css'
 
 const Dash = (props) => {
   const dispatch = useDispatch();
-  const { setOnDash, setOnGame, socket } = props;
+  const { setOnDash, setOnGame, socket, setOnReplay } = props;
   const [roomInput, setRoomInput] = useState("");
   const { user } = useSelector((store) => store.authReducer);
   const [currentGames, setCurrentGames] = useState([]);
+  const [pastGames, setPastGames] = useState([])
 
   useEffect(() => {
     axios
@@ -20,6 +23,9 @@ const Dash = (props) => {
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].game_complete !== true) {
             currentGames.push(res.data[i]);
+          }
+          else{
+            pastGames.push(res.data[i])
           }
         }
         setCurrentGames(currentGames);
@@ -51,15 +57,21 @@ const Dash = (props) => {
     }
     //Error check!
   };
+  const handleReplay = (game) => {
+    dispatch(setOpponent(game.opponent))
+    dispatch(setRoomCode(game.room_code))
+    setOnDash(false)
+    setOnReplay(true)
+  }
 
-  const handleJoinGame = (e) => {
-      console.log(e.target.id)
-    if (e.target.value !== "inputCode") {
+  const handleJoinGame = (game) => {
+    if (game.room_code) {
       socket &&
         socket.emit("client-attempt-join", {
-          code: e.target.id,
+          code: game.room_code,
           user_id: user.user_id,
         });
+        dispatch(setOpponent(game.opponent))
     }
     else {
     socket &&
@@ -93,22 +105,29 @@ const Dash = (props) => {
         onChange={(e) => setRoomInput(e.target.value)}
         placeholder="room code"
       />
-      <button value="inputCode" onClick={handleJoinGame}>Join</button>
+      <button onClick={handleJoinGame}>Join</button>
+      <div className="replay-current-games-container">
+
+      
       <div>
-        <h1>pastgames</h1>
+        <h1>replay games</h1>
+        {pastGames.map((game) => {
+                return <div  onClick={()=>{handleReplay(game)}}>
+                  <h3> {`vs. ${game.opponent.username}`}</h3>
+                  <h3>{game.room_code}</h3>
+                </div>;
+              })}
       </div>
       <div>
         <h1>current games</h1>
-        {currentGames.map((game) => {
-          return (
-            <div>
               {currentGames.map((game) => {
-                return <div id={game.room_code} onClick={handleJoinGame}>{game.room_code}</div>;
+                return <div  onClick={()=>{handleJoinGame(game)}}>
+                  <h3> {`vs. ${game.opponent.username}`}</h3>
+                  <h3>{game.room_code}</h3>
+                </div>;
               })}
-            </div>
-          );
-        })}
       </div>
+    </div>
     </div>
   );
 };
