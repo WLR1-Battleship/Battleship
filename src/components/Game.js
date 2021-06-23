@@ -25,7 +25,6 @@ const Game = (props) => {
   const { roomCode } = useSelector((store) => store.gameReducer);
   const { user } = useSelector((store) => store.authReducer);
   const {opponentInfo} = useSelector((store)=>store.gameReducer);
-  console.log(opponentInfo)
   const shipGridRef = useRef(shipGrid);
   const radarGridRef = useRef(radarGrid);
   const shipsPositionsRef = useRef(shipsPositions);
@@ -47,7 +46,6 @@ const Game = (props) => {
 
   const updateGameRejoin = async (info) => {
       //determine if user is player1 or player2
-      console.log(opponentInfo)
       let opponent;
       let opponentShips;
       let thisPlayer;

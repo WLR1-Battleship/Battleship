@@ -1,7 +1,8 @@
 *BUGS*
 
 
-
+***make sure more hits are not going
+***if you start game and reload without opponent than it doesnt work
 
 *TODO*
 
