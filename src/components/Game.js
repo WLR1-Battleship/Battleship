@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import "./Game.css";
+import "./Ships.scss"
 import Chat from "./Chat";
 import axios from "axios";
 
@@ -319,6 +320,7 @@ const Game = (props) => {
       ) {
         shipPosition[shipName].positions[nameIndex] = [square.row, i];
         addShipToShipGrid[square.row][i].ship = `${shipName}-${nameIndex}`;
+        addShipToShipGrid[square.row][i].direction = `${shipsDirection}`;
         nameIndex++;
       }
     } else {
@@ -347,6 +349,7 @@ const Game = (props) => {
       ) {
         shipPosition[shipName].positions[nameIndex] = [i, square.column];
         addShipToShipGrid[i][square.column].ship = `${shipName}-${nameIndex}`;
+        addShipToShipGrid[i][square.column].direction = `${shipsDirection}`;
         nameIndex++;
       }
     }
@@ -628,7 +631,8 @@ console.log(shipGridRef.current)
                   return (
                     <div
                       onClick={() => console.log(square)}
-                      className={`ship-grid-square ${cssClass}`}
+                      className={`ship-grid-square ${cssClass} ${square.direction? square.direction: ''}`}
+                      id={`${square.ship}`}
                       onDragOver={(e) => {
                         e.preventDefault();
                       }}
