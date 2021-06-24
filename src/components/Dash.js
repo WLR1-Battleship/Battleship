@@ -25,7 +25,7 @@ const Dash = (props) => {
             currentGames.push(res.data[i]);
           }
           else{
-            pastGames.push(res.data[i])
+            setPastGames([...pastGames, res.data[i]])
           }
         }
         setCurrentGames(currentGames);

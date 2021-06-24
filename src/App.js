@@ -42,8 +42,8 @@ function App(props) {
     <div className="App">
       {!user && <Auth/>}
       {user && onDash && <Dash socket={socket} setOnDash={setOnDash} setOnReplay={setOnReplay} setOnGame={setOnGame} />}
-      {user && onGame && <Game socket={socket}/>}
-      {user && onReplay && <Replay /> }
+      {user && onGame && <Game socket={socket} setOnGame={setOnGame} setOnDash={setOnDash}/>}
+      {user && onReplay && <Replay setOnDash={setOnDash} setOnReplay={setOnReplay}/> }
     </div>
   );
 }

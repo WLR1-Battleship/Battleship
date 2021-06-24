@@ -21,7 +21,7 @@ const Game = (props) => {
   const [everyoneReady, setEveryoneReady] = useState(false);
   const [radarGrid, setRadarGrid] = useState([]);
   const [shipGrid, setShipGrid] = useState([]);
-  const { socket } = props;
+  const { socket, setOnDash, setOnGame } = props;
   const { roomCode } = useSelector((store) => store.gameReducer);
   const { user } = useSelector((store) => store.authReducer);
   const {opponentInfo} = useSelector((store)=>store.gameReducer);
@@ -430,9 +430,15 @@ const Game = (props) => {
     }
   };
 console.log(shipGridRef.current)
+
+  const handleBackButton = () => {
+    setOnDash(true)
+    setOnGame(false)
+  }
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
+        <button onClick={() => handleBackButton()}>Back</button>
       <section> 
       <h1 className='your-ships-title'>Your Ships:</h1>
         <section className="ship-grid">

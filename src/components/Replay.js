@@ -5,7 +5,7 @@ import "./Game.css";
 //need to clear interval on dismount
 let moveId = 0;
 let replayInterval;
-const Replay = () => {
+const Replay = (props) => {
   const { roomCode } = useSelector((store) => store.gameReducer);
   const { opponentInfo } = useSelector((store) => store.gameReducer);
   const { user } = useSelector((store) => store.authReducer);
@@ -15,6 +15,7 @@ const Replay = () => {
   const [player2Ships, setPlayer2Ships] = useState(null);
   const [moves, setMoves] = useState(null);
   const [game, setGame] = useState(null);
+  const {setOnDash, setOnReplay} = props
   const player2ShipsRef = useRef(player2Ships);
   const player1ShipsRef = useRef(player1Ships);
 
@@ -201,8 +202,14 @@ const Replay = () => {
     moveId++;
   };
 
+  const handleBackButtonReplay = () => {
+    setOnDash(true)
+    setOnReplay(false)
+  }
+
   return (
     <div>
+      <button onClick={handleBackButtonReplay}>Back</button>
       Replay
       <button
         onClick={() => {
