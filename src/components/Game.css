@@ -172,8 +172,10 @@
 .ship-yard-ship-piece {
   width: 30px;
   height: 30px;
-  background-color: blue;
+  /* background-color: blue; */
+  border: rgba(0, 0, 0, .2) 1px solid;
 }
+
 
 /*Ship Grid*/
 .ship-grid {
@@ -192,6 +194,10 @@
   border: black 1px solid;
   box-sizing: border-box;
 }
+.ship-grid-square.none{
+  
+}
+
 .ship-grid-square.ship {
   background-color: blue;
   border: none;
