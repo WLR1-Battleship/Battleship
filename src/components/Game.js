@@ -30,6 +30,7 @@ const Game = (props) => {
   const shipsPositionsRef = useRef(shipsPositions);
   const [myTurn, setMyTurn] = useState(false);
   const [gameOver, setGameOver] = useState(false); // {win: true||false}
+  const [botShipGrid, setbotShipGrid] = useState([]);
   //get all previous game data on re-join
   useEffect(() => {
     axios
@@ -127,14 +128,114 @@ const Game = (props) => {
   //Start Game
   const startGame = () => {
     setImReady(true);
-    socket.emit("ships-set", {
-      user_id: user.user_id,
-      ships: shipsPositions,
-      roomCode: roomCode,
-      username: user.username,
-    });
+    let bot = false
+    if(opponentInfo.username === 'bot'){
+      bot = true
+      createbotshipgrid()
+    } else {
+      socket.emit("ships-set", {
+        bot,
+        user_id: user.user_id,
+        ships: shipsPositions,
+        roomCode: roomCode,
+        username: user.username,
+      });
+    }
   };
   //Placing ships onto grid
+  const handleRandomShips = () => {
+    let shipPieces = ['battleship-0', 'sub-0', 'carrier-0', 'cruiser-0', 'destroyer-0']
+    let orientation
+    while(shipPieces.length != 0){
+      let row = Math.floor(Math.random()*10)
+      let column = Math.floor(Math.random()*10)
+      let shipPiece = shipPieces[0]
+      Math.random() > .5 ? orientation = 'vertical' : orientation = 'horizontal'
+      let shipDrop = randomShipDrop(shipGrid[row][column], orientation, shipPiece)
+      if(shipDrop === true){
+        shipPieces.splice(0,1)
+      }
+    }
+    setShipsSet(5)
+    
+  }
+  const randomShipDrop = (square, orientation, shipPiece) => {
+    let shipName = shipPiece.slice(0, shipPiece.indexOf("-"));
+    let shipIndex = shipPiece.slice(
+      shipPiece.indexOf(shipPiece.length - 2)
+    );
+    let shipLength =
+      shipsPositions[shipPiece.slice(0, shipPiece.indexOf("-"))]
+        .positions.length;
+    //check if squares are available with direction HORIZONTAL
+    let addShipToShipGrid = [...shipGrid];
+    let shipPosition = { ...shipsPositions };
+    if (orientation === "horizontal") {
+      for (let i = 0; i < shipLength - shipIndex; i++) {
+        //9 === grid width
+        if (square.column + i > 9) {
+          return;
+        }
+        if (shipGrid[square.row][square.column + i].ship !== null) {
+          return;
+        }
+      }
+      for (let i = shipIndex; i > 0; i--) {
+        if (square.column - i < 0) {
+          return;
+        }
+        if (shipGrid[square.row][square.column - i].ship !== null) {
+          return;
+        }
+      }
+      let nameIndex = 0;
+      for (
+        let i = square.column - shipIndex;
+        i < square.column + shipLength - shipIndex;
+        i++
+      ) {
+        shipPosition[shipName].positions[nameIndex] = [square.row, i];
+        addShipToShipGrid[square.row][i].ship = `${shipName}-${nameIndex}`;
+        nameIndex++;
+      }
+    } else {
+      for (let i = 0; i < shipLength - shipIndex; i++) {
+        //9 === grid width
+        if (square.row + i > 9) {
+          return;
+        }
+        if (shipGrid[square.row + i][square.column].ship !== null) {
+          return;
+        }
+      }
+      for (let i = shipIndex; i > 0; i--) {
+        if (square.row - i < 0) {
+          return;
+        }
+        if (shipGrid[square.row - 1][square.column].ship !== null) {
+          return;
+        }
+      }
+      let nameIndex = 0;
+      for (
+        let i = square.row - shipIndex;
+        i < square.row + shipLength - shipIndex;
+        i++
+      ) {
+        shipPosition[shipName].positions[nameIndex] = [i, square.column];
+        addShipToShipGrid[i][square.column].ship = `${shipName}-${nameIndex}`;
+        nameIndex++;
+      }
+    }
+    setShipsPositions(shipPosition);
+    setShipGrid(addShipToShipGrid);
+    document.getElementById(shipName).style.display = "none";
+    setShipsSet(shipsSet + 1);
+    //check if ships are all set
+    //update the ship position locally and in the db
+    return true
+  };
+
   const onDragStart = () => {};
   const onShipDrop = (square) => {
     let shipName = draggedShipPiece.slice(0, draggedShipPiece.indexOf("-"));
@@ -525,6 +626,7 @@ console.log(shipGridRef.current)
               >
                 reset
               </button>
+              <button onClick={handleRandomShips}>Random</button>
               <button
                 onClick={() => {
                   if (shipsDirection === "horizontal") {

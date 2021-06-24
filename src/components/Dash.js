@@ -96,6 +96,18 @@ const Dash = (props) => {
     };
   }, [socket]);
 
+  const handleVsBot = () => {
+    let code = generateCode("", 6);
+    dispatch(setRoomCode(code));
+    //maybe change set opponent based on real bot in database
+    dispatch(setOpponent({username: 'bot', user_id: 100}))
+    if (socket) {
+      socket.emit("client-start-game", { code, user_id: user.user_id }); // CHANGE THIS TO ACTUAL user id FROM REDUX
+    }
+    setOnGame(true);
+    setOnDash(false);
+  }
+
   return (
     <div className='dash'>
       {/* Dash */}
@@ -111,6 +123,7 @@ const Dash = (props) => {
       </div>
       <br />
       <button className='dash-create-game-button' onClick={handleCreateGame}>Create Game</button>
+      <button onClick={handleVsBot}>VS. Bot</button>
       <br />
       <div className="replay-current-games-container">
 
