@@ -33,5 +33,13 @@ module.exports = {
             games[i].opponent = opponentInfo
         }
         res.status(200).send(games)
+    },
+
+    setBotGame: (req, res) => {
+        const db = req.app.get('db')
+        let player = JSON.stringify(req.body.player)
+        let bot = JSON.stringify(req.body.bot)
+        db.games.set_bot_game(player, bot, req.body.roomCode)
+        res.sendStatus(200)
     }
 }
