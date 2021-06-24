@@ -26,3 +26,10 @@ CREATE TABLE moves (
     user_id INT REFERENCES users(user_id),
     move INT []
 );
+
+-- bot into database
+
+-- INSERT INTO users
+-- (username, games_played, wins)
+-- VALUES
+-- ('BOT', 0, 0);

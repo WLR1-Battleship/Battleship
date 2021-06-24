@@ -30,7 +30,14 @@ const Game = (props) => {
   const shipsPositionsRef = useRef(shipsPositions);
   const [myTurn, setMyTurn] = useState(false);
   const [gameOver, setGameOver] = useState(false); // {win: true||false}
-  const [botShipGrid, setbotShipGrid] = useState([]);
+  const [botShipGrid, setBotShipGrid] = useState([]);
+  const [botShipPosition, setBotShipPosition] = useState({
+    battleship: { positions: [[], [], [], []], hits: 0, sunk: false },
+    carrier: { positions: [[], [], [], [], []], hits: 0, sunk: false },
+    sub: { positions: [[], [], []], hits: 0, sunk: false },
+    cruiser: { positions: [[], [], []], hits: 0, sunk: false },
+    destroyer: { positions: [[], []], hits: 0, sunk: false },
+  })
   //get all previous game data on re-join
   useEffect(() => {
     axios
@@ -44,6 +51,26 @@ const Game = (props) => {
         
       });
   }, []);
+
+  useEffect(() => {
+    let shipSquares = [];
+
+    for (let i = 0; i < 10; i++) {
+      let row = [];
+      for (let j = 0; j < 10; j++) {
+        row.push({
+          row: i,
+          column: j,
+          attacked: false,
+          sunk: false,
+          hit: false,
+          ship: null,
+        });
+      }
+      shipSquares.push(row);
+    }
+    setBotShipGrid(shipSquares)
+  }, [])
 
   const updateGameRejoin = async (info) => {
       //determine if user is player1 or player2
@@ -128,13 +155,12 @@ const Game = (props) => {
   //Start Game
   const startGame = () => {
     setImReady(true);
-    let bot = false
     if(opponentInfo.username === 'bot'){
-      bot = true
-      createbotshipgrid()
+      handleRandomShips('bot', botShipGrid, botShipPosition)
+      setMyTurn(true)
+      setEveryoneReady(true)
     } else {
       socket.emit("ships-set", {
-        bot,
         user_id: user.user_id,
         ships: shipsPositions,
         roomCode: roomCode,
@@ -143,7 +169,7 @@ const Game = (props) => {
     }
   };
   //Placing ships onto grid
-  const handleRandomShips = () => {
+  const handleRandomShips = (bot, shipGrid, shipsPositions) => {
     let shipPieces = ['battleship-0', 'sub-0', 'carrier-0', 'cruiser-0', 'destroyer-0']
     let orientation
     while(shipPieces.length != 0){
@@ -151,7 +177,7 @@ const Game = (props) => {
       let column = Math.floor(Math.random()*10)
       let shipPiece = shipPieces[0]
       Math.random() > .5 ? orientation = 'vertical' : orientation = 'horizontal'
-      let shipDrop = randomShipDrop(shipGrid[row][column], orientation, shipPiece)
+      let shipDrop = randomShipDrop(shipGrid[row][column], orientation, shipPiece, bot, shipGrid, shipsPositions)
       if(shipDrop === true){
         shipPieces.splice(0,1)
       }
@@ -159,7 +185,7 @@ const Game = (props) => {
     setShipsSet(5)
     
   }
-  const randomShipDrop = (square, orientation, shipPiece) => {
+  const randomShipDrop = (square, orientation, shipPiece, bot, shipGrid, shipsPositions) => {
     let shipName = shipPiece.slice(0, shipPiece.indexOf("-"));
     let shipIndex = shipPiece.slice(
       shipPiece.indexOf(shipPiece.length - 2)
@@ -227,12 +253,31 @@ const Game = (props) => {
         nameIndex++;
       }
     }
-    setShipsPositions(shipPosition);
-    setShipGrid(addShipToShipGrid);
-    document.getElementById(shipName).style.display = "none";
-    setShipsSet(shipsSet + 1);
-    //check if ships are all set
-    //update the ship position locally and in the db
+    if(bot === 'bot'){
+      setBotShipGrid(addShipToShipGrid)
+      setBotShipPosition(shipPosition)
+      let shipFull = true
+      for(let ship in shipPosition){
+        for(let i = 0; i < shipPosition[ship].positions.length; i++){
+          if(shipPosition[ship].positions[i].length === 0){
+            shipFull = false
+            break
+          }
+        }
+      }
+      if(shipFull === true){
+        axios.put('/api/bot/setgame', {bot: shipPosition, player: shipsPositionsRef.current, roomCode: roomCode})
+        console.log(shipPosition)
+        console.log(shipsPositionsRef.current)
+      }
+    } else {
+        setShipsPositions(shipPosition);
+        setShipGrid(addShipToShipGrid);
+        document.getElementById(shipName).style.display = "none";
+        setShipsSet(shipsSet + 1);
+    }
+      //check if ships are all set
+      //update the ship position locally and in the db
     return true
   };
 
@@ -518,9 +563,22 @@ const Game = (props) => {
     };
   }, [socket]);
 
+  const attackBot = (row, column) => {
+    
+  }
+
   const handleAttack = (row, column) => {
+    if(opponentInfo.username === 'BOT' &&
+      !gameOver &&
+      everyoneReady &&
+      myTurn &&
+      !radarGrid[row][column].attacked
+    )
+    {
+      attackBot(row, column)
+    }
     console.log(radarGrid[row][column]);
-    if (
+    if (opponentInfo.username !== 'BOT'&&
       !gameOver &&
       everyoneReady &&
       myTurn &&
@@ -536,6 +594,9 @@ console.log(shipGridRef.current)
     setOnDash(true)
     setOnGame(false)
   }
+
+  console.log(botShipPosition)
+
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
@@ -626,7 +687,7 @@ console.log(shipGridRef.current)
               >
                 reset
               </button>
-              <button onClick={handleRandomShips}>Random</button>
+              <button onClick={() => handleRandomShips('', shipGrid, shipsPositions)}>Random</button>
               <button
                 onClick={() => {
                   if (shipsDirection === "horizontal") {

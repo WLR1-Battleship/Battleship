@@ -100,7 +100,7 @@ const Dash = (props) => {
     let code = generateCode("", 6);
     dispatch(setRoomCode(code));
     //maybe change set opponent based on real bot in database
-    dispatch(setOpponent({username: 'bot', user_id: 100}))
+    dispatch(setOpponent({username: 'BOT', user_id: 17}))
     if (socket) {
       socket.emit("client-start-game", { code, user_id: user.user_id }); // CHANGE THIS TO ACTUAL user id FROM REDUX
     }
