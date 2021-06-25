@@ -145,7 +145,7 @@ const Dash = (props) => {
       <div>
         <h1 className='dash-current-games-title'>CURRENT GAMES:</h1>
         <br />
-              {currentGames.map((game) => {
+              {currentGames.filter((game)=> game.opponent?.user_id !== user.user_id).map((game) => {
 
                 return <div className='current-games-button'  onClick={()=>{handleJoinGame(game)}}>
                     <h3> {`vs. ${game.opponent? game.opponent.username:'Nobody'}`}</h3>
