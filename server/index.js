@@ -59,3 +59,4 @@ app.get("/api/get/game/:roomCode", gameController.getGameData)
 app.get("/api/get/completed/game/:roomCode", gameController.getCompletedGameData)
 app.get("/api/user/games/:userId", gameController.getAllUsersGames);
 app.put('/api/bot/setgame', gameController.setBotGame)
+app.post('/api/game/add/move', gameController.addMove)

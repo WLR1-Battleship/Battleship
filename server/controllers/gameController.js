@@ -41,5 +41,13 @@ module.exports = {
         let bot = JSON.stringify(req.body.bot)
         db.games.set_bot_game(player, bot, req.body.roomCode)
         res.sendStatus(200)
+    },
+
+    addMove: (req, res) => {
+        const db = req.app.get('db')
+        const {row, column, roomCode, user_id} = req.body
+        db.moves.add_move([roomCode, user_id, row, column]).then(()=>{
+            res.sendStatus(200)
+        })
     }
 }
