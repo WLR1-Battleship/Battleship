@@ -20,14 +20,16 @@ const Dash = (props) => {
       .then((res) => {
         console.log(res);
         let currentGames = [];
+        let pastGamesData = [];
         for (let i = 0; i < res.data.length; i++) {
           if (res.data[i].game_complete !== true) {
             currentGames.push(res.data[i]);
           }
           else{
-            setPastGames([...pastGames, res.data[i]])
+            pastGamesData.push(res.data[i])
           }
         }
+        setPastGames(pastGamesData)
         setCurrentGames(currentGames);
       })
       .catch((err) => {
