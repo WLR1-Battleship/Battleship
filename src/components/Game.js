@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import "./Game.scss";
+import "./Game.css";
 import "./Ships.scss"
 import Chat from "./Chat";
 import axios from "axios";

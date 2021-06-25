@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import "./Game.scss";
+import "./Game.css";
 //need to clear interval on dismount
 let moveId = 0;
 let replayInterval;
