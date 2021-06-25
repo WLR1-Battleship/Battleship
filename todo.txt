@@ -1,15 +1,19 @@
 *BUGS*
 
-
-***make sure more hits are not going
-***if you start game and reload without opponent than it doesnt work
+-bots and players moves are not inserted correctly into db because of timing
+-if you start game and reload without opponent than it doesnt work
 
 *TODO*
 
--add moves to db
+FOR BOT:
 
--change css on grid sqaures to match ship name 
+-async play needs to set correct turn(always players turn on reload
+-async play needs to populate the computer grid correctly on reload
+-need to set the game to complete in the database
 
+
+
+FOR GAME:
 -add username of opponent 
 
 -add status of opponent

@@ -1,9 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./Game.css";
 import "./Ships.scss"
 import Chat from "./Chat";
 import axios from "axios";
+import {setOpponent} from '../redux/gameReducer'
 
 const Game = (props) => {
   //Placing ships onto grid
@@ -17,7 +18,7 @@ const Game = (props) => {
   const [shipsSet, setShipsSet] = useState(0);
   const [shipsDirection, setShipsDirection] = useState("horizontal");
   const [draggedShipPiece, setDraggedShipPiece] = useState(null);
-  ////////////////////////////////////////////////////////////////
+  const dispatch = useDispatch()
   const [imReady, setImReady] = useState(false);
   const [everyoneReady, setEveryoneReady] = useState(false);
   const [radarGrid, setRadarGrid] = useState([]);
@@ -44,7 +45,6 @@ const Game = (props) => {
     axios
       .get(`/api/get/game/${roomCode}`)
       .then((res) => {
-        console.log(res.data);
         updateGameRejoin(res.data)
       })
       .catch((err) => {
@@ -91,8 +91,6 @@ const Game = (props) => {
         opponent = info.game.player_1;
         opponentShips = info.game.player_1_ships;
       }
-      console.log("thisplayer",thisPlayer, thisPlayerShips)
-      console.log("opponent",opponent, opponentShips)
       if (thisPlayerShips !== null){
       setShipsPositions(thisPlayerShips)
       setImReady(true)
@@ -102,7 +100,6 @@ const Game = (props) => {
       } 
       setGrids(opponentShips, thisPlayerShips, info.moves, opponent, thisPlayer) 
       if (info.moves.length > 0){
-        console.log(shipsPositionsRef.current)
       let turn = info.moves.sort((a,b)=>{
         if (a.move_id > b.move_id){
           return -1
@@ -116,9 +113,6 @@ const Game = (props) => {
         setMyTurn(false)
       }
       else{
-        //why isnt the shipGridRef current?
-        console.log(shipGridRef.current)
-        console.log(shipsPositionsRef.current)
         let hit = false
         for (let ship in shipsPositionsRef.current){
           for (let i = 0; i < shipsPositionsRef.current[ship].positions.length; i++){
@@ -132,9 +126,7 @@ const Game = (props) => {
                 for (const key in shipsPositionsRef.current) {
                   allSunk += shipsPositionsRef.current[key].hits
                 }
-                console.log(allSunk)
                 if(allSunk === 17){
-                  console.log('YOU LOSE')
                   setGameOver({win: false})
                   socket.emit('player-sunk', {user_id: user.user_id, roomCode: roomCode})
                 }
@@ -156,18 +148,24 @@ const Game = (props) => {
   //Start Game
   const startGame = () => {
     setImReady(true);
-    if(opponentInfo.username === 'bot'){
+    if (opponentInfo !== null){
+    if(opponentInfo.username === 'BOT'){
       handleRandomShips('bot', botShipGrid, botShipPosition)
       setMyTurn(true)
       setEveryoneReady(true)
-    } else {
+      return
+     
+     } 
+
+    } 
+     
       socket.emit("ships-set", {
         user_id: user.user_id,
         ships: shipsPositions,
         roomCode: roomCode,
         username: user.username,
       });
-    }
+    
   };
   //Placing ships onto grid
   const handleRandomShips = (bot, shipGrid, shipsPositions) => {
@@ -268,8 +266,6 @@ const Game = (props) => {
       }
       if(shipFull === true){
         axios.put('/api/bot/setgame', {bot: shipPosition, player: shipsPositionsRef.current, roomCode: roomCode})
-        console.log(shipPosition)
-        console.log(shipsPositionsRef.current)
       }
     } else {
         setShipsPositions(shipPosition);
@@ -474,10 +470,8 @@ const Game = (props) => {
     let updateShipGrid = [...shipGridRef.current]
     if (shipGridRef.current[body.row][body.column].ship !== null){
       let shipName = shipGridRef.current[body.row][body.column].ship.slice(0, shipGridRef.current[body.row][body.column].ship.indexOf("-"));
-      // console.log('SHip Positions: ', shipsPositionsRef.current, 'shipPName: ', shipName)
         socket.emit('hit', {...body, username2: user.username})
         setShipsPositions({...shipsPositionsRef.current, [shipName]: {...shipsPositionsRef.current[shipName], hits: shipsPositionsRef.current[shipName].hits+1 }})
-        // console.log('new positions: ', shipsPositionsRef.current)
         updateShipGrid[body.row][body.column].attacked = true;
         updateShipGrid[body.row][body.column].hit = true;
         if(shipsPositionsRef.current[shipName].hits + 1 >= shipsPositionsRef.current[shipName].positions.length){
@@ -505,18 +499,16 @@ const Game = (props) => {
     }
   setMyTurn(true)
   setShipGrid(updateShipGrid)
-  console.log(body);
 };
 
   useEffect(() => {
     const playerReady = (body) => {
       const { username, gameReady, player_1 } = body;
       if (gameReady) {
-        console.log("EVERYONE READY");
+        dispatch(setOpponent({username: username}))
         setEveryoneReady(true);
         player_1 === user.user_id && setMyTurn(true);
       }
-      console.log(username);
     };
 
     const handleMiss = (body) => {
@@ -555,7 +547,6 @@ const Game = (props) => {
     }
 
     return () => {
-      console.log("off");
       if (socket) {
         socket.off("server-send-attack", attackRespond);
         socket.off("player-ready", playerReady);
@@ -567,7 +558,100 @@ const Game = (props) => {
   }, [socket]);
 
   const attackBot = (row, column) => {
+    //need to update bots ship hits
+    let updateBotShips = {...botShipPosition}
+    let hit = false;
+    let sunk = false;
+    for (let ship in updateBotShips){
+      for (let i = 0; i < updateBotShips[ship].positions.length; i++){
+        if (updateBotShips[ship].positions[i][0] === row && updateBotShips[ship].positions[i][1] === column){
+          updateBotShips[ship].hits += 1
+          hit = true;
+          if (updateBotShips[ship].positions.length === updateBotShips[ship].hits){
+            sunk = ship + ""
+          }
+        }
+      }
+    }
+
+    setBotShipPosition(updateBotShips);
+     //need to update players radar
+     let updatePlayerRadar = [...radarGrid]
+     updatePlayerRadar[row][column].attacked = true
+
+     if (hit === true){
+        updatePlayerRadar[row][column].hit = true
+     }
+     if (sunk === true){
+      updatePlayerRadar[row][column].sunk = true
+    }
     
+    //need to send move to db
+    axios.post('/api/game/add/move', {row, column, user_id: user.user_id, roomCode})
+    //need to call a function for bot to move
+    botAttackPlayer();
+  }
+  const botAttackPlayer = () => {
+    
+    let successfulAttack = false
+    let playerShipGrid = [...shipGrid]
+    let playersShips = {...shipsPositions}
+    let row;
+    let column;
+    //easybot
+
+  //   while (!successfulAttack){
+  //   let tryRow = Math.floor(Math.random() * 10)
+  //   let tryColumn = Math.floor(Math.random() * 10)
+  //   if(!playerShipGrid[tryRow][tryColumn].attacked){
+  //     successfulAttack = true;
+  //     row = tryRow;
+  //     column = tryColumn
+  //   }
+  // }
+  //impossible bot
+  for (let i = 0; i < playerShipGrid.length; i++){
+    for (let j = 0; j  < playerShipGrid[i].length; j++){
+      if (playerShipGrid[i][j].attacked === false && playerShipGrid[i][j].ship !== null){
+        row = i
+        column = j;
+      }
+    }
+  }
+
+  playerShipGrid[row][column].attacked = true;
+  if (playerShipGrid[row][column].ship !== null){
+    playerShipGrid[row][column].hit = true;
+    let shipName = playerShipGrid[row][column].ship.slice(0, playerShipGrid[row][column].ship.indexOf('-'))
+    console.log(shipName)
+    playersShips[shipName].hits += 1;
+    console.log(playersShips[shipName])
+    if (playersShips[shipName].hits === playersShips[shipName].positions.length){
+      console.log(playersShips[shipName], 'sunk')
+      //update sink
+      for (let i = 0; i < playersShips[shipName].positions.length; i++){
+        playerShipGrid[playersShips[shipName].positions[i][0]][playersShips[shipName].positions[i][1]].sunk = true;
+      }
+      let hits = 0
+      for (let ship in playersShips){
+        hits += playersShips[ship].hits;
+      }
+      if (hits === 17){
+        alert('You Lose')
+        setGameOver(true);
+      }
+      //check for win
+    }
+
+  }
+  else{
+    playerShipGrid[row][column].hit = false;
+  }
+  setShipGrid(playerShipGrid);
+  setShipsPositions(playersShips);
+  setTimeout(function (){setMyTurn(true)}, 3000)
+  axios.post('/api/game/add/move', {row, column, user_id: opponentInfo.user_id, roomCode})
+
   }
 
   const handleAttack = (row, column) => {
@@ -579,8 +663,8 @@ const Game = (props) => {
     )
     {
       attackBot(row, column)
+      setMyTurn(false)
     }
-    console.log(radarGrid[row][column]);
     if (opponentInfo.username !== 'BOT'&&
       !gameOver &&
       everyoneReady &&
@@ -591,14 +675,12 @@ const Game = (props) => {
       setMyTurn(false);
     }
   };
-console.log(shipGridRef.current)
 
   const handleBackButton = () => {
     setOnDash(true)
     setOnGame(false)
   }
 
-  console.log(botShipPosition)
 
   return (
     <div className="game-screen">
