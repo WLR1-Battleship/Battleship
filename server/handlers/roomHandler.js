@@ -1,8 +1,12 @@
+let rooms = {}
+
 module.exports = (io, socket, db, app) => {
   const startRoom = async (body) => {
     const { code, user_id } = body;
     await db.games.create_game(user_id, code);
     socket.join(code);
+    rooms[code] = {connections: [user_id]}
+    console.log(rooms)
     console.log(`room ${code} started`);
   };
 
@@ -16,6 +20,8 @@ module.exports = (io, socket, db, app) => {
         await db.games.addplayer2(user_id, code);
       }
       socket.join(code);
+      rooms[code].connections.push(user_id)
+      console.log(rooms)
       return socket.emit("server-confirm-join", { code });
     }
     socket.emit("join-failed");
