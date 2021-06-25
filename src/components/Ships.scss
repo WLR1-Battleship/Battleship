@@ -1,3 +1,5 @@
+@import '../sass_styles/variables';
+@import '../sass_styles/mixins.scss';
 /*------------------------------------ SHIPS -----------------------------------------*/
 #battleship{
     position: relative;
@@ -7,16 +9,16 @@
     background: no-repeat center/100% url('../assets/images/Battleship/Battleship.png');
 }
 #battleship-0.horizontal{
-    background: no-repeat center/100% url('../assets/images/Battleship/Horizontal/Battleship-0.png');
+    background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-0.png');
 }
 #battleship-1.horizontal{
-    background: no-repeat center/100% url('../assets/images/Battleship/Horizontal/Battleship-1.png');
+    background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-1.png');
 }
 #battleship-2.horizontal{
-    background: no-repeat center/100% url('../assets/images/Battleship/Horizontal/Battleship-2.png');
+    background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-2.png');
 }
 #battleship-3.horizontal{
-    background: no-repeat center/100% url('../assets/images/Battleship/Horizontal/Battleship-3.png');
+    background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-3.png');
 }
 
 #battleship.vertical{
@@ -79,11 +81,10 @@
   
   #carrier.vertical{
     background: no-repeat center/100% url('../assets/images/Carrier/newCarrier-V.png');
-  
   }
   #carrier-0.vertical{
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-0-V.png');
-  
+    
   }
   #carrier-1.vertical{
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-1-V.png');
@@ -106,30 +107,33 @@
   
   }
   #carrier-0.horizontal{
-    background: no-repeat center/100% url('../assets/images/Carrier/Horizontal/newCarrier-0.png');
-    /* border-top: black 1px solid; */
-    border: rgb(0, 0, 0) 1px solid;
-    border-right: none;
+    background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-0.png');
+    @include h-left-piece($ship-grid-border);
+
   }
   #carrier-1.horizontal{
-    background: no-repeat center/100% url('../assets/images/Carrier/Horizontal/newCarrier-1.png');
-    border-top: rgb(0, 0, 0) 1px solid;
-    border-bottom: rgb(0, 0, 0) 1px solid;
+    background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-1.png');
+    // border-top: rgb(0, 0, 0) 1px solid;
+    // border-bottom: rgb(0, 0, 0) 1px solid;
+    @include h-mid-piece($ship-grid-border);
   }
   #carrier-2.horizontal{
-    background: no-repeat center/100% url('../assets/images/Carrier/Horizontal/newCarrier-2.png');
-    border-top: rgb(0, 0, 0) 1px solid;
-    border-bottom: rgb(0, 0, 0) 1px solid;
+    padding:none;
+    background:  no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-2.png');
+    // border-top: rgb(0, 0, 0) 1px solid;
+    // border-bottom: rgb(0, 0, 0) 1px solid;
+    @include h-mid-piece($ship-grid-border);
   }
   #carrier-3.horizontal{
-    background: no-repeat center/100% url('../assets/images/Carrier/Horizontal/newCarrier-3.png');
-    border-top: rgb(0, 0, 0) 1px solid;
-    border-bottom: rgb(0, 0, 0) 1px solid;
+    background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-3.png');
+    // border-top: rgb(0, 0, 0) 1px solid;
+    // border-bottom: rgb(0, 0, 0) 1px solid;
+    @include h-mid-piece($ship-grid-border);
   }
   #carrier-4.horizontal{
-    background: no-repeat center/100% url('../assets/images/Carrier/Horizontal/newCarrier-4.png');
-    border: rgb(0, 0, 0) 1px solid;
-    border-left: none;
+    background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-4.png');
+    // border: rgb(0, 0, 0) 1px solid;
+    // border-left: none;
   }
   
   
@@ -142,20 +146,20 @@
     background: no-repeat center/100% url('../assets/images/Destroyer/NewNewDestroyer.png');
   }
   #destroyer-0.horizontal{
-    background: no-repeat center/100% url('../assets/images/Destroyer/Horizontal/NewNewDestroyer-0.png');
+    background: no-repeat center/101% url('../assets/images/Destroyer/Horizontal/NewNewDestroyer-0.png');
   }
   #destroyer-1.horizontal{
-    background: no-repeat center/100% url('../assets/images/Destroyer/Horizontal/NewNewDestroyer-1.png');
+    background: no-repeat center/101% url('../assets/images/Destroyer/Horizontal/NewNewDestroyer-1.png');
   }
 
   #destroyer.vertical{
     background: no-repeat center/100% url('../assets/images/Destroyer/NewNewDestroyer-V.png');
   }
   #destroyer-0.vertical{
-    background: no-repeat center/100% url('../assets/images/Destroyer/Vertical/NewNewDestroyer-0-V.png');
+    background: no-repeat center/101% url('../assets/images/Destroyer/Vertical/NewNewDestroyer-0-V.png');
   }
   #destroyer-1.vertical{
-    background: no-repeat center/100% url('../assets/images/Destroyer/Vertical/NewNewDestroyer-1-V.png');
+    background: no-repeat center/101% url('../assets/images/Destroyer/Vertical/NewNewDestroyer-1-V.png');
   }
 
 
@@ -165,28 +169,28 @@
   }
 
   #sub.horizontal{
-    background: no-repeat center/100% url('../assets/images/Submarine/Submarine.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Submarine.png');
   }
   #sub-0.horizontal{
-    background: no-repeat center/100% url('../assets/images/Submarine/Horizontal/Submarine-0.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Horizontal/Submarine-0.png');
   }
   #sub-1.horizontal{
-    background: no-repeat center/100% url('../assets/images/Submarine/Horizontal/Submarine-1.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Horizontal/Submarine-1.png');
   }
   #sub-2.horizontal{
-    background: no-repeat center/100% url('../assets/images/Submarine/Horizontal/Submarine-2.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Horizontal/Submarine-2.png');
   }
 
 
   #sub.vertical{
-    background: no-repeat center/100% url('../assets/images/Submarine/Submarine-V.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Submarine-V.png');
   }
   #sub-0.vertical{
-    background: no-repeat center/100% url('../assets/images/Submarine/Vertical/Submarine-0-V.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Vertical/Submarine-0-V.png');
   }
   #sub-1.vertical{
-    background: no-repeat center/100% url('../assets/images/Submarine/Vertical/Submarine-1-V.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Vertical/Submarine-1-V.png');
   }
   #sub-2.vertical{
-    background: no-repeat center/100% url('../assets/images/Submarine/Vertical/Submarine-2-V.png');
+    background: no-repeat center/101% url('../assets/images/Submarine/Vertical/Submarine-2-V.png');
   }

@@ -214,6 +214,16 @@ const Game = (props) => {
   };
   //Placing ships onto grid
   const handleRandomShips = (bot, shipGrid, shipsPositions) => {
+
+    let resetShipGrid = [...shipGrid];
+    for (let i = 0; i < resetShipGrid.length; i++) {
+      for (let j = 0; j < resetShipGrid[i].length; j++) {
+        resetShipGrid[i][j].ship = null;
+        resetShipGrid[i][j].direction = null
+      }
+    }
+    setShipGrid(resetShipGrid);
+        
     let shipPieces = [
       "battleship-0",
       "sub-0",
@@ -239,6 +249,7 @@ const Game = (props) => {
       );
       if (shipDrop === true) {
         shipPieces.splice(0, 1);
+
       }
     }
     setShipsSet(5);
@@ -285,6 +296,7 @@ const Game = (props) => {
       ) {
         shipPosition[shipName].positions[nameIndex] = [square.row, i];
         addShipToShipGrid[square.row][i].ship = `${shipName}-${nameIndex}`;
+        addShipToShipGrid[square.row][i].direction = `${orientation}`;
         nameIndex++;
       }
     } else {
@@ -313,6 +325,8 @@ const Game = (props) => {
       ) {
         shipPosition[shipName].positions[nameIndex] = [i, square.column];
         addShipToShipGrid[i][square.column].ship = `${shipName}-${nameIndex}`;
+        addShipToShipGrid[i][square.column].direction = `${orientation}`;
+
         nameIndex++;
       }
     }
@@ -919,6 +933,7 @@ const Game = (props) => {
                   for (let i = 0; i < resetShipGrid.length; i++) {
                     for (let j = 0; j < resetShipGrid[i].length; j++) {
                       resetShipGrid[i][j].ship = null;
+                      resetShipGrid[i][j].direction = null
                     }
                   }
                   setShipGrid(resetShipGrid);
