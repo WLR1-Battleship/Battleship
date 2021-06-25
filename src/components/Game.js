@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import "./Game.css";
+import "./Game.scss";
 import "./Ships.scss"
 import Chat from "./Chat";
 import axios from "axios";
@@ -171,6 +171,14 @@ const Game = (props) => {
   };
   //Placing ships onto grid
   const handleRandomShips = (bot, shipGrid, shipsPositions) => {
+    let resetShipGrid = [...shipGrid];
+    for (let i = 0; i < resetShipGrid.length; i++) {
+      for (let j = 0; j < resetShipGrid[i].length; j++) {
+        resetShipGrid[i][j].ship = null;
+        resetShipGrid[i][j].direction = null
+      }
+    }
+    setShipGrid(resetShipGrid);
     let shipPieces = ['battleship-0', 'sub-0', 'carrier-0', 'cruiser-0', 'destroyer-0']
     let orientation
     while(shipPieces.length != 0){
@@ -223,6 +231,7 @@ const Game = (props) => {
       ) {
         shipPosition[shipName].positions[nameIndex] = [square.row, i];
         addShipToShipGrid[square.row][i].ship = `${shipName}-${nameIndex}`;
+        addShipToShipGrid[square.row][i].direction = `${orientation}`;
         nameIndex++;
       }
     } else {
@@ -251,6 +260,8 @@ const Game = (props) => {
       ) {
         shipPosition[shipName].positions[nameIndex] = [i, square.column];
         addShipToShipGrid[i][square.column].ship = `${shipName}-${nameIndex}`;
+        addShipToShipGrid[i][square.column].direction = `${orientation}`;
+
         nameIndex++;
       }
     }
@@ -668,6 +679,7 @@ console.log(shipGridRef.current)
                   for (let i = 0; i < resetShipGrid.length; i++) {
                     for (let j = 0; j < resetShipGrid[i].length; j++) {
                       resetShipGrid[i][j].ship = null;
+                      resetShipGrid[i][j].direction = null
                     }
                   }
                   setShipGrid(resetShipGrid);

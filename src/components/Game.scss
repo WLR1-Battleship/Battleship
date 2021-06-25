@@ -201,6 +201,8 @@
 .ship-grid-square.ship {
   background-color: blue;
   border: none;
+  box-sizing: border-box;
+
 }
 .ship-grid-square.miss {
   background-color: rgba(255, 255, 255, 0.479);

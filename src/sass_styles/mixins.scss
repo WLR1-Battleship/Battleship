@@ -1,0 +1,13 @@
+@mixin ship-image($url){
+    background:  no-repeat center/101% url($url);
+}
+
+@mixin h-left-piece($color){
+    border: $color 1px solid;
+    border-right: none;
+}
+
+@mixin h-mid-piece($color){
+    border-top: $color 1px solid;
+    border-bottom: $color 1px solid;
+}
