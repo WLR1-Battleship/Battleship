@@ -214,15 +214,16 @@ const Game = (props) => {
   };
   //Placing ships onto grid
   const handleRandomShips = (bot, shipGrid, shipsPositions) => {
-
-    let resetShipGrid = [...shipGrid];
-    for (let i = 0; i < resetShipGrid.length; i++) {
-      for (let j = 0; j < resetShipGrid[i].length; j++) {
-        resetShipGrid[i][j].ship = null;
-        resetShipGrid[i][j].direction = null
+    if(bot !=='bot'){
+      let resetShipGrid = [...shipGrid];
+      for (let i = 0; i < resetShipGrid.length; i++) {
+        for (let j = 0; j < resetShipGrid[i].length; j++) {
+          resetShipGrid[i][j].ship = null;
+          resetShipGrid[i][j].direction = null
+        }
       }
+      setShipGrid(resetShipGrid);
     }
-    setShipGrid(resetShipGrid);
         
     let shipPieces = [
       "battleship-0",
