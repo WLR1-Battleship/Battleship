@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Game.css";
 import "./Ships.scss";
+import "./GameMissile.css";
 import Chat from "./Chat";
 import axios from "axios";
 import { setOpponent } from "../redux/gameReducer";
@@ -950,7 +951,20 @@ console.log(opponentInfo)
                         onDrop={() => {
                           onShipDrop(square);
                         }}
-                      ></div>
+                      >
+                        {square.attacked ?<div className="game-missile"> <div ></div><span id="smoke">
+  <span class="s0"></span>
+  <span class="s1"></span>
+  <span class="s2"></span>
+  <span class="s3"></span>
+  <span class="s4"></span>
+  <span class="s5"></span>
+  <span class="s6"></span>
+  <span class="s7"></span>
+  <span class="s8"></span>
+  <span class="s9"></span>
+</span></div> : null}
+                      </div>
                     );
                   })}
                 </div>
@@ -961,7 +975,7 @@ console.log(opponentInfo)
         {imReady ? (
           <div>
             {opponentInfo !== null && opponentOnline ? <h1>{opponentInfo.username} <span>online</span></h1> : null}
-            {opponentInfo !== null && !opponentOnline ? <h1>{opponentInfo.username} <span>offline</span></h1> : null}
+            {opponentInfo !== null && !opponentOnline ? <h1 style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
             {" "}
             <Chat socket={props.socket} />{" "}
           </div>
