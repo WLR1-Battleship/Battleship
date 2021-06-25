@@ -21,6 +21,7 @@ function App(props) {
   useEffect(()=>{
     if(!socket){
         setSocket(io.connect())
+        
     } //<---- to check if socket is already connected
     return()=>{
         if(socket){

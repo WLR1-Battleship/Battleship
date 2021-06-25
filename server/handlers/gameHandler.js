@@ -11,7 +11,7 @@ module.exports = (io, socket, db, app) => {
     const { user_id, ships, roomCode, username } = body;
     let shipsJson = JSON.stringify(ships);
     const [game] = await db.games.set_ships([shipsJson, user_id, roomCode]);
-    io.in(roomCode).emit("player-ready", { username: username, gameReady: game.player_1_ships && game.player_2_ships? true : false , player_1: game.player_1});
+    io.in(roomCode).emit("player-ready", { username: username, gameReady: game.player_1_ships && game.player_2_ships? true : false , player_1: game.player_1, user_id: user_id});
   };
   const handleMiss = (body) => {
     const { row, column, roomCode, username, username2 } = body;

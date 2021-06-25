@@ -40,6 +40,7 @@ const Game = (props) => {
     cruiser: { positions: [[], [], []], hits: 0, sunk: false },
     destroyer: { positions: [[], []], hits: 0, sunk: false },
   });
+  const [opponentOnline, setOpponentOnline] = useState(false)
   //get all previous game data on re-join
   useEffect(() => {
     axios
@@ -642,10 +643,14 @@ const Game = (props) => {
 
   useEffect(() => {
     const playerReady = (body) => {
-      const { username, gameReady, player_1 } = body;
+      const { username, gameReady, player_1, user_id } = body;
       if (gameReady) {
-        dispatch(setOpponent({ username: username }));
+        if (user_id !== user.user_id){
+        dispatch(setOpponent({ username: username, user_id: user_id }));
+        socket.emit('im-your-opponent', {username: user.username, user_id: user.user_id, roomCode})
+        }
         setEveryoneReady(true);
+        setOpponentOnline(true);
         player_1 === user.user_id && setMyTurn(true);
       }
     };
@@ -673,7 +678,31 @@ const Game = (props) => {
       setGameOver({ win: true });
     };
 
+    const handlePlayerOffline = (body) => {
+      console.log('offline')
+      setOpponentOnline(false)
+    }
+    const handlePlayerOnline = (body) => {
+      console.log('online')
+      setOpponentOnline(true)
+    }
+    if (socket){
+      socket.emit('online', {roomCode: roomCode})
+      socket.emit('are-you-online', {roomCode})
+    }
     if (socket) {
+      socket.on('are-you-online', ()=>{
+        socket.emit('online', {roomCode})
+      })
+
+      socket.on('im-your-opponent', (body) => {
+        dispatch(setOpponent({username: body.username, user_id: body.user_id}))
+      })
+
+      socket.on('player-online', handlePlayerOnline);
+
+      socket.on('player-offline', handlePlayerOffline);
+
       socket.on("server-send-attack", attackRespond);
 
       socket.on("player-ready", playerReady);
@@ -687,15 +716,20 @@ const Game = (props) => {
 
     return () => {
       if (socket) {
+
         socket.off("server-send-attack", attackRespond);
         socket.off("player-ready", playerReady);
         socket.off("miss", handleMiss);
         socket.off("hit", handleHit);
         socket.off("you-win", handleWin);
+        socket.off("are-you-online");
+        socket.off("im-your-opponent");
+        socket.off("player-online", handlePlayerOnline);
+        socket.off("player-offline", handlePlayerOffline)
       }
     };
   }, [socket]);
-
+ 
   const attackBot = (row, column) => {
     //need to update bots ship hits
     let updateBotShips = { ...botShipPosition };
@@ -874,7 +908,7 @@ const Game = (props) => {
     setOnDash(true);
     setOnGame(false);
   };
-
+console.log(opponentInfo)
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
@@ -926,6 +960,8 @@ const Game = (props) => {
         </section>
         {imReady ? (
           <div>
+            {opponentInfo !== null && opponentOnline ? <h1>{opponentInfo.username} <span>online</span></h1> : null}
+            {opponentInfo !== null && !opponentOnline ? <h1>{opponentInfo.username} <span>offline</span></h1> : null}
             {" "}
             <Chat socket={props.socket} />{" "}
           </div>

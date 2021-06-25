@@ -42,8 +42,14 @@ massive({
       registerGameHandlers(io, socket, db);
       registerRoomHandlers(io, socket, db, app);
       registerChatHandlers(io, socket, db, app)
+      socket.on('disconnecting', () => {
+        console.log(socket.rooms)
+        const [socketid, room] = socket.rooms
+        socket.to(room).emit("player-offline");
 
+      })
       socket.on("disconnect", () => {
+        console.log(socket.rooms)
         console.log(`Socket ${socket.id} disconnected`);
       });
     };
