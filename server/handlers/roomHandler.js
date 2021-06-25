@@ -12,7 +12,7 @@ module.exports = (io, socket, db, app) => {
     // POTENTIALLY NEED TO INCLUDE A CHECK FOR IF PLAYERS ALREADY EXIST
 
     if (game) {
-      if (game.player_2 === null) {
+      if (game.player_2 === null && game.player_1 !== user_id) {
         await db.games.addplayer2(user_id, code);
       }
       socket.join(code);
