@@ -511,6 +511,17 @@ const Game = (props) => {
           shipSquares[playerShips[ship].positions[i][0]][
             playerShips[ship].positions[i][1]
           ].ship = `${ship}-${index}`;
+          let direction = ''
+          console.log(shipSquares[playerShips[ship].positions[0][0]])
+          if(shipSquares[playerShips[ship].positions[0][0]][playerShips[ship].positions[0][1]].row === shipSquares[playerShips[ship].positions[1][0]][playerShips[ship].positions[1][1]].row){
+            direction = 'horizontal'
+          }
+          else{
+            direction = 'vertical'
+          }
+          shipSquares[playerShips[ship].positions[i][0]][
+            playerShips[ship].positions[i][1]
+          ].direction = direction;
           index++;
         }
       }
