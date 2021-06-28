@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Game.css";
 import "./Ships.scss";
 import "./GameMissile.css";
+import './gamefire.css';
 import Chat from "./Chat";
 import axios from "axios";
 import { setOpponent } from "../redux/gameReducer";
@@ -964,6 +965,26 @@ console.log(opponentInfo)
   <span class="s8"></span>
   <span class="s9"></span>
 </span></div> : null}
+{square.hit ? 
+<div class='explode'>
+<div class="fire">
+  <div class="fire-left">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-main">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-right">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-bottom">
+    <div class="main-fire"></div>
+  </div>
+</div>
+</div> : null}
                       </div>
                     );
                   })}
@@ -975,7 +996,8 @@ console.log(opponentInfo)
         {imReady ? (
           <div>
             {opponentInfo !== null && opponentOnline ? <h1 className='game-online-title'>{opponentInfo.username} <span>online</span></h1> : null}
-            {opponentInfo !== null && !opponentOnline ? <h1 className='game-offline-title' style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
+            {opponentInfo !== null && !opponentOnline && opponentInfo.username !== 'BOT' ? <h1 className='game-offline-title' style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
+
             {" "}
             <Chat socket={props.socket} />{" "}
           </div>

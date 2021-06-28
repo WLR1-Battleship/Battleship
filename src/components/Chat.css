@@ -3,11 +3,14 @@
     font-family: "Big Shoulders Stencil Display", cursive;
     font-size: larger;
     color: greenyellow;
+    width: 300px;
+    justify-content: center;
+    align-items: center;
   }
 .chat-board{
     overflow-y: auto;
     height: 10rem;
-    max-width: 90%;
+    max-width: 300px;
     border: black 1px solid;
     display: flex;
     flex-direction: column-reverse;

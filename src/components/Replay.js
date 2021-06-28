@@ -2,6 +2,15 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import "./Game.css";
+import './Ships.scss';
+import "./Replay.css";
+import {FaPlay} from 'react-icons/fa'
+import {GiPauseButton} from 'react-icons/gi'
+import {RiSpeedFill} from 'react-icons/ri'
+import {FaStepForward} from 'react-icons/fa'
+import {AiOutlineReload} from 'react-icons/ai'
+import {BsBackspaceFill} from 'react-icons/bs'
+
 //need to clear interval on dismount
 let moveId = 0;
 let replayInterval;
@@ -18,6 +27,8 @@ const Replay = (props) => {
   const {setOnDash, setOnReplay} = props
   const player2ShipsRef = useRef(player2Ships);
   const player1ShipsRef = useRef(player1Ships);
+  const [speed, setSpeed] = useState('slow');
+  const [buttonHighlight, setButtonHighlight] = useState({play: 1, pause: 1, speed: 1, reset: 1, next: 1})
 
   useEffect(() => {
     player2ShipsRef.current = player2Ships;
@@ -79,6 +90,19 @@ const Replay = (props) => {
         makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
           info.game.player_1_ships[ship].positions[i][1]
         ].ship = `${ship}-${index}`;
+        let direction = ''
+          console.log(makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
+            info.game.player_1_ships[ship].positions[i][1]
+          ].ship)
+          if(makePlayer1Grid[info.game.player_1_ships[ship].positions[0][0]][info.game.player_1_ships[ship].positions[0][1]].row === makePlayer1Grid[info.game.player_1_ships[ship].positions[1][0]][info.game.player_1_ships[ship].positions[1][1]].row){
+            direction = 'horizontal'
+          }
+          else{
+            direction = 'vertical'
+          }
+          makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
+            info.game.player_1_ships[ship].positions[i][1]
+          ].direction = direction;
         index++;
       }
     }
@@ -92,6 +116,17 @@ const Replay = (props) => {
         makePlayer2Grid[info.game.player_2_ships[ship2].positions[j][0]][
           info.game.player_2_ships[ship2].positions[j][1]
         ].ship = `${ship2}-${index}`;
+        let direction = ''
+          // console.log(shipSquares[playerShips[ship].positions[0][0]])
+          if(makePlayer2Grid[info.game.player_2_ships[ship2].positions[0][0]][info.game.player_2_ships[ship2].positions[0][1]].row === makePlayer2Grid[info.game.player_2_ships[ship2].positions[1][0]][info.game.player_2_ships[ship2].positions[1][1]].row){
+            direction = 'horizontal'
+          }
+          else{
+            direction = 'vertical'
+          }
+          makePlayer2Grid[info.game.player_2_ships[ship2].positions[j][0]][
+            info.game.player_2_ships[ship2].positions[j][1]
+          ].direction = direction;
         index++;
       }
     }
@@ -114,6 +149,14 @@ const Replay = (props) => {
     let i = moveId;
     if (i >= moves.length) {
       clearInterval(replayInterval);
+      setTimeout(()=>{
+        if (moves[moves.length - 1].user_id === user.user_id){
+          alert(`${user.username} wins`)
+        }
+        else{
+          alert(`${opponentInfo.username} wins`)
+        }
+      }, 2000)
       return;
     }
 
@@ -203,66 +246,70 @@ const Replay = (props) => {
   };
 
   const handleBackButtonReplay = () => {
+    moveId = 0;
+    clearInterval(replayInterval);
     setOnDash(true)
     setOnReplay(false)
   }
+ 
 
   return (
-    <div>
-      <button onClick={handleBackButtonReplay}>Back</button>
-      Replay
-      <button
-        onClick={() => {
-          startReplayTimer(800);
-        }}
-      >
-        Start Replay
-      </button>
-      <button
-        onClick={() => {
-          clearInterval(replayInterval);
+    <div id='replay-page-container'>
+      <h2>Replay</h2>
+      <div id='replay-page-buttons'>
+      <div id='replay-back-button'><BsBackspaceFill size={40} color={'red'} onClick={handleBackButtonReplay}/></div>
+      <FaPlay opacity={buttonHighlight.play} onClick={() => {
+          setSpeed('slow')
           startReplayTimer(1350);
-        }}
-      >
-        slow
-      </button>
-      <button
-        onClick={() => {
+          setButtonHighlight({play: .3, pause: 1, speed: 1, reset: 1, next: 1})
+          
+        }}/>
+      <RiSpeedFill opacity={buttonHighlight.speed} onClick={()=>{
+        if (speed === 'slow'){
           clearInterval(replayInterval);
           startReplayTimer(800);
-        }}
-      >
-        medium
-      </button>
-      <button
-        onClick={() => {
+          setSpeed('medium')
+        }
+        if (speed === 'medium'){
           clearInterval(replayInterval);
           startReplayTimer(250);
-        }}
-      >
-        fast
-      </button>
-      <button
-        onClick={() => {
+          setSpeed('fast')
+        }
+        if (speed === 'fast'){
           clearInterval(replayInterval);
-        }}
-      >
-        pause
-      </button>
-      <button onClick={startReplay}>forward</button>
-      <button
-        onClick={() => {
+          startReplayTimer(1350);
+          setSpeed('slow')
+        }
+      }}/>
+      <GiPauseButton opacity={buttonHighlight.pause} onClick={() => {
+          clearInterval(replayInterval);
+          setButtonHighlight({play: 1, pause: .3, speed: 1, reset: 1, next: 1})
+
+        }}/>
+      <FaStepForward opacity={buttonHighlight.next} onClick={()=>{startReplay();
+                setButtonHighlight({play: 1, pause: 1, speed: 1, reset: 1, next: .3})
+
+      }}/>
+      <AiOutlineReload opacity={buttonHighlight.reset} onClick={() => {
           let info = { game: game, moves: moves };
           setGrid(info);
           moveId = 0;
-        }}
-      >
-        reset
-      </button>
+          setButtonHighlight({play: 1, pause: 1, speed: 1, reset: .3, next: 1})
+
+        }}/>
+      </div>
+      
+      <div style={{color: 'white'}}>speed: {speed}</div>
+      {moves !== null? 
+      <div id="replay-status-bar" style={{width: '100vw', height: '20px', display:'flex', justifyContent:'center', alignItems:'center'}}> 
+        <div style={{width: '66%', border: '1px solid black', height: '100%'}}>
+          <div style={{height: '100%', backgroundColor:'greenyellow', width: `${(moveId / (moves.length - 1)) * 100}%`}}></div>
+        </div> 
+      </div> : null}
       <div className="replay-grid-container">
         <div>
           {game && game.player_1 === user.user_id ? (
-            <h1>{user.username}</h1>
+            <h1 style={{color: 'greenyellow', fontSize: '32px'}}>{user.username}</h1>
           ) : (
             <h1>{opponentInfo.username}</h1>
           )}
@@ -291,11 +338,24 @@ const Replay = (props) => {
                     return (
                       <div
                         onClick={() => console.log(square)}
-                        className={`ship-grid-square ${cssClass}`}
+                        className={`ship-grid-square ${cssClass} ${
+                          square.direction ? square.direction : ""
+                        }`}
+                        id={`${square.ship}`}
+                        
                       >
-                        {square.attacked === true ? (
-                          <span className="missile-right-to-left"></span>
-                        ) : null}
+                           {square.attacked ?<div className="replay-missile-right-to-left"> <div ></div><span id="replay-smoke-right">
+  <span className="s0"></span>
+  <span className="s1"></span>
+  <span className="s2"></span>
+  <span className="s3"></span>
+  <span className="s4"></span>
+  <span className="s5"></span>
+  <span className="s6"></span>
+  <span className="s7"></span>
+  <span className="s8"></span>
+  <span className="s9"></span>
+</span></div> : null}
                       </div>
                     );
                   })}
@@ -308,7 +368,7 @@ const Replay = (props) => {
           {game && game.player_2 === user.user_id ? (
             <h1>{user.username}</h1>
           ) : (
-            <h1>{opponentInfo.username}</h1>
+            <h1 style={{color: 'red', fontSize: '32px'}}>{opponentInfo.username}</h1>
           )}
 
           <section className="ship-grid">
@@ -336,11 +396,23 @@ const Replay = (props) => {
                     return (
                       <div
                         onClick={() => console.log(square)}
-                        className={`ship-grid-square ${cssClass}`}
+                        className={`ship-grid-square ${cssClass} ${
+                          square.direction ? square.direction : ""
+                        }`}
+                        id={`${square.ship}`}
                       >
-                        {square.attacked === true ? (
-                          <span className="missile-left-to-right"></span>
-                        ) : null}
+                            {square.attacked ?<div className="replay-missile-left-to-right"> <div ></div><span id="replay-smoke">
+  <span className="s0"></span>
+  <span className="s1"></span>
+  <span className="s2"></span>
+  <span className="s3"></span>
+  <span className="s4"></span>
+  <span className="s5"></span>
+  <span className="s6"></span>
+  <span className="s7"></span>
+  <span className="s8"></span>
+  <span className="s9"></span>
+</span></div> : null}
                       </div>
                     );
                   })}

@@ -147,7 +147,9 @@ const Dash = (props) => {
         <span className='dash-loading-bar'>Loading</span> 
         : null}
       <div className="replay-current-games-container">
-      <div>
+
+      
+      <div className='replay-games-container'>
         <h1 className='dash-replay-games-title'>REPLAY GAMES:</h1>
         <br />
         {pastGames.map((game) => {
@@ -159,7 +161,7 @@ const Dash = (props) => {
                 </div>;
               })}
       </div>
-      <div>
+      <div className='current-games-container'>
         <h1 className='dash-current-games-title'>CURRENT GAMES:</h1>
         <br />
               {currentGames.filter((game)=> game.opponent?.user_id !== user.user_id).map((game) => {

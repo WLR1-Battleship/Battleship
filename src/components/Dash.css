@@ -119,3 +119,10 @@
 .dash-loading-bar{
     font-size: 2rem;
 }
+.current-games-container{
+    overflow: auto;
+}
+
+.replay-games-container{
+    overflow: auto;
+}
