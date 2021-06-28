@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Game.css";
+import "./Game.scss";
 import "./Ships.scss";
 import "./GameMissile.css";
 import Chat from "./Chat";
@@ -917,6 +918,11 @@ console.log(opponentInfo)
         <section>
           <h1 className="your-ships-title">Your Ships:</h1>
           <section className="ship-grid">
+            <div className='ocean'></div>
+            <div className='waves'></div>
+            <div className='waves w2'></div>
+            <div className='seafoam sf1'></div>
+            <div className='seafoam sf2'></div>
             {shipGrid.map((row) => {
               return (
                 <div className="ship-grid-row">

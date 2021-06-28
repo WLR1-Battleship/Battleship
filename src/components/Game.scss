@@ -1,0 +1,77 @@
+/*Ship Grid*/
+.ship-grid {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 300px;
+    border: rgb(0, 0, 0) 1px solid;
+    background-color: rgba(7, 133, 252, 0.5);
+    z-index: 2;
+    overflow: hidden;
+  }
+  .ocean{
+    position: absolute;
+    height: 300px;
+    width: 300px;
+    background: center url('../assets/images/Ocean/Ocean.png');
+  
+  }
+  .waves{
+    position: absolute;
+    height: 300px;
+    width: 300px;
+    background: center url('../assets/images/Ocean/waves.png');
+    /* background-image: fill; */
+    animation: move-ocean 30s infinite linear;
+    &.w2{
+        height: 300px;
+        width: 300px;
+        animation: move-ocean-2 40s infinite linear;
+        background: center url('../assets/images/Ocean/waves2.png');
+    }
+    /* overflow-x: hidden; */
+    z-index: 0;
+  }
+  @keyframes move-ocean {
+    0%{
+      background-position:right
+  
+    }
+    100%{    
+        background-position:left
+  
+    }
+  }
+  @keyframes move-ocean-2 {
+    0%{
+      background-position:right;
+    //   background-position:bottom;
+  
+    }
+    100%{    
+        background-position:left;
+        // background-position:top;
+  
+    }
+  }
+  
+  .ship-grid-square {
+    height: 30px;
+    width: 30px;
+  
+    border: rgba(0, 0, 0, 0.219) 1px solid;
+    box-sizing: border-box;
+    background-color: rgba(7, 133, 252, 0.5);
+    z-index: 1;
+  }
+  .ship-grid-square.none{
+    
+  }
+  
+  .ship-grid-square.ship {
+    background-color: rgba(7, 133, 252, 0.5);
+    border: none;
+    box-sizing: border-box;
+  
+  }
