@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Game.css";
+import "./Game.scss";
 import "./Ships.scss";
 import "./GameMissile.css";
 import './gamefire.css';
@@ -199,7 +200,7 @@ const Game = (props) => {
   //Start Game
   const startGame = () => {
     setImReady(true);
-    if (opponentInfo !== null) {
+    if (opponentInfo) {
       if (opponentInfo.username === "BOT") {
         handleRandomShips("bot", botShipGrid, botShipPosition);
         setMyTurn(true);
@@ -884,6 +885,9 @@ const Game = (props) => {
   };
 
   const handleAttack = (row, column) => {
+    if(!everyoneReady || !opponentInfo){
+      return
+    }
     if (
       opponentInfo.username === "BOT" &&
       !gameOver &&
@@ -918,6 +922,9 @@ console.log(opponentInfo)
         <section>
           <h1 className="your-ships-title">Your Ships:</h1>
           <section className="ship-grid">
+            <div className='ocean'></div>
+            <div className='waves'></div>
+            <div className='waves w2'></div>
             {shipGrid.map((row) => {
               return (
                 <div className="ship-grid-row">
@@ -995,8 +1002,10 @@ console.log(opponentInfo)
         </section>
         {imReady ? (
           <div>
-            {opponentInfo !== null && opponentOnline ? <h1 className='game-online-title'>{opponentInfo.username} <span>online</span></h1> : null}
-            {opponentInfo !== null && !opponentOnline && opponentInfo.username !== 'BOT' ? <h1 className='game-offline-title' style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
+
+            {opponentInfo && opponentOnline ? <h1 className='game-online-title'>{opponentInfo.username} <span>online</span></h1> : null}
+            {opponentInfo && !opponentOnline && opponentInfo.username !== 'BOT' ? <h1 className='game-offline-title' style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
+
 
             {" "}
             <Chat socket={props.socket} />{" "}

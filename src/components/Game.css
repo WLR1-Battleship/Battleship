@@ -193,8 +193,11 @@
   height: 30px;
   width: 30px;
 
-  border: rgba(126, 126, 126, 0.349) 1px solid;
+  border: black 1px solid;
   box-sizing: border-box;
+}
+.ship-grid-square.none{
+  
 }
 
 .ship-grid-square.ship {
@@ -278,7 +281,6 @@
 .ship-grid-square.sunk {
   background-color: rgb(5, 5, 5);
   animation: fadeinSink 2s;
-  border: none;
 }
 @keyframes fadeinSink {
   0% {
