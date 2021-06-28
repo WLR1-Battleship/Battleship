@@ -911,6 +911,7 @@ const Game = (props) => {
   };
 
   const handleBackButton = () => {
+    dispatch(setOpponent(null))
     setOnDash(true);
     setOnGame(false);
   };

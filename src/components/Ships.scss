@@ -197,6 +197,7 @@
   }
   #carrier-0.vertical{
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-0-V.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -206,6 +207,7 @@
     
   }
   #carrier-1.vertical{
+    @include ship-animate(5s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-1-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -216,6 +218,7 @@
   
   }
   #carrier-2.vertical{
+    @include ship-animate(5s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-2-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -225,6 +228,7 @@
     }
   }
   #carrier-3.vertical{
+    @include ship-animate(5s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-3-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -234,6 +238,7 @@
     }
   }
   #carrier-4.vertical{
+    @include ship-animate(5s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-4-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);

@@ -314,6 +314,9 @@ const Replay = (props) => {
             <h1>{opponentInfo.username}</h1>
           )}
           <section className="ship-grid">
+          <div className='ocean'></div>
+            <div className='waves'></div>
+            <div className='waves w2'></div>
             {player1Grid.map((row) => {
               return (
                 <div className="ship-grid-row">
@@ -356,6 +359,26 @@ const Replay = (props) => {
   <span className="s8"></span>
   <span className="s9"></span>
 </span></div> : null}
+
+{square.hit ? 
+
+<div class="fire">
+  <div class="fire-left">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-main">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-right">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-bottom">
+    <div class="main-fire"></div>
+  </div>
+</div>: null}
                       </div>
                     );
                   })}
@@ -372,6 +395,9 @@ const Replay = (props) => {
           )}
 
           <section className="ship-grid">
+          <div className='ocean'></div>
+            <div className='waves'></div>
+            <div className='waves w2'></div>
             {player2Grid.map((row) => {
               return (
                 <div className="ship-grid-row">
@@ -413,6 +439,26 @@ const Replay = (props) => {
   <span className="s8"></span>
   <span className="s9"></span>
 </span></div> : null}
+{square.hit ? 
+<div class='explode'>
+<div class="fire">
+  <div class="fire-left">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-main">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-right">
+    <div class="main-fire"></div>
+    <div class="particle-fire"></div>
+  </div>
+  <div class="fire-bottom">
+    <div class="main-fire"></div>
+  </div>
+</div>
+</div> : null}
                       </div>
                     );
                   })}

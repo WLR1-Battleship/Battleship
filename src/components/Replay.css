@@ -154,13 +154,13 @@
 
 /* Smoke animation */
 
-@keyframes smokeL {
+@keyframes smokeLl {
 	0%   { transform: scale(0.2) translate(0, 0) }
 	10%  { opacity: 1; transform: scale(0.2) translate(0, -5px) }
 	100% { opacity: 0; transform: scale(1) translate(-100px, -5px) }
 }
 
-@keyframes smokeR {
+@keyframes smokeRr {
 	0%   { transform: scale(0.2) translate(0, 0) }
 	10%  { opacity: 1; transform: scale(0.2) translate(0, -5px) }
 	100% { opacity: 0; transform: scale(1) translate(-100px, 0px) }
@@ -177,16 +177,16 @@
 	100% { opacity: 0; transform: scale(1) translate(100px, 0px) }
 }
 
-#replay-smoke .s0{ animation: smokeL 3s 0s infinite }
-#replay-smoke .s1{ animation: smokeR 3s .2s infinite }
-#replay-smoke .s2{ animation: smokeL 3s .3s infinite }
-#replay-smoke .s3{ animation: smokeR 3s .4s infinite }
-#replay-smoke .s4{ animation: smokeL 3s .5s infinite }
-#replay-smoke .s5{ animation: smokeR 3s .6s infinite }
-#replay-smoke .s6{ animation: smokeL 3s .7s infinite }
-#replay-smoke .s7{ animation: smokeR 3s .8s infinite }
-#replay-smoke .s8{ animation: smokeL 3s .9s infinite }
-#replay-smoke .s9{ animation: smokeR 3s 1s infinite }
+#replay-smoke .s0{ animation: smokeLl 3s 0s infinite }
+#replay-smoke .s1{ animation: smokeRr 3s .2s infinite }
+#replay-smoke .s2{ animation: smokeLl 3s .3s infinite }
+#replay-smoke .s3{ animation: smokeRr 3s .4s infinite }
+#replay-smoke .s4{ animation: smokeLl 3s .5s infinite }
+#replay-smoke .s5{ animation: smokeRr 3s .6s infinite }
+#replay-smoke .s6{ animation: smokeLl 3s .7s infinite }
+#replay-smoke .s7{ animation: smokeRr 3s .8s infinite }
+#replay-smoke .s8{ animation: smokeLl 3s .9s infinite }
+#replay-smoke .s9{ animation: smokeRr 3s 1s infinite }
 #replay-smoke-right .s0 { animation: smokeLright 3s 0s infinite }
 #replay-smoke-right .s1 { animation: smokeRright 3s .2s infinite }
 #replay-smoke-right .s2 { animation: smokeLright 3s .3s infinite }

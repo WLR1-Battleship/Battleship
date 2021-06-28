@@ -120,6 +120,7 @@
   background-color: lightblue;
   border: black 1px solid;
   box-sizing: border-box;
+  position: relative;
 }
 
 .ship-grid-row {
@@ -189,16 +190,6 @@
   background-color: lightblue;
 }
 
-.ship-grid-square {
-  height: 30px;
-  width: 30px;
-
-  border: black 1px solid;
-  box-sizing: border-box;
-}
-.ship-grid-square.none{
-  
-}
 
 .ship-grid-square.ship {
   /* background-color: blue; */
@@ -217,6 +208,7 @@
   border-radius: 75%;
   border: solid red 5px; */
   /* animation: fadeinHit 2s; */
+  border: none;
 }
 @keyframes fadeinMiss {
   0% {
