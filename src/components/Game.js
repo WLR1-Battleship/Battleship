@@ -199,7 +199,7 @@ const Game = (props) => {
   //Start Game
   const startGame = () => {
     setImReady(true);
-    if (opponentInfo !== null) {
+    if (opponentInfo) {
       if (opponentInfo.username === "BOT") {
         handleRandomShips("bot", botShipGrid, botShipPosition);
         setMyTurn(true);
@@ -884,6 +884,9 @@ const Game = (props) => {
   };
 
   const handleAttack = (row, column) => {
+    if(!everyoneReady || !opponentInfo){
+      return
+    }
     if (
       opponentInfo.username === "BOT" &&
       !gameOver &&
@@ -921,8 +924,6 @@ console.log(opponentInfo)
             <div className='ocean'></div>
             <div className='waves'></div>
             <div className='waves w2'></div>
-            <div className='seafoam sf1'></div>
-            <div className='seafoam sf2'></div>
             {shipGrid.map((row) => {
               return (
                 <div className="ship-grid-row">
@@ -980,8 +981,8 @@ console.log(opponentInfo)
         </section>
         {imReady ? (
           <div>
-            {opponentInfo !== null && opponentOnline ? <h1>{opponentInfo.username} <span>online</span></h1> : null}
-            {opponentInfo !== null && !opponentOnline ? <h1 style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
+            {opponentInfo && opponentOnline ? <h1>{opponentInfo.username} <span>online</span></h1> : null}
+            {opponentInfo && !opponentOnline ? <h1 style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
             {" "}
             <Chat socket={props.socket} />{" "}
           </div>

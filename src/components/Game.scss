@@ -23,12 +23,13 @@
     width: 300px;
     background: center url('../assets/images/Ocean/waves.png');
     /* background-image: fill; */
-    animation: move-ocean 30s infinite linear;
+    animation: move-ocean 40s infinite linear;
     &.w2{
-        height: 300px;
-        width: 300px;
-        animation: move-ocean-2 40s infinite linear;
+        height: 600px;
+        width: 600px;
+        animation: move-ocean-2 50s infinite linear;
         background: center url('../assets/images/Ocean/waves2.png');
+        // transform: scale(85%);
     }
     /* overflow-x: hidden; */
     z-index: 0;
@@ -45,14 +46,14 @@
   }
   @keyframes move-ocean-2 {
     0%{
-      background-position:right;
-    //   background-position:bottom;
+      transform: translate(-50%,-50%);
   
     }
     100%{    
-        background-position:left;
+        // background-position:left;
         // background-position:top;
-  
+      transform: translate(0,0);
+
     }
   }
   
