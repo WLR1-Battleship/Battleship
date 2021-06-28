@@ -198,7 +198,7 @@
 }
 
 .ship-grid-square.ship {
-  background-color: blue;
+  /* background-color: blue; */
   border: none;
   box-sizing: border-box;
 
@@ -210,10 +210,10 @@
   animation: fadeinMiss 2s;
 }
 .ship-grid-square.hit {
-  background-color: rgba(255, 0, 0, 0.479);
+  /* background-color: rgba(255, 0, 0, 0.479);
   border-radius: 75%;
-  border: solid red 5px;
-  animation: fadeinHit 2s;
+  border: solid red 5px; */
+  /* animation: fadeinHit 2s; */
 }
 @keyframes fadeinMiss {
   0% {
@@ -242,26 +242,26 @@
 }
 
 .ship-grid-square.hit {
-  background-color: rgba(255, 0, 0, 0.479);
+  /* background-color: rgba(255, 0, 0, 0.479);
   border-radius: 75%;
-  border: solid red 5px;
+  border: solid red 5px; */
   animation: fadeinHit 2s;
 }
 @keyframes fadeinHit {
   0% {
-    background-color: blue;
-    border-radius: 0%;
-    border: none;
+    /* background-color: blue; */
+    /* border-radius: 0%;
+    border: none; */
   }
   99% {
-    background-color: blue;
-    border-radius: 0%;
-    border: none;
+    /* background-color: blue; */
+    /* border-radius: 0%;
+    border: none; */
   }
   100% {
     background-color: rgba(255, 0, 0, 0.479);
-    border-radius: 75%;
-    border: solid red 5px;
+    /* border-radius: 75%;
+    border: solid red 5px; */
   }
 }
 .radar-grid-square.miss {
@@ -282,10 +282,10 @@
 }
 @keyframes fadeinSink {
   0% {
-    background-color: blue;
+    /* background-color: blue; */
   }
   99% {
-    background-color: blue;
+    /* background-color: blue; */
   }
   100% {
     background-color: rgb(5, 5, 5);
@@ -363,3 +363,49 @@
   font-size: 2rem;
   cursor: default;
 }
+
+@keyframes scaleUpDown {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  50%,
+  90% {
+    transform: scaleY(1.1);
+  }
+  75% {
+    transform: scaleY(0.95);
+  }
+  80% {
+    transform: scaleX(0.95);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: skewX(0) scale(1);
+  }
+  50% {
+    transform: skewX(5deg) scale(0.9);
+  }
+}
+
+@keyframes particleUp {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: -100%;
+    transform: scale(0.5);
+  }
+}
+
+

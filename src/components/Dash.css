@@ -104,3 +104,11 @@
     color: whitesmoke;
     opacity: 1;
 }
+
+.current-games-container{
+    overflow: auto;
+}
+
+.replay-games-container{
+    overflow: auto;
+}
