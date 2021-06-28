@@ -365,3 +365,27 @@
   font-size: 2rem;
   cursor: default;
 }
+
+.game-back-button{
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, .6);
+  color: yellowgreen;
+  transition-duration: 0.4s;
+  /* font-size: 16px; */
+}
+
+.game-back-button:hover{
+  background-color: rgba(112, 128, 144, 0.575);
+  /* -webkit-text-stroke: 3px rgba(253, 154, 5, 0.514); */
+  color: rgba(253, 154, 5, 0.822);
+  border: rgba(253, 154, 5, 0.514) solid 1px;
+  cursor: pointer;
+}
+
+.game-online-title{
+  cursor: default;
+}
+
+.game-offline-title{
+  cursor: default;
+}

@@ -913,7 +913,7 @@ console.log(opponentInfo)
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
-        <button onClick={() => handleBackButton()}>Back</button>
+        <button className='game-back-button' onClick={() => handleBackButton()}>Back</button>
         <section>
           <h1 className="your-ships-title">Your Ships:</h1>
           <section className="ship-grid">
@@ -974,8 +974,8 @@ console.log(opponentInfo)
         </section>
         {imReady ? (
           <div>
-            {opponentInfo !== null && opponentOnline ? <h1>{opponentInfo.username} <span>online</span></h1> : null}
-            {opponentInfo !== null && !opponentOnline ? <h1 style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
+            {opponentInfo !== null && opponentOnline ? <h1 className='game-online-title'>{opponentInfo.username} <span>online</span></h1> : null}
+            {opponentInfo !== null && !opponentOnline ? <h1 className='game-offline-title' style={{color: 'red'}}>{opponentInfo.username} <span style={{color: 'red'}}>offline</span></h1> : null}
             {" "}
             <Chat socket={props.socket} />{" "}
           </div>
