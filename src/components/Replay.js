@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import "./Game.css";
+import './Ships.scss'
 //need to clear interval on dismount
 let moveId = 0;
 let replayInterval;
@@ -79,6 +80,19 @@ const Replay = (props) => {
         makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
           info.game.player_1_ships[ship].positions[i][1]
         ].ship = `${ship}-${index}`;
+        let direction = ''
+          console.log(makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
+            info.game.player_1_ships[ship].positions[i][1]
+          ].ship)
+          if(makePlayer1Grid[info.game.player_1_ships[ship].positions[0][0]][info.game.player_1_ships[ship].positions[0][1]].row === makePlayer1Grid[info.game.player_1_ships[ship].positions[1][0]][info.game.player_1_ships[ship].positions[1][1]].row){
+            direction = 'horizontal'
+          }
+          else{
+            direction = 'vertical'
+          }
+          makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
+            info.game.player_1_ships[ship].positions[i][1]
+          ].direction = direction;
         index++;
       }
     }
@@ -92,6 +106,17 @@ const Replay = (props) => {
         makePlayer2Grid[info.game.player_2_ships[ship2].positions[j][0]][
           info.game.player_2_ships[ship2].positions[j][1]
         ].ship = `${ship2}-${index}`;
+        let direction = ''
+          // console.log(shipSquares[playerShips[ship].positions[0][0]])
+          if(makePlayer2Grid[info.game.player_2_ships[ship2].positions[0][0]][info.game.player_2_ships[ship2].positions[0][1]].row === makePlayer2Grid[info.game.player_2_ships[ship2].positions[1][0]][info.game.player_2_ships[ship2].positions[1][1]].row){
+            direction = 'horizontal'
+          }
+          else{
+            direction = 'vertical'
+          }
+          makePlayer2Grid[info.game.player_2_ships[ship2].positions[j][0]][
+            info.game.player_2_ships[ship2].positions[j][1]
+          ].direction = direction;
         index++;
       }
     }
@@ -291,7 +316,10 @@ const Replay = (props) => {
                     return (
                       <div
                         onClick={() => console.log(square)}
-                        className={`ship-grid-square ${cssClass}`}
+                        className={`ship-grid-square ${cssClass} ${
+                          square.direction ? square.direction : ""
+                        }`}
+                        id={`${square.ship}`}
                       >
                         {square.attacked === true ? (
                           <span className="missile-right-to-left"></span>
@@ -336,7 +364,10 @@ const Replay = (props) => {
                     return (
                       <div
                         onClick={() => console.log(square)}
-                        className={`ship-grid-square ${cssClass}`}
+                        className={`ship-grid-square ${cssClass} ${
+                          square.direction ? square.direction : ""
+                        }`}
+                        id={`${square.ship}`}
                       >
                         {square.attacked === true ? (
                           <span className="missile-left-to-right"></span>
