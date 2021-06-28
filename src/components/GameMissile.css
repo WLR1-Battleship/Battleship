@@ -74,13 +74,13 @@
 	100% { opacity: 0; transform: scale(1) translate(20px, -130px) }
 }
 
-#smoke .s0 { animation: smokeL 2s 0s infinite }
-#smoke .s1 { animation: smokeR 2s .2s infinite }
-#smoke .s2 { animation: smokeL 2s .4s infinite }
-#smoke .s3 { animation: smokeR 2s .6s infinite }
-#smoke .s4 { animation: smokeL 2s .8s infinite }
-#smoke .s5 { animation: smokeR 2s 1s infinite }
-#smoke .s6 { animation: smokeL 2s 1.2s infinite }
-#smoke .s7 { animation: smokeR 2s 1.4s infinite }
-#smoke .s8 { animation: smokeL 2s 1.6s infinite }
-#smoke .s9 { animation: smokeR 2s 1.8s infinite }
+#smoke .s0 { animation: smokeL 3s 0s infinite }
+#smoke .s1 { animation: smokeR 3s .2s infinite }
+#smoke .s2 { animation: smokeL 3s .3s infinite }
+#smoke .s3 { animation: smokeR 3s .4s infinite }
+#smoke .s4 { animation: smokeL 3s .5s infinite }
+#smoke .s5 { animation: smokeR 3s .6s infinite }
+#smoke .s6 { animation: smokeL 3s .7s infinite }
+#smoke .s7 { animation: smokeR 3s .8s infinite }
+#smoke .s8 { animation: smokeL 3s .9s infinite }
+#smoke .s9 { animation: smokeR 3s 1s infinite }

@@ -10,7 +10,8 @@
 }
 #battleship-0.horizontal{
   background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-0.png');
-  &.sunk {
+    @include ship-animate(5s);
+    &.sunk {
     background-color: rgb(0, 0, 255);
     opacity: 25%;
     background-size: 85%;
@@ -19,6 +20,7 @@
 }
 #battleship-1.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-1.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -28,6 +30,7 @@
 }
 #battleship-2.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-2.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -37,6 +40,7 @@
 }
 #battleship-3.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-3.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -108,6 +112,7 @@
 }
 #cruiser-0.horizontal{
   background: no-repeat center/100% url('../assets/images/Cruiser/Horizontal/Cruiser-0.png');
+  @include ship-animate(4s);
   &.sunk {
     background-color: rgb(0, 0, 255);
     opacity: 25%;
@@ -116,6 +121,7 @@
   }
 }
 #cruiser-1.horizontal{
+  @include ship-animate(4s);
   background: no-repeat center/100% url('../assets/images/Cruiser/Horizontal/Cruiser-1.png');
   &.sunk {
     background-color: rgb(0, 0, 255);
@@ -125,6 +131,7 @@
   }
 }
 #cruiser-2.horizontal{
+  @include ship-animate(4s);
   background: no-repeat center/100% url('../assets/images/Cruiser/Horizontal/Cruiser-2.png');
   &.sunk {
     background-color: rgb(0, 0, 255);
@@ -246,7 +253,6 @@
   }
   #carrier-0.horizontal{
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-0.png');
-    @include h-left-piece($ship-grid-border);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -258,7 +264,6 @@
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-1.png');
     // border-top: rgb(0, 0, 0) 1px solid;
     // border-bottom: rgb(0, 0, 0) 1px solid;
-    @include h-mid-piece($ship-grid-border);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -271,7 +276,6 @@
     background:  no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-2.png');
     // border-top: rgb(0, 0, 0) 1px solid;
     // border-bottom: rgb(0, 0, 0) 1px solid;
-    @include h-mid-piece($ship-grid-border);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -283,7 +287,6 @@
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-3.png');
     // border-top: rgb(0, 0, 0) 1px solid;
     // border-bottom: rgb(0, 0, 0) 1px solid;
-    @include h-mid-piece($ship-grid-border);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
