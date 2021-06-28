@@ -1,5 +1,6 @@
 @mixin ship-image($url){
     background:  no-repeat center/101% url($url);
+    background-position: center/100%;
 }
 
 @mixin h-left-piece($color){
@@ -10,4 +11,30 @@
 @mixin h-mid-piece($color){
     border-top: $color 1px solid;
     border-bottom: $color 1px solid;
+}
+
+@mixin ship-animate($time){
+    animation: shift-around $time*2 infinite linear;
+}
+@keyframes shift-around {
+    0%{
+        transform: translateX(-10%) scale(101%);
+    }
+    25%{
+        transform: translateY(10%) scale(111%);
+
+    }
+    50%{
+        transform: translateX(10%) scale(101%);
+
+    }
+    75%{
+        transform: translateY(-10%) scale(111%);
+
+
+    }
+    100%{
+        transform:translateX(-10%) scale(101%);
+
+    }
 }

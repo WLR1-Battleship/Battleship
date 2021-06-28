@@ -10,15 +10,20 @@
 }
 #battleship-0.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-0.png');
+    @include ship-animate(5s);
 }
 #battleship-1.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-1.png');
+    @include ship-animate(5s);
 }
 #battleship-2.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-2.png');
+    @include ship-animate(5s);
 }
 #battleship-3.horizontal{
     background: no-repeat center/101% url('../assets/images/Battleship/Horizontal/Battleship-3.png');
+    @include ship-animate(5s);
+
 }
 
 #battleship.vertical{
@@ -49,12 +54,18 @@
 }
 #cruiser-0.horizontal{
   background: no-repeat center/100% url('../assets/images/Cruiser/Horizontal/Cruiser-0.png');
+  @include ship-animate(4s);
+
 }
 #cruiser-1.horizontal{
   background: no-repeat center/100% url('../assets/images/Cruiser/Horizontal/Cruiser-1.png');
+  @include ship-animate(4s);
+
 }
 #cruiser-2.horizontal{
   background: no-repeat center/100% url('../assets/images/Cruiser/Horizontal/Cruiser-2.png');
+  @include ship-animate(4s);
+
 }
 
 #cruiser.vertical{
@@ -108,32 +119,24 @@
   }
   #carrier-0.horizontal{
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-0.png');
-    @include h-left-piece($ship-grid-border);
 
   }
   #carrier-1.horizontal{
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-1.png');
-    // border-top: rgb(0, 0, 0) 1px solid;
-    // border-bottom: rgb(0, 0, 0) 1px solid;
-    @include h-mid-piece($ship-grid-border);
+    
   }
   #carrier-2.horizontal{
     padding:none;
     background:  no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-2.png');
-    // border-top: rgb(0, 0, 0) 1px solid;
-    // border-bottom: rgb(0, 0, 0) 1px solid;
-    @include h-mid-piece($ship-grid-border);
+    
   }
   #carrier-3.horizontal{
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-3.png');
-    // border-top: rgb(0, 0, 0) 1px solid;
-    // border-bottom: rgb(0, 0, 0) 1px solid;
-    @include h-mid-piece($ship-grid-border);
+    
   }
   #carrier-4.horizontal{
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-4.png');
-    // border: rgb(0, 0, 0) 1px solid;
-    // border-left: none;
+    
   }
   
   
