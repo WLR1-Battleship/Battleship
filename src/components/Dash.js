@@ -13,6 +13,7 @@ const Dash = (props) => {
   const { user } = useSelector((store) => store.authReducer);
   const [currentGames, setCurrentGames] = useState([]);
   const [pastGames, setPastGames] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     axios
@@ -31,6 +32,7 @@ const Dash = (props) => {
         }
         setPastGames(pastGamesData)
         setCurrentGames(currentGames);
+        setLoading(false)
       })
       .catch((err) => {
         console.log(err);
@@ -110,6 +112,20 @@ const Dash = (props) => {
     setOnDash(false);
   }
 
+  const move = () => {
+    var elem = document.getElementById("myBar");
+    var width = 1;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+      } else {
+        width++;
+        elem.style.width = width + '%';
+      }
+    }
+  }
+
   return (
     <div className='dash'>
       {/* Dash */}
@@ -125,8 +141,11 @@ const Dash = (props) => {
       </div>
       <br />
       <button className='dash-create-game-button' onClick={handleCreateGame}>Create Game</button>
-      <button onClick={handleVsBot}>VS. Bot</button>
+      <button className='dash-vs-bot-button' onClick={handleVsBot}>VS. Bot</button>
       <br />
+      {loading ? 
+        <span className='dash-loading-bar'>Loading</span> 
+        : null}
       <div className="replay-current-games-container">
 
       
