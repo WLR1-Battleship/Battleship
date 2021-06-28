@@ -201,7 +201,7 @@
 }
 
 .ship-grid-square.ship {
-  background-color: blue;
+  /* background-color: blue; */
   border: none;
   box-sizing: border-box;
 
@@ -213,10 +213,10 @@
   animation: fadeinMiss 2s;
 }
 .ship-grid-square.hit {
-  background-color: rgba(255, 0, 0, 0.479);
+  /* background-color: rgba(255, 0, 0, 0.479);
   border-radius: 75%;
-  border: solid red 5px;
-  animation: fadeinHit 2s;
+  border: solid red 5px; */
+  /* animation: fadeinHit 2s; */
 }
 @keyframes fadeinMiss {
   0% {
@@ -245,26 +245,26 @@
 }
 
 .ship-grid-square.hit {
-  background-color: rgba(255, 0, 0, 0.479);
+  /* background-color: rgba(255, 0, 0, 0.479);
   border-radius: 75%;
-  border: solid red 5px;
+  border: solid red 5px; */
   animation: fadeinHit 2s;
 }
 @keyframes fadeinHit {
   0% {
-    background-color: blue;
-    border-radius: 0%;
-    border: none;
+    /* background-color: blue; */
+    /* border-radius: 0%;
+    border: none; */
   }
   99% {
-    background-color: blue;
-    border-radius: 0%;
-    border: none;
+    /* background-color: blue; */
+    /* border-radius: 0%;
+    border: none; */
   }
   100% {
     background-color: rgba(255, 0, 0, 0.479);
-    border-radius: 75%;
-    border: solid red 5px;
+    /* border-radius: 75%;
+    border: solid red 5px; */
   }
 }
 .radar-grid-square.miss {
@@ -284,10 +284,10 @@
 }
 @keyframes fadeinSink {
   0% {
-    background-color: blue;
+    /* background-color: blue; */
   }
   99% {
-    background-color: blue;
+    /* background-color: blue; */
   }
   100% {
     background-color: rgb(5, 5, 5);
@@ -304,50 +304,12 @@
 .replay-grid-container {
   display: flex;
   justify-content: space-evenly;
+  height: 80vh;
+  width: 100%;
+  align-items: center;
 }
 
-.missile-right-to-left {
-  height: 5px;
-  width: 20px;
-  background-color: crimson;
-  display: inline-block;
-  position: relative;
-  animation: attack-right-to-left 2s;
-  z-index: 10;
-}
-@keyframes attack-right-to-left {
-  0% {
-    display: inline-block;
-    left: 300px;
-    opacity: 0;
-  }
 
-  100% {
-    left: 0px;
-    opacity: 1;
-  }
-}
-.missile-left-to-right {
-  height: 5px;
-  width: 20px;
-  background-color: crimson;
-  display: inline-block;
-  position: relative;
-  animation: attack-left-to-right 2s;
-  z-index: 10;
-}
-@keyframes attack-left-to-right {
-  0% {
-    display: inline-block;
-    right: 300px;
-    opacity: 0;
-  }
-
-  100% {
-    right: 0px;
-    opacity: 1;
-  }
-}
 .your-ships-title{
   cursor: default;
 }
@@ -365,3 +327,72 @@
   font-size: 2rem;
   cursor: default;
 }
+
+.game-back-button{
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, .6);
+  color: yellowgreen;
+  transition-duration: 0.4s;
+  /* font-size: 16px; */
+}
+
+.game-back-button:hover{
+  background-color: rgba(112, 128, 144, 0.575);
+  /* -webkit-text-stroke: 3px rgba(253, 154, 5, 0.514); */
+  color: rgba(253, 154, 5, 0.822);
+  border: rgba(253, 154, 5, 0.514) solid 1px;
+  cursor: pointer;
+}
+
+.game-online-title{
+  cursor: default;
+}
+
+.game-offline-title{
+  cursor: default;
+}
+@keyframes scaleUpDown {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  50%,
+  90% {
+    transform: scaleY(1.1);
+  }
+  75% {
+    transform: scaleY(0.95);
+  }
+  80% {
+    transform: scaleX(0.95);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: skewX(0) scale(1);
+  }
+  50% {
+    transform: skewX(5deg) scale(0.9);
+  }
+}
+
+@keyframes particleUp {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: -100%;
+    transform: scale(0.5);
+  }
+}
+
+

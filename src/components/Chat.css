@@ -3,11 +3,14 @@
     font-family: "Big Shoulders Stencil Display", cursive;
     font-size: larger;
     color: greenyellow;
+    width: 300px;
+    justify-content: center;
+    align-items: center;
   }
 .chat-board{
     overflow-y: auto;
     height: 10rem;
-    max-width: 90%;
+    max-width: 300px;
     border: black 1px solid;
     display: flex;
     flex-direction: column-reverse;
@@ -19,14 +22,14 @@
 
 .chat-button{
     border-radius: 5px;
-    background-color: lightgray;
-    color: black;
+    background-color: rgba(0, 0, 0, .6);
+    color: yellowgreen;
     transition-duration: 0.4s;
     /* font-size: 16px; */
 }
 
 .chat-button:hover{
-    background-color: slategray;
+    background-color: rgba(112, 128, 144, 0.575);
     /* -webkit-text-stroke: 3px rgba(253, 154, 5, 0.514); */
     color: rgba(253, 154, 5, 0.822);
     border: rgba(253, 154, 5, 0.514) solid 1px;
@@ -34,7 +37,17 @@
 }
 
 .chat-input{
-    background-color: whitesmoke;
+    background-color: transparent;
+    border-top: transparent;
+    border-right: transparent;
+    border-left: yellowgreen solid 1px;
+    border-bottom: yellowgreen solid 1px;
+    color: yellowgreen;
+    border-bottom-left-radius: 5px;
+}
+
+.chat-input::placeholder{
+    color: yellowgreen;
 }
 
 .chat-text{
