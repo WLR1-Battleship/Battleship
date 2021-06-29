@@ -61,9 +61,13 @@ width: 0px;
 overflow: hidden;
 position: relative;
 transform: translateY(-45px) translateX(10px);
-
+/* z-index: 50; */
 animation: attack-right-to-left 2s;
 }
+.square-z-index{
+  z-index: 50;
+}
+
 .replay-missile-left-to-right{
 display: flex;
 flex-direction: row-reverse;
