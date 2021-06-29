@@ -60,6 +60,7 @@
 }
 #battleship-0.vertical{
     background: no-repeat center/100% url('../assets/images/Battleship/Vertical/Battleship-0-V.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -69,6 +70,7 @@
 }
 #battleship-1.vertical{
     background: no-repeat center/100% url('../assets/images/Battleship/Vertical/Battleship-1-V.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -78,6 +80,7 @@
 }
 #battleship-2.vertical{
     background: no-repeat center/100% url('../assets/images/Battleship/Vertical/Battleship-2-V.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -87,6 +90,7 @@
 }
 #battleship-3.vertical{
     background: no-repeat center/100% url('../assets/images/Battleship/Vertical/Battleship-3-V.png');
+    @include ship-animate(5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -152,6 +156,7 @@
 }
 #cruiser-0.vertical{
   background: no-repeat center/100% url('../assets/images/Cruiser/Vertical/Cruiser-0-V.png');
+  @include ship-animate(4s);
   &.sunk {
     background-color: rgb(0, 0, 255);
     opacity: 25%;
@@ -162,6 +167,7 @@
 }
 #cruiser-1.vertical{
   background: no-repeat center/100% url('../assets/images/Cruiser/Vertical/Cruiser-1-V.png');
+  @include ship-animate(4s);
   &.sunk {
     background-color: rgb(0, 0, 255);
     opacity: 25%;
@@ -172,6 +178,7 @@
 }
 #cruiser-2.vertical{
   background: no-repeat center/100% url('../assets/images/Cruiser/Vertical/Cruiser-2-V.png');
+  @include ship-animate(4s);
   &.sunk {
     background-color: rgb(0, 0, 255);
     opacity: 25%;
@@ -197,7 +204,7 @@
   }
   #carrier-0.vertical{
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-0-V.png');
-    @include ship-animate(5s);
+    @include ship-animate(6s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -207,7 +214,7 @@
     
   }
   #carrier-1.vertical{
-    @include ship-animate(5s);
+    @include ship-animate(6s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-1-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -218,7 +225,7 @@
   
   }
   #carrier-2.vertical{
-    @include ship-animate(5s);
+    @include ship-animate(6s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-2-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -228,7 +235,7 @@
     }
   }
   #carrier-3.vertical{
-    @include ship-animate(5s);
+    @include ship-animate(6s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-3-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -238,7 +245,7 @@
     }
   }
   #carrier-4.vertical{
-    @include ship-animate(5s);
+    @include ship-animate(6s);
     background: no-repeat center/100% url('../assets/images/Carrier/Vertical/newCarrier-4-V.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -249,6 +256,7 @@
   }
   #carrier.horizontal{
     background: no-repeat center/100% url('../assets/images/Carrier/newCarrier.png');
+
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -257,6 +265,7 @@
     }
   }
   #carrier-0.horizontal{
+    @include ship-animate(6s);
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-0.png');
     &.sunk {
       background-color: rgb(0, 0, 255);
@@ -269,6 +278,7 @@
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-1.png');
     // border-top: rgb(0, 0, 0) 1px solid;
     // border-bottom: rgb(0, 0, 0) 1px solid;
+    @include ship-animate(6s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -281,6 +291,7 @@
     background:  no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-2.png');
     // border-top: rgb(0, 0, 0) 1px solid;
     // border-bottom: rgb(0, 0, 0) 1px solid;
+    @include ship-animate(6s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -292,6 +303,7 @@
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-3.png');
     // border-top: rgb(0, 0, 0) 1px solid;
     // border-bottom: rgb(0, 0, 0) 1px solid;
+    @include ship-animate(6s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -303,6 +315,7 @@
     background: no-repeat center/101% url('../assets/images/Carrier/Horizontal/newCarrier-4.png');
     // border: rgb(0, 0, 0) 1px solid;
     // border-left: none;
+    @include ship-animate(6s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -328,6 +341,7 @@
   }
   #destroyer-0.horizontal{
     background: no-repeat center/101% url('../assets/images/Destroyer/Horizontal/NewNewDestroyer-0.png');
+    @include ship-animate(3.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -337,6 +351,7 @@
   }
   #destroyer-1.horizontal{
     background: no-repeat center/101% url('../assets/images/Destroyer/Horizontal/NewNewDestroyer-1.png');
+    @include ship-animate(3.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -356,6 +371,7 @@
   }
   #destroyer-0.vertical{
     background: no-repeat center/101% url('../assets/images/Destroyer/Vertical/NewNewDestroyer-0-V.png');
+    @include ship-animate(3.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -365,6 +381,7 @@
   }
   #destroyer-1.vertical{
     background: no-repeat center/101% url('../assets/images/Destroyer/Vertical/NewNewDestroyer-1-V.png');
+    @include ship-animate(3.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -390,6 +407,7 @@
   }
   #sub-0.horizontal{
     background: no-repeat center/101% url('../assets/images/Submarine/Horizontal/Submarine-0.png');
+    @include ship-animate(4.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -399,6 +417,7 @@
   }
   #sub-1.horizontal{
     background: no-repeat center/101% url('../assets/images/Submarine/Horizontal/Submarine-1.png');
+    @include ship-animate(4.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -408,6 +427,7 @@
   }
   #sub-2.horizontal{
     background: no-repeat center/101% url('../assets/images/Submarine/Horizontal/Submarine-2.png');
+    @include ship-animate(4.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -428,6 +448,7 @@
   }
   #sub-0.vertical{
     background: no-repeat center/101% url('../assets/images/Submarine/Vertical/Submarine-0-V.png');
+    @include ship-animate(4.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -437,6 +458,7 @@
   }
   #sub-1.vertical{
     background: no-repeat center/101% url('../assets/images/Submarine/Vertical/Submarine-1-V.png');
+    @include ship-animate(4.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;
@@ -446,6 +468,7 @@
   }
   #sub-2.vertical{
     background: no-repeat center/101% url('../assets/images/Submarine/Vertical/Submarine-2-V.png');
+    @include ship-animate(4.5s);
     &.sunk {
       background-color: rgb(0, 0, 255);
       opacity: 25%;

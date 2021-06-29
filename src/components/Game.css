@@ -136,21 +136,27 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: chartreuse;
+  background: center / contain no-repeat url('../assets/images/ShipYard.png') ;
+  background-color: rgb(97, 97, 97);
+  box-sizing: border-box;
+  border: black 10px inset;
 }
 #ship-yard-ship-container.horizontal {
   height: 260px;
-  width: 300px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
 }
 #ship-yard-ship-container.vertical {
   height: 260px;
-  width: 300px;
+  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  align-items: center;
+
 }
 
 #battleship.horizontal,
@@ -175,8 +181,10 @@
 .ship-yard-ship-piece {
   width: 30px;
   height: 30px;
-  /* background-color: blue; */
+  /* background-color: rgba(0, 0, 0, 0.247); */
   border: rgba(0, 0, 0, .2) 1px solid;
+  /* -webkit-box-shadow: 0px 0px 15px 5px #000000; 
+box-shadow: 0px 0px 15px 5px #000000; */
 }
 
 
@@ -212,7 +220,7 @@
 }
 @keyframes fadeinMiss {
   0% {
-    background-color: lightblue;
+    background-color: rgba(173, 216, 230, 0);
     border-radius: 0%;
     border: black 1px solid;
     box-sizing: border-box;
@@ -244,7 +252,7 @@
 }
 @keyframes fadeinHit {
   0% {
-    /* background-color: blue; */
+    background-color: rgba(0, 0, 255, 0);
     /* border-radius: 0%;
     border: none; */
   }
