@@ -1016,7 +1016,7 @@ console.log(opponentInfo)
         ) : (
           <section className="ship-yard">
             <div className="ship-yard-button-container">
-              <button
+              <button className='game-reset-button'
                 onClick={() => {
                   let ships = Array.from(
                     document.querySelectorAll("#ship-yard-ship-container > div")
@@ -1053,12 +1053,12 @@ console.log(opponentInfo)
               >
                 reset
               </button>
-              <button
+              <button className='game-random-button'
                 onClick={() => handleRandomShips("", shipGrid, shipsPositions)}
               >
                 Random
               </button>
-              <button
+              <button className='game-flip-button'
                 onClick={() => {
                   if (shipsDirection === "horizontal") {
                     setShipsDirection("vertical");
@@ -1203,9 +1203,9 @@ console.log(opponentInfo)
       {imReady ? null : (
         <div>
           {shipsSet === 5 ? (
-            <button onClick={startGame}>Start Game</button>
+            <button className='game-start-game-button' onClick={startGame}>Start Game</button>
           ) : (
-            <div>Place Ships to start </div>
+            <div className='game-ships-to-start-title'>Place Ships To Start </div>
           )}
         </div>
       )}
