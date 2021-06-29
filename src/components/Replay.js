@@ -10,6 +10,8 @@ import {RiSpeedFill} from 'react-icons/ri'
 import {FaStepForward} from 'react-icons/fa'
 import {AiOutlineReload} from 'react-icons/ai'
 import {BsBackspaceFill} from 'react-icons/bs'
+import explosionSound from '../assets/images/sounds/explosion.mp3'
+import splashSound from '../assets/images/sounds/splash.mp3'
 
 //need to clear interval on dismount
 let moveId = 0;
@@ -169,6 +171,13 @@ const Replay = (props) => {
       if (player2GridNew[moves[i].move[0]][moves[i].move[1]].ship === null) {
         player2GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player2GridNew[moves[i].move[0]][moves[i].move[1]].hit = false;
+        setTimeout(function(){
+          let splash = document.getElementById("splash-sound")
+          splash.currentTime = 0;
+          splash.volume = 0.5;
+
+          splash.play();
+        },1150)
       } else {
         let shipName = player2GridNew[moves[i].move[0]][
           moves[i].move[1]
@@ -178,6 +187,13 @@ const Replay = (props) => {
         );
         player2GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player2GridNew[moves[i].move[0]][moves[i].move[1]].hit = true;
+        setTimeout(function(){
+          let explosion = document.getElementById("explosion-sound")
+          explosion.currentTime = 0;
+          explosion.volume = 0.5;
+          explosion.play();
+        },1150)
+       
 
         setPlayer2Ships({
           ...player2ShipsRef.current,
@@ -209,6 +225,13 @@ const Replay = (props) => {
       if (player1GridNew[moves[i].move[0]][moves[i].move[1]].ship === null) {
         player1GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player1GridNew[moves[i].move[0]][moves[i].move[1]].hit = false;
+        setTimeout(function(){
+          let splash = document.getElementById("splash-sound")
+          splash.currentTime = 0;
+          splash.volume = 0.5;
+
+          splash.play();
+        },1150)
       } else {
         let shipName = player1GridNew[moves[i].move[0]][
           moves[i].move[1]
@@ -218,6 +241,13 @@ const Replay = (props) => {
         );
         player1GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player1GridNew[moves[i].move[0]][moves[i].move[1]].hit = true;
+        setTimeout(function(){
+          let explosion = document.getElementById("explosion-sound")
+          explosion.currentTime = 0;
+          explosion.volume = 0.5;
+
+          explosion.play();
+        },1150)
         player1GridNew[moves[i].move[0]][moves[i].move[1]].zIndex = moveId;
         setPlayer1Ships({
           ...player1ShipsRef.current,
@@ -256,7 +286,6 @@ const Replay = (props) => {
   }
  
 
-  console.log(moves && moves)
   return (
     <div id='replay-page-container'>
       <h2 className='replay-replay-title'>Replay</h2>
@@ -286,6 +315,7 @@ const Replay = (props) => {
         }
       }}/>
       <GiPauseButton opacity={buttonHighlight.pause} onClick={() => {
+        
           clearInterval(replayInterval);
           setButtonHighlight({play: 1, pause: .3, speed: 1, reset: 1, next: 1})
 
@@ -307,7 +337,7 @@ const Replay = (props) => {
       {moves !== null? 
       <div id="replay-status-bar" style={{width: '100vw', height: '20px', display:'flex', justifyContent:'center', alignItems:'center'}}> 
         <div style={{width: '66%', border: '1px solid black', height: '100%'}}>
-          <div style={{height: '100%', backgroundColor:'greenyellow', width: `${(moveId / (moves.length - 1)) * 100}%`}}></div>
+          <div style={{height: '100%', backgroundColor:'greenyellow', width: `${(moveId / (moves.length - 1)) * 100}%`, transition: '1.5s'}}></div>
         </div> 
       </div> : null}
       <div className="replay-grid-container">
@@ -473,6 +503,12 @@ const Replay = (props) => {
           </section>
         </div>
       </div>
+      <audio id='explosion-sound'>
+        <source src={explosionSound}></source>
+      </audio>
+      <audio id='splash-sound'>
+        <source src={splashSound}></source>
+      </audio>
     </div>
   );
 };
