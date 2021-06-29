@@ -11,7 +11,7 @@
 #replay-page-container > h2 {
   font-size: 32px;
   padding-top: 5px;
-  color: whitesmoke;
+  /* color: whitesmoke; */
   margin-bottom: 5px;
 }
 .button-highlight{
@@ -31,7 +31,11 @@
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  background-color: whitesmoke;
+  /* background-color: rgba(0, 0, 0, .6); */
+  /* background-image: url("../assets/images/adam-niescioruk-bWiH0PDTB-g-unsplash.jpg"); */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 
 }
 .replay-missile-right-to-left > div {
@@ -204,11 +208,53 @@ transform: scale(0.2);
 #replay-smoke-right .s9 { animation: smokeRright 3s 1s infinite }
 
 .replay-replay-title{
-  color: yellowgreen;
+  color: greenyellow;
   cursor: default;
+  font-size: 2rem;
 }
 
 .replay-speed-title{
-  color: yellowgreen;
+  color: greenyellow;
+  cursor: default;
+}
+
+.fa-play-button{
+  color: rgb(216, 130, 0);
+  cursor: pointer;
+}
+
+.ri-speed-fill-buttons{
+  color: rgb(216, 130, 0);
+  cursor: pointer;
+}
+
+.gi-pause-button{
+  color: rgb(216, 130, 0);
+  cursor: pointer;
+}
+
+.fa-step-forword-button{
+  color: rgb(216, 130, 0);
+  cursor: pointer;
+}
+
+.ai-outline-reload{
+  color: rgb(216, 130, 0);
+  cursor: pointer;
+}
+
+.replay-header{
+  background-color: rgba(0, 0, 0, .4);
+}
+
+.replay-username-title{
+  color: greenyellow;
+  font-size: 2rem;
+  cursor: default;
+}
+
+.replay-opponent-title{
+  color: red;
+  font-size: 2rem;
   cursor: default;
 }

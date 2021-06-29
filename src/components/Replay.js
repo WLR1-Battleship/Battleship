@@ -288,16 +288,18 @@ const Replay = (props) => {
 
   return (
     <div id='replay-page-container'>
-      <h2 className='replay-replay-title'>Replay</h2>
+      <div className='replay-header'>
+
+      <h2 className='replay-replay-title' color={'yellowgreen'}>Replay</h2>
       <div id='replay-page-buttons'>
-      <div id='replay-back-button'><BsBackspaceFill size={40} color={'red'} onClick={handleBackButtonReplay}/></div>
-      <FaPlay opacity={buttonHighlight.play} onClick={() => {
-          setSpeed('slow')
-          startReplayTimer(1350);
-          setButtonHighlight({play: .3, pause: 1, speed: 1, reset: 1, next: 1})
-          
-        }}/>
-      <RiSpeedFill opacity={buttonHighlight.speed} onClick={()=>{
+      <div id='replay-back-button'><BsBackspaceFill size={40} color={'red'} cursor={'pointer'} onClick={handleBackButtonReplay}/></div>
+      <FaPlay className='fa-play-button' opacity={buttonHighlight.play} onClick={() => {
+        setSpeed('slow')
+        startReplayTimer(1350);
+        setButtonHighlight({play: .3, pause: 1, speed: 1, reset: 1, next: 1})
+        
+      }}/>
+      <RiSpeedFill className='ri-speed-fill-buttons' opacity={buttonHighlight.speed} onClick={()=>{
         if (speed === 'slow'){
           clearInterval(replayInterval);
           startReplayTimer(800);
@@ -314,39 +316,43 @@ const Replay = (props) => {
           setSpeed('slow')
         }
       }}/>
-      <GiPauseButton opacity={buttonHighlight.pause} onClick={() => {
+
+      <GiPauseButton className='gi-pause-button' opacity={buttonHighlight.pause} onClick={() => {
+        clearInterval(replayInterval);
+        setButtonHighlight({play: 1, pause: .3, speed: 1, reset: 1, next: 1})
         
-          clearInterval(replayInterval);
-          setButtonHighlight({play: 1, pause: .3, speed: 1, reset: 1, next: 1})
-
-        }}/>
-      <FaStepForward opacity={buttonHighlight.next} onClick={()=>{startReplay();
-                setButtonHighlight({play: 1, pause: 1, speed: 1, reset: 1, next: .3})
-
       }}/>
-      <AiOutlineReload opacity={buttonHighlight.reset} onClick={() => {
-          let info = { game: game, moves: moves };
-          setGrid(info);
-          moveId = 0;
-          setButtonHighlight({play: 1, pause: 1, speed: 1, reset: .3, next: 1})
+      <FaStepForward className='fa-step-forword-button' opacity={buttonHighlight.next} onClick={()=>{startReplay();
 
-        }}/>
+                setButtonHighlight({play: 1, pause: 1, speed: 1, reset: 1, next: .3})
+                
+              }}/>
+      <AiOutlineReload className='ai-outline-reload' opacity={buttonHighlight.reset} onClick={() => {
+        let info = { game: game, moves: moves };
+        setGrid(info);
+        moveId = 0;
+        setButtonHighlight({play: 1, pause: 1, speed: 1, reset: .3, next: 1})
+        
+      }}/>
       </div>
-      
-      <div className='replay-speed-title' style={{color: 'white'}}>speed: {speed}</div>
+      <div className='replay-speed-title'>speed: {speed}</div>
+      <br />
       {moves !== null? 
       <div id="replay-status-bar" style={{width: '100vw', height: '20px', display:'flex', justifyContent:'center', alignItems:'center'}}> 
         <div style={{width: '66%', border: '1px solid black', height: '100%'}}>
-          <div style={{height: '100%', backgroundColor:'greenyellow', width: `${(moveId / (moves.length - 1)) * 100}%`, transition: '1.5s'}}></div>
+          <div style={{height: '100%', backgroundColor:'rgb(216, 130, 0)', width: `${(moveId / (moves.length - 1)) * 100}%`, transition: '1.5s'}}></div>
+
         </div> 
       </div> : null}
+      <br />
+          </div>
       <div className="replay-grid-container">
         <div>
           {game && game.player_1 === user.user_id ? (
-            <h1 style={{color: 'greenyellow', fontSize: '32px'}}>{user.username}</h1>
-          ) : (
-            <h1>{opponentInfo.username}</h1>
-          )}
+            <h1 className='replay-username-title'>{user.username}</h1>
+            ) : (
+              <h1>{opponentInfo.username}</h1>
+              )}
           <section className="ship-grid">
           <div className='ocean'></div>
             <div className='waves'></div>
@@ -426,7 +432,7 @@ const Replay = (props) => {
           {game && game.player_2 === user.user_id ? (
             <h1>{user.username}</h1>
           ) : (
-            <h1 style={{color: 'red', fontSize: '32px'}}>{opponentInfo.username}</h1>
+            <h1 className='replay-opponent-title'>{opponentInfo.username}</h1>
           )}
 
           <section className="ship-grid">
