@@ -62,7 +62,7 @@ overflow: hidden;
 position: relative;
 transform: translateY(-45px) translateX(10px);
 /* z-index: 50; */
-animation: attack-right-to-left 2s;
+animation: attack-right-to-left 1.5s;
 }
 .square-z-index{
   z-index: 50;
@@ -84,11 +84,12 @@ animation: attack-left-to-right 1.5s;
 
 @keyframes attack-right-to-left {
   0% {
-    left: 500px;
-    opacity: 1;
+    left: 300px;
+    opacity: 0;
     height: 115px;
     width: 200px;
   }
+
 
   100% {
     left: 0px;
@@ -100,8 +101,8 @@ animation: attack-left-to-right 1.5s;
 }
 @keyframes attack-left-to-right {
   0% {
-    left: -500px;
-    opacity: 1;
+    left: -300px;
+    opacity: 0;
     height: 115px;
     width: 200px;
   }
