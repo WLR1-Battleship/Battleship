@@ -90,6 +90,7 @@ const Replay = (props) => {
         makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
           info.game.player_1_ships[ship].positions[i][1]
         ].ship = `${ship}-${index}`;
+        
         let direction = ''
           console.log(makePlayer1Grid[info.game.player_1_ships[ship].positions[i][0]][
             info.game.player_1_ships[ship].positions[i][1]
@@ -217,6 +218,7 @@ const Replay = (props) => {
         );
         player1GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player1GridNew[moves[i].move[0]][moves[i].move[1]].hit = true;
+        player1GridNew[moves[i].move[0]][moves[i].move[1]].zIndex = moveId;
         setPlayer1Ships({
           ...player1ShipsRef.current,
           [shipName]: {
@@ -235,6 +237,7 @@ const Replay = (props) => {
               player1Ships[shipName].positions[j][1]
             ].sunk = true;
           }
+          
         }
       }
     }
@@ -253,6 +256,7 @@ const Replay = (props) => {
   }
  
 
+  console.log(moves && moves)
   return (
     <div id='replay-page-container'>
       <h2>Replay</h2>
@@ -343,7 +347,8 @@ const Replay = (props) => {
                         onClick={() => console.log(square)}
                         className={`ship-grid-square ${cssClass} ${
                           square.direction ? square.direction : ""
-                        }`}
+                        } `}
+                        style={{zIndex:`${square.attacked? `${50 + square.zIndex}`: '1'}`}}
                         id={`${square.ship}`}
                         
                       >
@@ -424,7 +429,7 @@ const Replay = (props) => {
                         onClick={() => console.log(square)}
                         className={`ship-grid-square ${cssClass} ${
                           square.direction ? square.direction : ""
-                        }`}
+                        } `}
                         id={`${square.ship}`}
                       >
                             {square.attacked ?<div className="replay-missile-left-to-right"> <div ></div><span id="replay-smoke">
