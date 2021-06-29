@@ -8,7 +8,7 @@
   border: rgb(0, 0, 0) 1px solid;
   background-color: rgba(7, 133, 252, 0.5);
   z-index: 2;
-  overflow: hidden;
+  // overflow: hidden;
 }
 .ocean{
   position: absolute;
@@ -25,9 +25,9 @@
   /* background-image: fill; */
   animation: move-ocean 40s infinite linear;
   &.w2{
-      height: 600px;
-      width: 600px;
-      animation: move-ocean-2 50s infinite linear;
+      // height: 600px;
+      // width: 600px;
+      animation: move-ocean-2 40s infinite linear;
       background: center url('../assets/images/Ocean/waves2.png');
       // transform: scale(85%);
   }
@@ -84,7 +84,8 @@
   }
   @keyframes move-ocean-2 {
     0%{
-      transform: translate(-50%,-50%);
+      background-position:0 0 ;
+      // transform: translate(-50%,-50%);
       opacity: .2;
   
     }
@@ -128,14 +129,9 @@
     100%{    
         // background-position:left;
         // background-position:top;
-      transform: translate(0,0);
-      opacity: .2;
+        background-position:-50% -50%;
 
-  }
-  100%{    
-      // background-position:left;
-      // background-position:top;
-    transform: translate(0,0);
+      opacity: .2;
 
   }
 }
