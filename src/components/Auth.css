@@ -35,7 +35,7 @@
     font-family: jazz let, fantasy;
     color: slategray;
     -webkit-text-stroke: 3px rgba(253, 154, 5, 0.514);
-    cursor: none;
+    cursor: default;
 }
 
 .auth-input{
