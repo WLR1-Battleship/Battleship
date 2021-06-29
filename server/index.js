@@ -44,12 +44,14 @@ massive({
       registerChatHandlers(io, socket, db, app)
       socket.on('disconnecting', () => {
         console.log(socket.rooms)
-        const [socketid, room] = socket.rooms
-        socket.to(room).emit("player-offline");
+        let roomsArray  = Array.from(socket.rooms);
+        for (let i = 1; i < roomsArray.length; i++){
+          socket.to(roomsArray[i]).emit("player-offline");
+
+        }
 
       })
       socket.on("disconnect", () => {
-        console.log(socket.rooms)
         console.log(`Socket ${socket.id} disconnected`);
       });
     };
