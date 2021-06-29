@@ -146,7 +146,7 @@ const Dash = (props) => {
       {loading ? 
         // <span className='dash-loading-bar'>Loading</span> 
         // <progress className='dash-loading-bar'>Loading...</progress>
-        <svg width="200" height="200" viewBox="0 0 100 100">
+        <svg className='dash-loading-bar' width="200" height="200" viewBox="0 0 100 100">
           <polyline class="line-cornered stroke-still" points="0,0 100,0 100,100" stroke-width="10" fill="none"></polyline>
           <polyline class="line-cornered stroke-still" points="0,0 0,100 100,100" stroke-width="10" fill="none"></polyline>
           <polyline class="line-cornered stroke-animation" points="0,0 100,0 100,100" stroke-width="10" fill="none"></polyline>
