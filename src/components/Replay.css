@@ -201,3 +201,13 @@ transform: scale(0.2);
 #replay-smoke-right .s7 { animation: smokeRright 3s .8s infinite }
 #replay-smoke-right .s8 { animation: smokeLright 3s .9s infinite }
 #replay-smoke-right .s9 { animation: smokeRright 3s 1s infinite }
+
+.replay-replay-title{
+  color: yellowgreen;
+  cursor: default;
+}
+
+.replay-speed-title{
+  color: yellowgreen;
+  cursor: default;
+}

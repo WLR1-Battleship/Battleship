@@ -259,7 +259,7 @@ const Replay = (props) => {
   console.log(moves && moves)
   return (
     <div id='replay-page-container'>
-      <h2>Replay</h2>
+      <h2 className='replay-replay-title'>Replay</h2>
       <div id='replay-page-buttons'>
       <div id='replay-back-button'><BsBackspaceFill size={40} color={'red'} onClick={handleBackButtonReplay}/></div>
       <FaPlay opacity={buttonHighlight.play} onClick={() => {
@@ -303,7 +303,7 @@ const Replay = (props) => {
         }}/>
       </div>
       
-      <div style={{color: 'white'}}>speed: {speed}</div>
+      <div className='replay-speed-title' style={{color: 'white'}}>speed: {speed}</div>
       {moves !== null? 
       <div id="replay-status-bar" style={{width: '100vw', height: '20px', display:'flex', justifyContent:'center', alignItems:'center'}}> 
         <div style={{width: '66%', border: '1px solid black', height: '100%'}}>
