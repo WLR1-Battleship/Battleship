@@ -36,11 +36,19 @@ const Chat = props => {
         <section className="chat">
         <h1 className='chat-title'>Chat:</h1>
             <div className='chat-board'>
-                {messages.map((body) => (
-                    <div className='chat-text'>
+                {messages.map((body) => {
+                    let cssClass = "none";
+                    if( body.username === 'GAME'){
+                        cssClass = 'yellow'
+                    }
+                    if (body.username !== user.username && body.username !== 'GAME'){
+                        cssClass = 'red'
+                    }
+                    return( 
+                    <div className={`chat-text ${cssClass}`}>
                         {body.username}: {body.message}
-                    </div>
-                ))}
+                    </div>)
+                })}
             </div>
             <input placeholder="Enter Message Here" className='chat-input' value={message} onChange={(e) => setMessage(e.target.value)} />
             <button className='chat-button' onClick={sendMessage}>Send</button>
