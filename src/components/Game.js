@@ -44,6 +44,7 @@ const Game = (props) => {
     destroyer: { positions: [[], []], hits: 0, sunk: false },
   });
   const [opponentOnline, setOpponentOnline] = useState(false)
+  const [botDiff, setBotDiff] = useState('easy')
   //get all previous game data on re-join
   useEffect(() => {
     axios
@@ -755,6 +756,7 @@ const Game = (props) => {
           if (
             updateBotShips[ship].positions.length === updateBotShips[ship].hits
           ) {
+            sunk=true;
             socket.emit("send-message", {
               username: "BOT",
               roomCode: roomCode,
@@ -811,29 +813,39 @@ const Game = (props) => {
     let playersShips = { ...shipsPositions };
     let row;
     let column;
-    //easybot
 
-    //   while (!successfulAttack){
-    //   let tryRow = Math.floor(Math.random() * 10)
-    //   let tryColumn = Math.floor(Math.random() * 10)
-    //   if(!playerShipGrid[tryRow][tryColumn].attacked){
-    //     successfulAttack = true;
-    //     row = tryRow;
-    //     column = tryColumn
-    //   }
-    // }
-    //impossible bot
-    for (let i = 0; i < playerShipGrid.length; i++) {
-      for (let j = 0; j < playerShipGrid[i].length; j++) {
-        if (
-          playerShipGrid[i][j].attacked === false &&
-          playerShipGrid[i][j].ship !== null
-        ) {
-          row = i;
-          column = j;
+    //easybot
+    if(botDiff==='easy'){
+      while (!successfulAttack){
+        let tryRow = Math.floor(Math.random() * 10)
+        let tryColumn = Math.floor(Math.random() * 10)
+        if(!playerShipGrid[tryRow][tryColumn].attacked){
+          successfulAttack = true;
+          row = tryRow;
+          column = tryColumn
         }
       }
     }
+    else if(botDiff==='hard'){
+
+    }
+    else{
+      //impossible bot
+      for (let i = 0; i < playerShipGrid.length; i++) {
+        for (let j = 0; j < playerShipGrid[i].length; j++) {
+          if (
+            playerShipGrid[i][j].attacked === false &&
+            playerShipGrid[i][j].ship !== null
+          ) {
+            row = i;
+            column = j;
+          }
+        }
+      }
+    }
+
+    
+    
 /////////////
     playerShipGrid[row][column].attacked = true;
     if (playerShipGrid[row][column].ship !== null) {
@@ -920,7 +932,7 @@ const Game = (props) => {
     setOnDash(true);
     setOnGame(false);
   };
-console.log(opponentInfo)
+console.log(botDiff)
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
@@ -1194,11 +1206,17 @@ console.log(opponentInfo)
             </div>
           </section>
         )}
-        <div className="code-container">
+        {opponentInfo?.username !== 'BOT' ? <div className="code-container">
           <h1 className="code-title">CODE:</h1>
           <br />
           <h2> {roomCode} </h2>
-        </div>
+        </div> : 
+        everyoneReady &&<div className='bot-difficulty'>
+          <h2>BOT DIFFICULTY</h2>
+          <label  ><input onChange={(e)=>setBotDiff(e.target.value)} type='radio' defaultChecked={true} name='diff' value='easy' />Easy</label>
+          <label  ><input onChange={(e)=>setBotDiff(e.target.value)} type='radio' name='diff' value='hard' />Hard</label>
+          <label  ><input onChange={(e)=>setBotDiff(e.target.value)}  type='radio' name='diff' value='impossible' />Impossible</label>
+        </div>}
       </section>
       {imReady ? null : (
         <div>
