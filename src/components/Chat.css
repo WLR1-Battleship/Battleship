@@ -57,3 +57,11 @@
 .chat-title{
     cursor: default;
 }
+
+.chat-text.red{
+    color: red;
+}
+
+.chat-text.yellow{
+    color: yellow;
+}
