@@ -171,16 +171,16 @@ const Replay = (props) => {
       if (player2GridNew[moves[i].move[0]][moves[i].move[1]].ship === null) {
         player2GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player2GridNew[moves[i].move[0]][moves[i].move[1]].hit = false;
-        setTimeout(function(){
-          let splash = document.getElementById("splash-sound")
-          if(splash){
-          splash.currentTime = 0;
-          splash.volume = 0.5;
-          splash.play();
-          }
+        // setTimeout(function(){
+        //   let splash = document.getElementById("splash-sound")
+        //   if(splash){
+        //   splash.currentTime = 0;
+        //   splash.volume = 0.5;
+        //   splash.play();
+        //   }
 
           
-        },1150)
+        // },1150)
       } else {
         let shipName = player2GridNew[moves[i].move[0]][
           moves[i].move[1]
@@ -190,14 +190,14 @@ const Replay = (props) => {
         );
         player2GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player2GridNew[moves[i].move[0]][moves[i].move[1]].hit = true;
-        setTimeout(function(){
-          let explosion = document.getElementById("explosion-sound")
-          if (explosion){
-          explosion.currentTime = 0;
-          explosion.volume = 0.5;
-          explosion.play();
-          }
-        },1150)
+        // setTimeout(function(){
+        //   let explosion = document.getElementById("explosion-sound")
+        //   if (explosion){
+        //   explosion.currentTime = 0;
+        //   explosion.volume = 0.5;
+        //   explosion.play();
+        //   }
+        // },1150)
        
 
         setPlayer2Ships({
@@ -226,18 +226,20 @@ const Replay = (props) => {
         }
       }
     } else {
-      //change player2grid
+      //change player1grid
+      player1GridNew[moves[i].move[0]][moves[i].move[1]].zIndex = moveId;
+
       if (player1GridNew[moves[i].move[0]][moves[i].move[1]].ship === null) {
         player1GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player1GridNew[moves[i].move[0]][moves[i].move[1]].hit = false;
-        setTimeout(function(){
-          let splash = document.getElementById("splash-sound")
-          if (splash){
-          splash.currentTime = 0;
-          splash.volume = 0.5;
-          splash.play();
-          }
-        },1150)
+        // setTimeout(function(){
+        //   let splash = document.getElementById("splash-sound")
+        //   if (splash){
+        //   splash.currentTime = 0;
+        //   splash.volume = 0.5;
+        //   splash.play();
+        //   }
+        // },1150)
       } else {
         let shipName = player1GridNew[moves[i].move[0]][
           moves[i].move[1]
@@ -247,16 +249,15 @@ const Replay = (props) => {
         );
         player1GridNew[moves[i].move[0]][moves[i].move[1]].attacked = true;
         player1GridNew[moves[i].move[0]][moves[i].move[1]].hit = true;
-        setTimeout(function(){
-          let explosion = document.getElementById("explosion-sound")
-          if (explosion){
-          explosion.currentTime = 0;
-          explosion.volume = 0.5;
+        // setTimeout(function(){
+        //   let explosion = document.getElementById("explosion-sound")
+        //   if (explosion){
+        //   explosion.currentTime = 0;
+        //   explosion.volume = 0.5;
 
-          explosion.play();
-          }
-        },1150)
-        player1GridNew[moves[i].move[0]][moves[i].move[1]].zIndex = moveId;
+        //   explosion.play();
+        //   }
+        // },1150)
         setPlayer1Ships({
           ...player1ShipsRef.current,
           [shipName]: {
