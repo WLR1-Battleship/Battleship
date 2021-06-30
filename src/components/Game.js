@@ -45,6 +45,8 @@ const Game = (props) => {
   });
   const [opponentOnline, setOpponentOnline] = useState(false)
   const [botDiff, setBotDiff] = useState('easy')
+  const [botHitTracker, setBotHitTracker] = useState({currentHits: [], shipsSunk: [], dir: null})
+ 
   //get all previous game data on re-join
   useEffect(() => {
     axios
@@ -813,6 +815,9 @@ const Game = (props) => {
     let playersShips = { ...shipsPositions };
     let row;
     let column;
+    console.log(botHitTracker)
+    let updateBotHitTracker = {...botHitTracker}
+    let dir;
 
     //easybot
     if(botDiff==='easy'){
@@ -826,9 +831,148 @@ const Game = (props) => {
         }
       }
     }
+    
     else if(botDiff==='hard'){
+        if (botHitTracker.currentHits.length === 0){
+          while (!successfulAttack){
+            let tryRow = Math.floor(Math.random() * 10)
+            let tryColumn = Math.floor(Math.random() * 10)
+            if(!playerShipGrid[tryRow][tryColumn].attacked){
+              successfulAttack = true;
+              row = tryRow;
+              column = tryColumn
+            }
+          }
+        }
+      else if (botHitTracker.currentHits.length > 0 && !botHitTracker.dir){
 
-    }
+         
+          //check 1 sqaure below, above, left, right
+          if ((botHitTracker.currentHits[0][0] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0] + 1][botHitTracker.currentHits[0][1]].attacked)){
+                row = botHitTracker.currentHits[0][0] + 1;
+                column = botHitTracker.currentHits[0][1];
+                dir = 'down'
+            
+          }
+          else if ((botHitTracker.currentHits[0][0] - 1 >= 0) &&(!playerShipGrid[botHitTracker.currentHits[0][0] - 1][botHitTracker.currentHits[0][1]].attacked)){
+                row = botHitTracker.currentHits[0][0] - 1;
+                column = botHitTracker.currentHits[0][1];
+                dir = 'up'
+
+            }
+          
+          else if ((botHitTracker.currentHits[0][1] - 1 >= 0) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] - 1].attacked)){
+                row = botHitTracker.currentHits[0][0];
+                column = botHitTracker.currentHits[0][1] - 1;
+                dir = 'left'
+
+            }
+          
+          else if ((botHitTracker.currentHits[0][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] + 1].attacked)){
+                row = botHitTracker.currentHits[0][0];
+                column = botHitTracker.currentHits[0][1] + 1;
+                dir = 'right'
+
+            }
+          }
+
+          
+          
+      else if (botHitTracker.currentHits.length > 0 && botHitTracker.dir){
+            
+            if (botHitTracker.dir === 'down'){
+              if ((botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0] + 1][botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1]].attacked)){
+                row = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0] + 1;
+                column = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1];
+                dir = 'down'
+                
+            
+              }
+              else{
+                 if ((botHitTracker.currentHits[0][0] - 1 >= 0) &&(!playerShipGrid[botHitTracker.currentHits[0][0] - 1][botHitTracker.currentHits[0][1]].attacked)){
+                  row = botHitTracker.currentHits[0][0] - 1;
+                  column = botHitTracker.currentHits[0][1];
+                  dir = 'up'
+  
+                }
+            
+              else if ((botHitTracker.currentHits[0][1] - 1 >= 0) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] - 1].attacked)){
+                  row = botHitTracker.currentHits[0][0];
+                  column = botHitTracker.currentHits[0][1] - 1;
+                  dir = 'left'
+  
+                }
+            
+              else if ((botHitTracker.currentHits[0][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] + 1].attacked)){
+                  row = botHitTracker.currentHits[0][0];
+                  column = botHitTracker.currentHits[0][1] + 1;
+                  dir = 'right'
+  
+                }
+              }
+
+            }
+            else if (botHitTracker.dir === 'up'){
+              if ((botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0] - 1 >= 0) && (!playerShipGrid[botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0] - 1][botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1]].attacked)){
+                row = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0] - 1;
+                column = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1];
+                dir = 'up'
+            
+              }
+              else {
+              
+           
+                if ((botHitTracker.currentHits[0][1] - 1 >= 0) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] - 1].attacked)){
+                  row = botHitTracker.currentHits[0][0];
+                  column = botHitTracker.currentHits[0][1] - 1;
+                  dir = 'left'
+  
+                }
+            
+                if ((botHitTracker.currentHits[0][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] + 1].attacked)){
+                  row = botHitTracker.currentHits[0][0];
+                  column = botHitTracker.currentHits[0][1] + 1;
+                  dir = 'right'
+  
+                }
+              }
+            }
+            else if (botHitTracker.dir === 'left'){
+              if ((botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1] - 1 >= 0) && (!playerShipGrid[botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0]][botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1] - 1].attacked)){
+                row = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0];
+                column = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1] - 1;
+                dir='left'
+            
+              }
+              else{
+                if ((botHitTracker.currentHits[0][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] + 1].attacked)){
+                  row = botHitTracker.currentHits[0][0];
+                  column = botHitTracker.currentHits[0][1] + 1;
+                  dir = 'right'
+  
+              }
+
+              }
+
+
+          }
+          else if (botHitTracker.dir === 'right'){
+            if ((botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0]][botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1] + 1].attacked)){
+              row = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][0];
+              column = botHitTracker.currentHits[botHitTracker.currentHits.length - 1][1] + 1;
+              dir = 'right'
+          
+            }
+            else{
+              console.log('error')
+            }
+          }
+
+        
+        
+       
+      }
+  }
     else{
       //impossible bot
       for (let i = 0; i < playerShipGrid.length; i++) {
@@ -850,6 +994,8 @@ const Game = (props) => {
     playerShipGrid[row][column].attacked = true;
     if (playerShipGrid[row][column].ship !== null) {
       playerShipGrid[row][column].hit = true;
+      updateBotHitTracker.dir = dir
+      updateBotHitTracker.currentHits.push([row, column]);
       let shipName = playerShipGrid[row][column].ship.slice(
         0,
         playerShipGrid[row][column].ship.indexOf("-")
@@ -860,6 +1006,22 @@ const Game = (props) => {
       if (
         playersShips[shipName].hits === playersShips[shipName].positions.length
       ) {
+         let updateCurrentHits = []
+       
+          for (let i = 0; i < updateBotHitTracker.currentHits.length; i++){
+            let flag = false;
+            for (let j = 0; j < playersShips[shipName].positions.length; j++){
+                if (updateBotHitTracker.currentHits[i][0] === playersShips[shipName].positions[j][0] && updateBotHitTracker.currentHits[i][1] === playersShips[shipName].positions[j][1]){
+                    flag = true;
+                }
+            }
+            if (flag === false){
+              updateCurrentHits.push(updateBotHitTracker.currentHits[i]);
+            }
+          }
+        updateBotHitTracker.currentHits = updateCurrentHits;
+        updateBotHitTracker.dir = null;
+
         console.log(playersShips[shipName], "sunk");
         socket.emit("send-message", {
           username: user.username,
@@ -887,7 +1049,11 @@ const Game = (props) => {
       }
     } else {
       playerShipGrid[row][column].hit = false;
+      updateBotHitTracker.dir = null
+
     }
+    console.log(updateBotHitTracker)
+    setBotHitTracker(updateBotHitTracker)
     setShipGrid(playerShipGrid);
     setShipsPositions(playersShips);
     setTimeout(function () {
@@ -932,7 +1098,7 @@ const Game = (props) => {
     setOnDash(true);
     setOnGame(false);
   };
-console.log(botDiff)
+console.log(botHitTracker)
   return (
     <div className="game-screen">
       <section className="yard-grid-wrapper">
