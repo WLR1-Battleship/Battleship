@@ -929,7 +929,7 @@ const Game = (props) => {
   
                 }
             
-                if ((botHitTracker.currentHits[0][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] + 1].attacked)){
+                else if ((botHitTracker.currentHits[0][1] + 1 <= 9) && (!playerShipGrid[botHitTracker.currentHits[0][0]][botHitTracker.currentHits[0][1] + 1].attacked)){
                   row = botHitTracker.currentHits[0][0];
                   column = botHitTracker.currentHits[0][1] + 1;
                   dir = 'right'
