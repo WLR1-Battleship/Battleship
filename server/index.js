@@ -10,7 +10,9 @@ const { CONNECTION_STRING, SESSION_SECRET, SERVER_PORT } = process.env;
 
 const app = express();
 
+//Include this with your other top-level middleware
 app.use(express.json());
+
 
 app.use(
   session({
@@ -68,3 +70,8 @@ app.get("/api/get/completed/game/:roomCode", gameController.getCompletedGameData
 app.get("/api/user/games/:userId", gameController.getAllUsersGames);
 app.put('/api/bot/setgame', gameController.setBotGame)
 app.post('/api/game/add/move', gameController.addMove)
+
+app.use(express.static(`${__dirname}/../build`))
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+})
