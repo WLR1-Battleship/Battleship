@@ -367,10 +367,10 @@ const Replay = (props) => {
           <div className='ocean'></div>
             <div className='waves'></div>
             <div className='waves w2'></div>
-            {player1Grid.map((row) => {
+            {player1Grid.map((row,index) => {
               return (
-                <div className="ship-grid-row">
-                  {row.map((square) => {
+                <div key={`p-grid-row-${index}`} className="ship-grid-row">
+                  {row.map((square,index) => {
                     /*
                     CHANGE CSS to match square.ship
                     */
@@ -390,6 +390,7 @@ const Replay = (props) => {
 
                     return (
                       <div
+                      key={`p-grid-square-${index}`}
                         onClick={() => console.log(square)}
                         className={`ship-grid-square ${cssClass} ${
                           square.direction ? square.direction : ""
@@ -449,10 +450,10 @@ const Replay = (props) => {
           <div className='ocean'></div>
             <div className='waves'></div>
             <div className='waves w2'></div>
-            {player2Grid.map((row) => {
+            {player2Grid.map((row,index) => {
               return (
-                <div className="ship-grid-row">
-                  {row.map((square) => {
+                <div key={`p2-grid-row-${index}`} className="ship-grid-row">
+                  {row.map((square,index) => {
                     /*
                     CHANGE CSS to match square.ship
                     */
@@ -472,6 +473,7 @@ const Replay = (props) => {
 
                     return (
                       <div
+                      key={`p2-grid-square-${index}`}
                         onClick={() => console.log(square)}
                         className={`ship-grid-square ${cssClass} ${
                           square.direction ? square.direction : ""
