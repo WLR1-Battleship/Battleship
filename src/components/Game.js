@@ -1109,6 +1109,7 @@ const Game = (props) => {
   };
 
   const handleBackButton = () => {
+    socket.emit('leave-room', {roomCode, user});
     dispatch(setOpponent(null))
     setOnDash(true);
     setOnGame(false);

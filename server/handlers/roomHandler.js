@@ -5,7 +5,7 @@ module.exports = (io, socket, db, app) => {
     const { code, user_id } = body;
     await db.games.create_game(user_id, code);
     socket.join(code);
-    console.log(`room ${code} started`);
+    console.log(`room ${code} started by user ${user_id}`);
   };
 
   const serverAttemptJoin = async (body) => {
@@ -18,6 +18,7 @@ module.exports = (io, socket, db, app) => {
         await db.games.addplayer2(user_id, code);
       }
       socket.join(code);
+      console.log(`user ${user_id} joined room ${code}`)
 
      return socket.emit("server-confirm-join", { code });
     };
@@ -39,4 +40,9 @@ module.exports = (io, socket, db, app) => {
   })
   socket.on("client-start-game", startRoom);
   socket.on("client-attempt-join", serverAttemptJoin);
+  socket.on('leave-room', (body)=>{
+    const {user, roomCode} = body
+    socket.leave(roomCode)
+    console.log(`user ${user.user_id} left room ${roomCode}`)
+  })
 };
