@@ -791,7 +791,7 @@ const Game = (props) => {
       }
       if (allSunk === 17) {
         alert("You Win!");
-        setGameOver(true);
+        setGameOver({win: true});
         socket.emit("player-sunk", {
           user_id: opponentInfo.user_id,
           roomCode: roomCode,
@@ -1045,7 +1045,7 @@ const Game = (props) => {
         }
         if (hits === 17) {
           alert("You Lose");
-          setGameOver(true);
+          setGameOver({win: false});
           socket.emit("player-sunk", {
             user_id: user.user_id,
             roomCode: roomCode,
