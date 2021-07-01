@@ -371,7 +371,13 @@ const Game = (props) => {
 
   const onDragStart = () => {};
   const onShipDrop = (square) => {
+    if (!draggedShipPiece){
+      return
+    }
     let shipName = draggedShipPiece.slice(0, draggedShipPiece.indexOf("-"));
+    if (shipsPositions[shipName].positions[0].length > 0){
+      return
+    }
     let shipIndex = draggedShipPiece.slice(
       draggedShipPiece.indexOf(draggedShipPiece.length - 2)
     );
