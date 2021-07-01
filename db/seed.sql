@@ -24,7 +24,8 @@ CREATE TABLE moves (
     move_id SERIAL PRIMARY KEY,
     game_id INT REFERENCES games(game_id),
     user_id INT REFERENCES users(user_id),
-    move INT []
+    move INT [],
+    bot_tracker JSON
 );
 
 -- bot into database
