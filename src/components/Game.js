@@ -108,13 +108,13 @@ const Game = (props) => {
     }
 
     setGrids(opponentShips, thisPlayerShips, info.moves, opponent, thisPlayer);
-    //HARD CODED to check for bot (bot user_id = 17);
-    if (opponent === 17) {
+    //HARD CODED to check for bot (bot user_id = 1);
+    if (opponent === 1) {
       setMyTurn(true);
       //set botships
       let updatedBotShips = opponentShips;
       for (let i = 0; i < info.moves.length; i++) {
-        if (info.moves[i].user_id !== 17) {
+        if (info.moves[i].user_id !== 1) {
           for (let ship in updatedBotShips) {
             for (let j = 0; j < updatedBotShips[ship].positions.length; j++) {
               if (

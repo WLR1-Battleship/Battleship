@@ -13,7 +13,11 @@ const Auth = (props) =>{
         e.preventDefault()
         if (username === "") {
           alert("Please enter a Username");
-        } else {
+        } 
+        else if(username.toUpperCase()==='BOT'){
+          alert(`Cannot login as BOT!!`)
+        }
+        else {
           axios
             .post("/api/auth/login", { username })
             .then((res) => {
