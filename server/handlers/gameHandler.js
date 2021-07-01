@@ -4,7 +4,8 @@ module.exports = (io, socket, db, app) => {
     const {row, column, roomCode} = body
     const {user_id, username} = body.user
     io.to(roomCode).emit('relay-message', {username: 'GAME', message:`${username} attacks row: ${row}, column: ${column}.`})
-    await db.moves.add_move([roomCode, user_id, row, column])
+    const dummyData = JSON.stringify({bot_diff: 'player'})
+    await db.moves.add_move([roomCode, user_id, row, column, dummyData])
     socket.to(roomCode).emit("server-send-attack", { row, column, roomCode, username });
   };
   const shipsSet = async (body) => {

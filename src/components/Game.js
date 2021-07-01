@@ -1103,7 +1103,7 @@ const Game = (props) => {
       myTurn &&
       !radarGrid[row][column].attacked
     ) {
-      socket.emit("send-attack", { row, column, roomCode, user });
+      socket.emit("send-attack", { row, column, roomCode, user});
       setMyTurn(false);
     }
   };
