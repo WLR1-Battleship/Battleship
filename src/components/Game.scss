@@ -152,3 +152,19 @@
   box-sizing: border-box;
 
 }
+
+.start-panel{
+  background-color: rgba(0, 0, 0, .6);
+  box-shadow: 0 0 25px black;
+  padding: 10px;
+  border-radius: 10px;
+
+  label{
+    color: white;
+  }
+  h2{
+    color: white;
+    padding: 10px;
+    font-size: 1.5rem;
+  }
+}

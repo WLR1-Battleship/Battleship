@@ -44,7 +44,7 @@ const Game = (props) => {
   });
   const [opponentOnline, setOpponentOnline] = useState(false)
   const [botDiff, setBotDiff] = useState('easy')
-  const [botHitTracker, setBotHitTracker] = useState({currentHits: [], shipsSunk: [], dir: null})
+  const [botHitTracker, setBotHitTracker] = useState({currentHits: [], shipsSunk: [], dir: null, bot_diff: 'easy'})
  
   //get all previous game data on re-join
   useEffect(() => {
@@ -84,7 +84,10 @@ const Game = (props) => {
     let opponentShips;
     let thisPlayer;
     let thisPlayerShips;
-     info.moves.length > 0 && info.moves[info.moves.length-1].bot_tracker!== null && setBotHitTracker(info.moves[info.moves.length-1].bot_tracker)
+    if(info.moves.length > 0 && info.moves[info.moves.length-1].bot_tracker!== null){
+      setBotHitTracker(info.moves[info.moves.length-1].bot_tracker)
+      setBotDiff(info.moves[info.moves.length-1].bot_tracker.bot_diff)
+    }
     if (user.user_id === info.game.player_1) {
       thisPlayer = info.game.player_1;
       thisPlayerShips = info.game.player_1_ships;
@@ -203,6 +206,9 @@ const Game = (props) => {
   };
   //Start Game
   const startGame = () => {
+    setBotHitTracker(prev => {
+      return {...prev, bot_diff: botDiff} 
+    })
     setImReady(true);
     if (opponentInfo) {
       if (opponentInfo.username === "BOT") {
@@ -1066,7 +1072,7 @@ const Game = (props) => {
     setShipsPositions(playersShips);
     setTimeout(function () {
       setMyTurn(true);
-    }, 3000);
+    }, 500);
     axios.post("/api/game/add/move", {
       row,
       column,
@@ -1386,22 +1392,25 @@ console.log(botHitTracker)
           <br />
           <h2> {roomCode} </h2>
         </div> : 
-        everyoneReady &&<div className='bot-difficulty'>
-          <h2>BOT DIFFICULTY</h2>
-          <label  ><input onChange={(e)=>setBotDiff(e.target.value)} type='radio' defaultChecked={true} name='diff' value='easy' />Easy</label>
-          <label  ><input onChange={(e)=>setBotDiff(e.target.value)} type='radio' name='diff' value='hard' />Hard</label>
-          <label  ><input onChange={(e)=>setBotDiff(e.target.value)}  type='radio' name='diff' value='impossible' />Impossible</label>
-        </div>}
+        everyoneReady && <h2>BOT: {`${botDiff}`}</h2>}
       </section>
       {imReady ? null : (
-        <div>
+        <div className='start-panel'>
           {shipsSet === 5 ? (
             <button className='game-start-game-button' onClick={startGame}>Start Game</button>
           ) : (
             <div className='game-ships-to-start-title'>Place Ships To Start </div>
           )}
+          {opponentInfo?.username==='BOT' && <div className='bot-difficulty'>
+          <h2>BOT DIFFICULTY</h2>
+          <label  ><input onChange={(e)=>setBotDiff(e.target.value)} defaultChecked={true} type='radio' name='diff' value='easy' />Easy</label>
+          <label  ><input onChange={(e)=>setBotDiff(e.target.value)} type='radio' name='diff' value='hard' />Hard</label>
+          <label  ><input onChange={(e)=>setBotDiff(e.target.value)}  type='radio' name='diff' value='impossible' />Impossible</label>
+        </div>}
         </div>
       )}
+
+
 
       {imReady && (
         <section>
