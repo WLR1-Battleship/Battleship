@@ -1392,7 +1392,7 @@ console.log(botHitTracker)
           <br />
           <h2> {roomCode} </h2>
         </div> : 
-        everyoneReady && <h2>BOT: {`${botDiff}`}</h2>}
+        everyoneReady && <h2 >BOT DIFFICULTY: {<span className={`diff-${botDiff}`}>{`${botDiff.toUpperCase()}`}</span>}</h2>}
       </section>
       {imReady ? null : (
         <div className='start-panel'>
