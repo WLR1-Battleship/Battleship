@@ -45,8 +45,9 @@ module.exports = {
 
     addMove: (req, res) => {
         const db = req.app.get('db')
-        const {row, column, roomCode, user_id} = req.body
-        db.moves.add_move([roomCode, user_id, row, column]).then(()=>{
+        const {row, column, roomCode, user_id, botHitTracker} = req.body
+        const bot_tracker = JSON.stringify(botHitTracker)
+        db.moves.add_move([roomCode, user_id, row, column, bot_tracker]).then(()=>{
             res.sendStatus(200)
         })
     }

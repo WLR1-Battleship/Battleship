@@ -27,9 +27,8 @@ const Game = (props) => {
   const [radarGrid, setRadarGrid] = useState([]);
   const [shipGrid, setShipGrid] = useState([]);
   const { socket, setOnDash, setOnGame } = props;
-  const { roomCode } = useSelector((store) => store.gameReducer);
+  const { roomCode, opponentInfo } = useSelector((store) => store.gameReducer);
   const { user } = useSelector((store) => store.authReducer);
-  const { opponentInfo } = useSelector((store) => store.gameReducer);
   const shipGridRef = useRef(shipGrid);
   const radarGridRef = useRef(radarGrid);
   const shipsPositionsRef = useRef(shipsPositions);
@@ -85,6 +84,7 @@ const Game = (props) => {
     let opponentShips;
     let thisPlayer;
     let thisPlayerShips;
+     info.moves.length > 0 && info.moves[info.moves.length-1].bot_tracker!== null && setBotHitTracker(info.moves[info.moves.length-1].bot_tracker)
     if (user.user_id === info.game.player_1) {
       thisPlayer = info.game.player_1;
       thisPlayerShips = info.game.player_1_ships;
@@ -805,6 +805,7 @@ const Game = (props) => {
       column,
       user_id: user.user_id,
       roomCode,
+      botHitTracker
     }).then(()=>{
       if (allSunk !== 17){
         botAttackPlayer();
@@ -839,6 +840,7 @@ const Game = (props) => {
     }
     
     else if(botDiff==='hard'){
+      console.log(botHitTracker)
         if (botHitTracker.currentHits.length === 0){
           while (!successfulAttack){
             let tryRow = Math.floor(Math.random() * 10)
@@ -1055,7 +1057,7 @@ const Game = (props) => {
       }
     } else {
       playerShipGrid[row][column].hit = false;
-      updateBotHitTracker.dir = null
+      botDiff==='hard' && (updateBotHitTracker.dir = null)
 
     }
     console.log(updateBotHitTracker)
@@ -1070,6 +1072,7 @@ const Game = (props) => {
       column,
       user_id: opponentInfo.user_id,
       roomCode,
+      botHitTracker: updateBotHitTracker
     });
   };
 
