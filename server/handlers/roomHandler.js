@@ -44,5 +44,6 @@ module.exports = (io, socket, db, app) => {
     const {user, roomCode} = body
     socket.leave(roomCode)
     console.log(`user ${user.user_id} left room ${roomCode}`)
+    socket.to(roomCode).emit("player-offline");
   })
 };
