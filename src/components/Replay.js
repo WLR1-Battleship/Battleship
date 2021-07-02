@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import "./Game.css";
 import './Ships.scss';
@@ -12,6 +12,7 @@ import {AiOutlineReload} from 'react-icons/ai'
 import {BsBackspaceFill} from 'react-icons/bs'
 import explosionSound from '../assets/images/sounds/explosion.mp3'
 import splashSound from '../assets/images/sounds/splash.mp3'
+import {setOpponent} from '../redux/gameReducer'
 
 //need to clear interval on dismount
 let moveId = 0;
@@ -31,6 +32,7 @@ const Replay = (props) => {
   const player1ShipsRef = useRef(player1Ships);
   const [speed, setSpeed] = useState('slow');
   const [buttonHighlight, setButtonHighlight] = useState({play: 1, pause: 1, speed: 1, reset: 1, next: 1})
+  const dispatch = useDispatch();
 
   useEffect(() => {
     player2ShipsRef.current = player2Ships;
@@ -288,6 +290,7 @@ const Replay = (props) => {
   };
 
   const handleBackButtonReplay = () => {
+    dispatch(setOpponent(null))
     moveId = 0;
     clearInterval(replayInterval);
     setOnDash(true)
@@ -303,6 +306,7 @@ const Replay = (props) => {
       <div id='replay-page-buttons'>
       <div id='replay-back-button'><BsBackspaceFill size={40} color={'red'} cursor={'pointer'} onClick={handleBackButtonReplay}/></div>
       <FaPlay className='fa-play-button' opacity={buttonHighlight.play} onClick={() => {
+        clearInterval(replayInterval);
         setSpeed('slow')
         startReplayTimer(1350);
         setButtonHighlight({play: .3, pause: 1, speed: 1, reset: 1, next: 1})
