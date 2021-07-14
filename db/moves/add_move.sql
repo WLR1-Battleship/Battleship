@@ -1,1 +1,1 @@
-INSERT into moves (game_id, user_id, move, bot_tracker) VALUES ((SELECT game_id FROM games WHERE room_code =$1), $2, ARRAY [$3,$4], $5);
+INSERT into new_moves (game_id, user_id, move, bot_tracker) VALUES ((SELECT game_id FROM games WHERE room_code =$1), $2, $3, $4);
