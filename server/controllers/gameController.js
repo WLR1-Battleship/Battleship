@@ -60,7 +60,7 @@ module.exports = {
         const bot_tracker = JSON.stringify(botHitTracker)
         if(myMoves){
           const moves = JSON.stringify({moves: [...myMoves.move.moves, [row,column]]})
-          await db.moves.update_move(myMoves.move_id, moves)
+          await db.moves.update_move(myMoves.move_id, moves, bot_tracker)
           res.sendStatus(200)
         }
         else{
