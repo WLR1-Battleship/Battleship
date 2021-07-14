@@ -8,7 +8,7 @@ module.exports = {
         let _moves = [];
         for (let j = 0; j < moves[0]?.move.moves.length; j++) {
             _moves.push({move_id: j*2, game_id: game.game_id, user_id: moves[0].user_id, move: moves[0].move.moves[j], bot_tracker: moves[0].bot_tracker  })
-            if(j < moves[1].move.moves.length) _moves.push({move_id: j*2+1, game_id: game.game_id, user_id: moves[1].user_id, move: moves[1].move.moves[j], bot_tracker: moves[1].bot_tracker  })
+            if(j < moves[1]?.move.moves.length) _moves.push({move_id: j*2+1, game_id: game.game_id, user_id: moves[1].user_id, move: moves[1].move.moves[j], bot_tracker: moves[1].bot_tracker  })
         }
         gameInfo = {moves: _moves, game: game};
 
