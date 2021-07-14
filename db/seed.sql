@@ -1,4 +1,4 @@
-DROP TABLE moves;
+DROP TABLE new_moves;
 DROP TABLE games;
 DROP TABLE users;
 
@@ -20,11 +20,19 @@ CREATE TABLE games (
     player_2_ships json,
     room_code VARCHAR(6)
 );
-CREATE TABLE moves (
+-- CREATE TABLE moves (
+--     move_id SERIAL PRIMARY KEY,
+--     game_id INT REFERENCES games(game_id),
+--     user_id INT REFERENCES users(user_id),
+--     move INT [],
+--     bot_tracker JSON
+-- );
+
+CREATE TABLE new_moves (
     move_id SERIAL PRIMARY KEY,
     game_id INT REFERENCES games(game_id),
     user_id INT REFERENCES users(user_id),
-    move INT [],
+    move json,
     bot_tracker JSON
 );
 

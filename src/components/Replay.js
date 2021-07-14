@@ -365,7 +365,7 @@ const Replay = (props) => {
           {game && game.player_1 === user.user_id ? (
             <h1 className='replay-username-title'>{user.username}</h1>
             ) : (
-              <h1>{opponentInfo.username}</h1>
+              <h1 className='replay-opponent-title'>{opponentInfo.username}</h1>
               )}
           <section className="ship-grid">
           <div className='ocean'></div>
@@ -445,7 +445,7 @@ const Replay = (props) => {
         </div>
         <div>
           {game && game.player_2 === user.user_id ? (
-            <h1>{user.username}</h1>
+            <h1 className='replay-username-title'>{user.username}</h1>
           ) : (
             <h1 className='replay-opponent-title'>{opponentInfo.username}</h1>
           )}

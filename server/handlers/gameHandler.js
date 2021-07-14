@@ -4,8 +4,18 @@ module.exports = (io, socket, db, app) => {
     const {row, column, roomCode} = body
     const {user_id, username} = body.user
     io.to(roomCode).emit('relay-message', {username: 'GAME', message:`${username} attacks row: ${row}, column: ${column}.`})
-    const dummyData = JSON.stringify({bot_diff: 'player'})
-    await db.moves.add_move([roomCode, user_id, row, column, dummyData])
+    const [myMoves] = await db.moves.get_my_moves(roomCode, user_id)
+    if(myMoves){
+      // console.log('TRUE')
+      const moves = JSON.stringify({moves: [...myMoves.move.moves, [row,column]]})
+      await db.moves.update_move(myMoves.move_id, moves)
+    }
+    else{
+      // console.log('FALSE')
+      const dummyData = JSON.stringify({bot_diff: 'player'})
+      const move = JSON.stringify({moves: [[row,column]]})
+      await db.moves.add_move([roomCode, user_id, move, dummyData])
+    }
     socket.to(roomCode).emit("server-send-attack", { row, column, roomCode, username });
   };
   const shipsSet = async (body) => {
